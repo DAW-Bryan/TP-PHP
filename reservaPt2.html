@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Reserva de Espaço</title>
+        <link rel="stylesheet" href="./css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+  </head>
+
+  <body>
+
+        <nav class="navbar is-transparent">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                    <img src="http://www.ufmg.br/online/marketing/arquivos/anexos/coltec_logo_proposta1.jpg" width="112" height="28">
+                </a>
+            </div>
+
+            <div class="navbar-burger burger" data-target="navbarExampleTransparentExample"></div>
+              
+            <div id="navbarExampleTransparentExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="index.html">
+                      Home
+                    </a>
+                    <a class="navbar-item is-hoverable">
+                        Reservas
+                    </a>
+                    <a class="navbar-item is-hoverable">
+                        Espaços
+                    </a>
+                </div>
+              
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                      <div class="field is-grouped">
+                        <p class="control">
+                          <a class="bd-tw-button button" data-social-network="Twitter" data-social-action="tweet" data-social-target="http://localhost:4000" target="_blank" href="https://twitter.com/intent/tweet?text=Bulma: a modern CSS framework based on Flexbox&amp;hashtags=bulmaio&amp;url=http://localhost:4000&amp;via=jgthms">
+                            <span class="icon">
+                              <i class="fas fa-user"></i>
+                            </span>
+                            <span>
+                              Login
+                            </span>
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </nav><!--navbar-->
+
+
+        <!--
+            Parte 1: Dados da pessoa
+            Parte 2: Dados da reserva
+
+
+        -->
+
+        <form action="reserva.html" class="container" method="get">            
+            <h1 class="title">Dados Pessoais</h1>
+            <progress class="progress is-info" value="50" max="100"></progress>
+        
+            <div class="field">
+                <label class="label">Espaço</label>
+                <div class="control">
+                    <div class="select">
+                    <select>
+                        <option>Auditório</option>
+                        <option>Labotatório</option>                        
+                        <option>Quadra maior</option>
+                        <option>Quadra menor</option>                        
+                    </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <label for="" class="label">Tipo de reserva</label>
+                    <label class="radio"><input type="radio" name="tipo-de-reserva"> Dia único</label>
+                    <label class="radio"><input type="radio" name="tipo-de-reserva"> Semanal</label>
+                    <label class="radio"><input type="radio" name="tipo-de-reserva"> Mensal</label>
+                </div>
+            </div>
+        
+            <label class="label">Data e Horário</label>
+            <div class="field is-grouped">
+                <div class="control">
+                    <input class="input" type="date">
+                </div>
+                <div class="control">
+                    <input class="input" type="time">
+                </div>
+            </div>
+              
+            <div class="field">
+                <div class="control">
+                    <label class="checkbox">
+                    <input type="checkbox">
+                    Eu declaro que aceito os <a href="#">termos e condições</a>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="field">
+            <div class="control">
+                <button class="button is-link">Próximo</button>
+            </div>
+            </div>
+        </form>
+  </body>
+</html>
