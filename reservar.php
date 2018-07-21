@@ -6,17 +6,20 @@
         <title>Reserva de Espaço</title>
         <link rel="stylesheet" href="./css/bulma.min.css">
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
   </head>
 
 
   <!--
       TO DO:
-         - Estilizar erros
+         - Estilizar erros (ok)
          - Escrever Reserva em arquivos json (ok)
          - Diferenciar Dia unico, semanal e mensal (JS?)
          - Adicionar horario de termino (ok)
          - Verificar Disponibilidade (ok)
-         - Setar ano 
+         - Setar ano (ok)
+         - Busca de Reservas 
 
       -->
 
@@ -59,7 +62,6 @@
             }else{ // Primeiro acesso ao site
                 carrega_dados_pessoais(0);
             }
-            
         ?>
   </body>
 </html>

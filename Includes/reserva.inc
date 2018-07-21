@@ -1,7 +1,24 @@
+<style>
+.msg-erro{
+    color: red !important;
+    font-size: 16px;
+}
+
+.input-erro{
+    border: 1px solid red !important;
+}
+
+.input-erro::placeholder {
+    color: red !important;
+    opacity: 0.6 !important;
+}
+</style>
+
+
 <?php
     function carrega_dados_pessoais($erro){
         ?>
-        
+
         <form action="reservar.php" class="container" method="POST">            
             <h1 class="title">Dados Pessoais</h1>
             <progress class="progress is-info" value="0" max="100"></progress>
@@ -33,12 +50,14 @@
                 <div class="control">
                   <button class="button is-link">Próximo</button>
                 </div>
+                <?php
+                    if ($erro){
+                        echo '<span class="msg-erro">Todos os campos devem estar preenchidos<span>';
+                    }
+                ?>
               </div>
             </form>
         <?php
-            if ($erro){
-                echo 'Todos os campos devem estar preenchidos';
-            }
     }
 
     function carrega_dados_reserva($erro){
@@ -54,7 +73,7 @@
                     <div class="select">
                     <select name="espaco">
                         <option>Auditório</option>
-                        <option>Labotatório</option>                        
+                        <option>Laboratório</option>                        
                         <option>Quadra maior</option>
                         <option>Quadra menor</option>                        
                     </select>
@@ -74,7 +93,11 @@
             <label class="label">Data e Horário</label>
             <div class="field is-grouped">
                 <div class="control">
-                    <input class="input" type="date" name="data">
+                    <label for="">Dia</label>
+                    <?php
+                        date_default_timezone_set('America/Sao_Paulo');
+                        echo '<input class="input" type="date" name="data" value="'.date('Y-m-d', time()).'">';
+                    ?>
                 </div>
 
                 <div class="control">
@@ -96,21 +119,22 @@
                     </label>
                 </div>
             </div>
-            
             <div class="field">
             <div class="control">
                 <button class="button is-link">Próximo</button>
             </div>
+            <?php
+                if ($erro == 1){
+                    echo '<span class="msg-erro">Você precisa aceitar os termos e condições</span>';
+                }else if ($erro == 2){
+                    echo '<span class="msg-erro">Preencha todos os campos</span>';
+                }else if ($erro == 3){
+                    echo '<span class="msg-erro">Horário indisponível</span>';
+                }
+            ?>
             </div>
         </form>
         <?php
-        if ($erro == 1){
-            echo "Você precisa aceitar os termos e condições";
-        }else if ($erro == 2){
-            echo "Preencha todos os campos";
-        }else if ($erro == 3){
-            echo "Horário indisponível";
-        }
     }
 
 
