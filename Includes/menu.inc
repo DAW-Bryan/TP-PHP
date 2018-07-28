@@ -1,14 +1,17 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
+                <img src="http://www.ufmg.br/online/marketing/arquivos/anexos/coltec_logo_proposta1.jpg" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+            </a>
 
-        <nav class="navbar is-transparent">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="index.html">
-                    <img src="http://www.ufmg.br/online/marketing/arquivos/anexos/coltec_logo_proposta1.jpg" width="112" height="28">
-                </a>
-            </div>
-
-            <div class="navbar-burger burger" data-target="navbarExampleTransparentExample"></div>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
               
-            <div id="navbarExampleTransparentExample" class="navbar-menu">
+            <div id="navbar" class="navbar-menu">
                 <div class="navbar-start">
                     <a class="navbar-item" href="index.html">
                       Home
