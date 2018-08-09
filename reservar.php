@@ -19,19 +19,25 @@
          - Adicionar horario de termino (ok)
          - Verificar Disponibilidade (ok)
          - Setar ano (ok)
-         - Busca de Reservas 
+         - Busca de Reservas
 
       -->
 
   <body>
-        <?php 
-            include "Includes/menu.inc";
+
+    <?php include "Includes/menu.inc"; ?>
+
+    <section class="section">
+
+      <div class="container">
+
+        <?php
             include "Models/Reserva.php";
             include "Models/ReservaDao.php";
             require "Includes/reserva.inc";
 
             if (isset($_POST["nome"])){ // Está na parte de Dados Pessoais
-                
+
                 if($_POST["nome"] == "" || $_POST["email"] == "" || $_POST["matricula"] == ""){ // Deixou algum campo em branco
                     carrega_dados_pessoais(1); // 1 = mensagem de erro
                 }else{
@@ -42,16 +48,16 @@
                 }
 
             }else if (isset($_POST["espaco"])) { // Está na parte de Dados da Reserva
-                
+
                 if ($_POST["declaracao"] == ""){
                     carrega_dados_reserva(1); // Não aceitou os termos
 
-                }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == ""){ 
+                }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == ""){
                     carrega_dados_reserva(2); // Não preencheu todos os campos
 
-                }else if (verifica_disponibilidade($_POST["espaco"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){ 
+                }else if (verifica_disponibilidade($_POST["espaco"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){
                     carrega_dados_reserva(3); // Horário indisponível
-                
+
                 }else{
                     $dao = new ReservaDao();
                     $reserva = new Reserva($_COOKIE["matricula"], $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
@@ -63,5 +69,8 @@
                 carrega_dados_pessoais(0);
             }
         ?>
+
+      </div>
+    </section>
   </body>
 </html>

@@ -19,7 +19,7 @@
     function carrega_dados_pessoais($erro){
         ?>
 
-        <form action="reservar.php" class="container" method="POST">            
+        <form action="reservar.php" method="POST">
             <h1 class="title">Dados Pessoais</h1>
             <progress class="progress is-info" value="0" max="100"></progress>
             <div class="field">
@@ -28,7 +28,7 @@
                   <input class="input" type="text" placeholder="Seu nome completo" name="nome">
                 </div>
               </div>
-              
+
               <div class="field">
                 <label class="label">Email</label>
                 <div class="control has-icons-left">
@@ -38,7 +38,7 @@
                   </span>
                 </div>
               </div>
-              
+
               <div class="field">
                   <label class="label">Número de Matrícula</label>
                   <div class="control">
@@ -62,20 +62,20 @@
 
     function carrega_dados_reserva($erro){
         ?>
-        
-        <form action="reservar.php" class="container" method="POST">            
+
+        <form action="reservar.php" method="POST">            
             <h1 class="title">Dados da Reserva</h1>
             <progress class="progress is-info" value="50" max="100"></progress>
-        
+
             <div class="field">
                 <label class="label">Espaço</label>
                 <div class="control">
                     <div class="select">
                     <select name="espaco">
                         <option>Auditório</option>
-                        <option>Laboratório</option>                        
+                        <option>Laboratório</option>
                         <option>Quadra maior</option>
-                        <option>Quadra menor</option>                        
+                        <option>Quadra menor</option>
                     </select>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                     <label class="radio"><input type="radio" name="tipo-de-reserva"> Mensal</label>
                 </div>
             </div>
-        
+
             <label class="label">Data e Horário</label>
             <div class="field is-grouped">
                 <div class="control">
@@ -104,13 +104,13 @@
                     <label for="">Inicio</label>
                     <input class="input" type="time" name="inicio">
                 </div>
-                
+
                 <div class="control">
                     <label for="">Término</label>
                     <input class="input" type="time" name="termino">
                 </div>
             </div>
-              
+
             <div class="field">
                 <div class="control">
                     <label class="checkbox">
@@ -142,7 +142,7 @@
         list ($horas, $minutos) = explode (':', $horario);
         return ($horas*60)+$minutos;
     }
-    
+
     function verifica_disponibilidade($espaco, $data, $inicio, $fim){
         $dao = new ReservaDao();
         $reservas = $dao->read_by_place($espaco);
