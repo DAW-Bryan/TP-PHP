@@ -17,7 +17,7 @@
          - Escrever Reserva em arquivos json (ok)
          - Diferenciar Dia unico, semanal e mensal (JS?)
          - Adicionar horario de termino (ok)
-         - Verificar Disponibilidade (ok)
+         - Verificar Disponibilidade (ok) (Mudei, lembrar de dar push)
          - Setar ano (ok)
          - Busca de Reservas 
 
@@ -49,7 +49,7 @@
                 }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == ""){ 
                     carrega_dados_reserva(2); // Não preencheu todos os campos
 
-                }else if (verifica_disponibilidade($_POST["espaco"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){ 
+                }else if (verifica_disponibilidade($_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){ 
                     carrega_dados_reserva(3); // Horário indisponível
                 
                 }else{
@@ -63,5 +63,40 @@
                 carrega_dados_pessoais(0);
             }
         ?>
+
+        <script>
+            var dia = new Date();
+                    var dd = dia.getDate();
+                    var mm = dia.getMonth()+1; // Janeiro = 0
+                    var yyyy = dia.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    dia = yyyy + '-' + mm + '-' + dd;
+
+            $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">'); 
+            $('#reservas-form .radio').on('change', function() {
+                $("#input-dia").remove();
+                if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "day"){ // Dia único
+                    
+
+                    $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">');
+                }else if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "week"){ // Semanal
+                    $("#dia").append('<select name="data" id="input-dia" class="input">'
+                        + '<option value="1">Segunda</option>'
+                        + '<option value="2">Terça</option>'
+                        + '<option value="3">Quarta</option>'
+                        + '<option value="4">Quinta</option>'
+                        + '<option value="5">Sexta</option>'
+                        + '<option value="6">Sábado</option>'
+                    + '</select>');
+                }
+                
+            });
+
+        </script>
   </body>
 </html>

@@ -63,7 +63,7 @@
     function carrega_dados_reserva($erro){
         ?>
         
-        <form action="reservar.php" class="container" method="POST">            
+        <form action="reservar.php" class="container" method="POST" id="reservas-form">            
             <h1 class="title">Dados da Reserva</h1>
             <progress class="progress is-info" value="50" max="100"></progress>
         
@@ -84,20 +84,15 @@
             <div class="field">
                 <div class="control">
                     <label for="" class="label">Tipo de reserva</label>
-                    <label class="radio"><input type="radio" name="tipo-de-reserva"> Dia único</label>
-                    <label class="radio"><input type="radio" name="tipo-de-reserva"> Semanal</label>
-                    <label class="radio"><input type="radio" name="tipo-de-reserva"> Mensal</label>
+                    <label class="radio"><input type="radio" name="tipo-de-reserva" value="day" checked> Dia único</label>
+                    <label class="radio"><input type="radio" name="tipo-de-reserva" value="week"> Semanal</label>
                 </div>
             </div>
         
             <label class="label">Data e Horário</label>
             <div class="field is-grouped">
-                <div class="control">
+                <div class="control" id="dia">
                     <label for="">Dia</label>
-                    <?php
-                        date_default_timezone_set('America/Sao_Paulo');
-                        echo '<input class="input" type="date" name="data" value="'.date('Y-m-d', time()).'">';
-                    ?>
                 </div>
 
                 <div class="control">
@@ -143,18 +138,37 @@
         return ($horas*60)+$minutos;
     }
     
-    function verifica_disponibilidade($espaco, $data, $inicio, $fim){
+    function verifica_disponibilidade($espaco, $tipo, $data, $inicio, $fim){
         $dao = new ReservaDao();
         $reservas = $dao->read_by_place($espaco);
         if ($reservas != null){
             $inicio = converte_horario_minutos($inicio);
             $fim = converte_horario_minutos($fim);
             foreach ( $reservas as $r ) {
-                if ($r->data == $data){
-                    $r->inicio = converte_horario_minutos($r->inicio);
-                    $r->fim = converte_horario_minutos($r->fim);
-                    if (($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
-                        return 0; // Indisponível
+                if ($r->tipo_de_reserva == $tipo){
+                    if ($r->data == $data){
+                        $r->inicio = converte_horario_minutos($r->inicio);
+                        $r->fim = converte_horario_minutos($r->fim);
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                            return 0; // Indisponível
+                        }
+                    }
+                }else if ($r->tipo_de_reserva == "day"){
+                    if (date('w', strtotime($r->data)) == $data){
+                        $r->inicio = converte_horario_minutos($r->inicio);
+                        $r->fim = converte_horario_minutos($r->fim);
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                            return 0; // Indisponível
+                        }
+                    }    
+                }else{
+                    if (date('w', strtotime($data)) == $r->data){
+                        $r->inicio = converte_horario_minutos($r->inicio);
+                        $r->fim = converte_horario_minutos($r->fim);
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                            return 0; // Indisponível
+                        }
+                    
                     }
                 }
             }
