@@ -1,4 +1,4 @@
-<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="index.php">
                 <img src="Images/logo.png">
@@ -50,3 +50,10 @@
                 </div>
             </div>
         </nav>
+
+        <section class="section has-background-dark" style="padding-bottom: 70px !important">
+            <div class="container">
+                <h1 class="title has-text-centered has-text-white"> Reservas COLTEC</h1>
+                <h2 class="subtitle has-text-centered has-text-light"> Para reservar a sala ou espaço que você precisa no Colégio!</h2>
+            </div>
+        </section>

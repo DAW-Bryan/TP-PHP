@@ -26,13 +26,6 @@
         <?php include "Includes/menu.inc"; ?>
 
         <section class="section">
-            <div class="container">
-                <h1 class="title has-text-centered"> Reserva de espaços CT</h1>
-                <h2 class="subtitle has-text-centered"> Para reservar a sala ou espaço que você precisa no Coltec!</h2>
-            </div>
-        </section>
-
-        <section class="section">
             <nav class="columns">
 
                 <a class="column has-text-centered" href="espacos.php/?tag=quadras">
