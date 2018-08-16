@@ -1,0 +1,26 @@
+figure img {
+  transition-timing-function: ease-in-out;
+  transition: all 0.4s;
+}
+
+figure img:hover{
+  transform: scale(1.1);
+}
+
+.navbar-item {
+  transition: 0.2s;
+}
+
+.button {
+  transition: 0.2s
+}
+
+.has-background-lightblue {
+  background-color: #e6ebff;
+  color: black
+}
+
+.has-background-lightgreen {
+  background-color: #b3ffb3;
+  color: black
+}
