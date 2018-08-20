@@ -175,4 +175,14 @@
         }
         return 1; // Disponível
     }
+
+
+    function print_reservas_by_mat ($matricula) {
+        $dao = new ReservaDao();
+        $reservas = $dao->read_by_matricula($matricula);
+        foreach ( $reservas as $r ) {
+            echo '<p>' . $r->espaco;
+        }
+
+    }
 ?>

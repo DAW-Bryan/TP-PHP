@@ -26,6 +26,17 @@
             fclose($file); 
         }
 
+        function read_by_matricula($matricula){
+            $reservas;
+            $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
+            foreach ( $todas_reservas as $r ) {
+                if ($r->matricula == $matricula){
+                    $reservas[] = new Reserva($r->matricula, $r->espaco, $r->tipo_de_reserva, $r->data, $r->inicio, $r->fim);
+                }
+            }
+            return $reservas;
+        }
+
     }
 
 ?>
