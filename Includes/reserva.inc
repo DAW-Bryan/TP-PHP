@@ -1,21 +1,7 @@
-<style>
-.msg-erro{
-    color: red !important;
-    font-size: 16px;
-}
-
-.input-erro{
-    border: 1px solid red !important;
-}
-
-.input-erro::placeholder {
-    color: red !important;
-    opacity: 0.6 !important;
-}
-</style>
-
 
 <?php
+
+    // Funções para realizar reservas //
     function carrega_dados_pessoais($erro){
         ?>
 
@@ -177,12 +163,42 @@
     }
 
 
-    function print_reservas_by_mat ($matricula) {
-        $dao = new ReservaDao();
-        $reservas = $dao->read_by_matricula($matricula);
-        foreach ( $reservas as $r ) {
-            echo '<p>' . $r->espaco;
-        }
+ // Funções para Listar Reservas //
 
+ function print_reservas_da_pessoa($reservas){
+    if ($reservas != null){
+        ?>
+        <form method="GET">
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Espaço</th>
+                    <th>Tipo de Reserva</th>
+                    <th>Data</th>
+                    <th>Início</th>
+                    <th>Término</th>
+                    <th class="has-text-centered">Deletar</th>
+                </tr>
+            </thead>
+            <tbody>
+        <?php
+        $i = 0;
+        foreach ( $reservas as $r ) {
+            echo '<tr>';
+            echo '<td>'. $r->espaco .'</div>';
+            echo '<td>'. $r->tipo_de_reserva .'</div>';
+            echo '<td>'. $r->data .'</div>';
+            echo '<td>'. $r->inicio .'</div>';
+            echo '<td>'. $r->fim .'</div>';
+            echo '<td class="has-text-centered"><button type="submit" name="reserva" value="'. $i . '" class="delete has-background-danger"></button></td>"';
+            echo '</tr>';
+            $i++;
+        }
+        echo '</tbody></table></form>';
+    }else{
+        echo '<h2>Nenhuma reserva cadastrada</h2>';
     }
+}
+
+
 ?>
