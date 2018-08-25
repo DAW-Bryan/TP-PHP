@@ -87,11 +87,9 @@
             $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">'); 
             $('#reservas-form .radio').on('change', function() {
                 $("#input-dia").remove();
-                if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "day"){ // Dia único
-                    
-
+                if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Diária"){ // Dia único
                     $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">');
-                }else if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "week"){ // Semanal
+                }else if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Semanal"){ // Semanal
                     $("#dia").append('<select name="data" id="input-dia" class="input">'
                         + '<option value="1">Segunda</option>'
                         + '<option value="2">Terça</option>'

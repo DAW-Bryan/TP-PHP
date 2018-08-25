@@ -59,7 +59,8 @@
                     <div class="select">
                     <select name="espaco">
                         <option>Auditório</option>
-                        <option>Laboratório</option>
+                        <option>Laboratório de Informática</option>
+                        <option>Laboratório de Química</option>
                         <option>Quadra maior</option>
                         <option>Quadra menor</option>
                     </select>
@@ -70,8 +71,8 @@
             <div class="field">
                 <div class="control">
                     <label for="" class="label">Tipo de reserva</label>
-                    <label class="radio"><input type="radio" name="tipo-de-reserva" value="day" checked> Dia único</label>
-                    <label class="radio"><input type="radio" name="tipo-de-reserva" value="week"> Semanal</label>
+                    <label class="radio"><input type="radio" name="tipo-de-reserva" value="Diária" checked> Dia único</label>
+                    <label class="radio"><input type="radio" name="tipo-de-reserva" value="Semanal"> Semanal</label>
                 </div>
             </div>
 
@@ -139,7 +140,7 @@
                             return 0; // Indisponível
                         }
                     }
-                }else if ($r->tipo_de_reserva == "day"){
+                }else if ($r->tipo_de_reserva == "Diária"){
                     if (date('w', strtotime($r->data)) == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
@@ -197,6 +198,38 @@
         echo '</tbody></table></form>';
     }else{
         echo '<h2>Nenhuma reserva cadastrada</h2>';
+    }
+}
+
+function print_reservas_por_espaco($reservas) {
+    if ($reservas != null){
+        ?>
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Tipo de Reserva</th>
+                    <th>Data</th>
+                    <th>Início</th>
+                    <th>Término</th>
+                </tr>
+            </thead>
+            <tbody>
+        <?php
+        $i = 0;
+        foreach ( $reservas as $r ) {
+            echo '<tr>';
+            echo '<td>'. $r->matricula .'</div>';
+            echo '<td>'. $r->tipo_de_reserva .'</div>';
+            echo '<td>'. $r->data .'</div>';
+            echo '<td>'. $r->inicio .'</div>';
+            echo '<td>'. $r->fim .'</div>';
+            echo '</tr>';
+            $i++;
+        }
+        echo '</tbody></table>';
+    }else{
+        echo 'Nenhuma reserva cadastrada para esse espaço';
     }
 }
 

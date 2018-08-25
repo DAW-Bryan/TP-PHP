@@ -28,7 +28,7 @@
         <section class="section">
             <nav class="columns">
 
-                <a class="column has-text-centered" href="espacos.php/?tag=quadras">
+                <a class="column has-text-centered" href="espacos.php?tag=quadras">
                     <p class="title is-4"> Quadras esportivas </p>
                     <p class="subtitle is-6"> Jogue seu futebol! </p>
 
@@ -37,7 +37,7 @@
                     </figure>
                 </a>
 
-                <a class="column has-text-centered" href="espacos.php/?tag=lab">
+                <a class="column has-text-centered" href="espacos.php?tag=lab">
                     <p class="title is-4"> Laboratórios </p>
                     <p class="subtitle is-6"> Informática, Química, entre outros </p>
 
@@ -46,7 +46,7 @@
                     </figure>
                 </a>
 
-                <a class="column has-text-centered" href="espacos.php/?tag=salas">
+                <a class="column has-text-centered" href="espacos.php?tag=salas">
                     <p class="title is-4"> Salas de aula </p>
                     <p class="subtitle is-6"> Auditório, Sala de dança, etc </p>
 

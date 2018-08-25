@@ -35,6 +35,11 @@
 
 
         // Leitura //
+        function read_all(){
+            return json_decode(file_get_contents("Arquivos/reservas.json"));            
+        }
+
+
         function read_by_place($espaco){
             $reservas = null;
             $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
