@@ -24,6 +24,18 @@
         <!-- Menu navbar -->
         <?php include "Includes/menu.inc"; ?>
 
+
+        <!-- Deleta reservas antigas -->
+        <?php 
+            include "Models/Reserva.php";
+            include "Models/ReservaDao.php";
+            date_default_timezone_set('America/Sao_Paulo');
+
+            $dao = new ReservaDao();
+            $dao->deleta_antigas();
+
+        ?>
+
         <section class="section">
             <nav class="columns">
 

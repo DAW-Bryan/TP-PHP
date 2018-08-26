@@ -15,7 +15,17 @@
             fwrite($file, $ArquivoJSON);
             fclose($file); 
         }
-
+        
+        function deleta_antigas(){
+            $reservas = null;
+            $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
+            foreach ( $todas_reservas as $r ) {
+                if (strtotime($r->data) < strtotime(date('Y-m-d')) && $r->tipo_de_reserva != "Semanal"){
+                    $this->delete($r);       
+                }
+            }
+        }
+        
         function delete($reserva){
             $ArquivoJSON = file_get_contents("Arquivos/reservas.json");
             $reservaJSON = json_encode($reserva);
@@ -63,7 +73,7 @@
         }
 
         function read_by_date($data){
-            $reservas = [];
+            $reservas = null;
             $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
             foreach ( $todas_reservas as $r ) {
                 if ($r->tipo_de_reserva == "Diária"){
