@@ -1,1 +1,1 @@
-[]
+[{"nome":"Ola","matricula":"123","espaco":"Sala de Dan\u00e7a","tipo_de_reserva":"Di\u00e1ria","data":"2018-08-26","inicio":"13:50","fim":"14:00"},{"nome":"asd","matricula":"123","espaco":"Sala de Dan\u00e7a","tipo_de_reserva":"Di\u00e1ria","data":"2018-08-26","inicio":"13:30","fim":"13:40"},{"nome":"Pao aqui","matricula":"123","espaco":"Audit\u00f3rio","tipo_de_reserva":"Di\u00e1ria","data":"2018-08-26","inicio":"13:30","fim":"13:31"},{"nome":"Peladinha","matricula":"123","espaco":"Quadra Menor","tipo_de_reserva":"Semanal","data":"5","inicio":"13:40","fim":"13:50"}]

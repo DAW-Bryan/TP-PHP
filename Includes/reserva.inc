@@ -10,6 +10,11 @@
             <h1 class="title">Dados da Reserva</h1>
 
             <div class="field">
+                <label class="label">Nome da Reserva</label>
+                <input type="text" name="nome" placeholder="Exemplo: Peladinha dos brothers" class="input">
+            </div>
+
+            <div class="field">
                 <label class="label">Espaço</label>
                 <div class="control">
                     <div class="select">
@@ -22,12 +27,6 @@
                         }
 
                     ?>
-                    <!-- <option>Auditório</option>
-                    <option>Laboratório de Informática</option>
-                    <option>Laboratório de Química</option>
-                    <option>Quadra maior</option>
-                    <option>Quadra menor</option> -->
-
                     </select>
                     </div>
                 </div>
@@ -274,6 +273,7 @@ function print_todas_as_reservas($reservas) {
       <table class="table is-hoverable is-fullwidth">
           <thead>
               <tr>
+                  <th>Nome</th>
                   <th>Espaço</th>
                   <th>Usuário</th>
                   <th>Tipo de Reserva</th>
@@ -287,6 +287,7 @@ function print_todas_as_reservas($reservas) {
       $i = 0;
       foreach ( $reservas as $r ) {
           echo '<tr>';
+          echo '<td>'. $r->nome . '</div>';
           echo '<td>'. $r->espaco .'</div>';
           echo '<td>'. $r->matricula .'</div>';
           echo '<td>'. $r->tipo_de_reserva .'</div>';
@@ -306,7 +307,7 @@ function print_todas_as_reservas($reservas) {
       echo '</tbody></table>';
   }else{
       echo '<p>Nenhuma reserva realizada</p>
-            <button class="button is-successis-outlined"> Fazer uma reserva</button>';
+            <a class="button is-successis-outlined" href="reservar.php"> Fazer uma reserva</a>';
   }
 }
 

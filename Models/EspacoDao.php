@@ -5,7 +5,7 @@
         function insert($espaco){
             $espacoJSON = json_encode($espaco);
             $ArquivoJSON = file_get_contents("Arquivos/espacos.json");
-            if($ArquivoJSON == "[]"){ // Nenhum usuario cadastrado
+            if(!strcmp($ArquivoJSON, "[]")){ // Nenhum usuario cadastrado
                 $ArquivoJSON = str_replace("[", "[".$espacoJSON, $ArquivoJSON);
             }else{
                 $ArquivoJSON = str_replace("[", "[".$espacoJSON.",", $ArquivoJSON);

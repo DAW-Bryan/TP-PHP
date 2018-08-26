@@ -55,7 +55,7 @@
 
                 }else{
                     $dao = new ReservaDao();
-                    $reserva = new Reserva("123", $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
+                    $reserva = new Reserva($_POST["nome"], "123", $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
                     $dao->insert($reserva);
                     echo 'Reserva realizada com sucesso';
                 }
