@@ -36,7 +36,9 @@
             include "Models/Reserva.php";
             include "Models/ReservaDao.php";
             require "Includes/reserva.inc";
-
+            
+            date_default_timezone_set('America/Sao_Paulo');
+            
             if (isset($_POST["nome"])){ // Está na parte de Dados Pessoais
 
                 if($_POST["nome"] == "" || $_POST["email"] == "" || $_POST["matricula"] == ""){ // Deixou algum campo em branco

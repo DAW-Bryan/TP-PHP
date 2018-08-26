@@ -136,7 +136,7 @@
                     if ($r->data == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
-                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim) || $inicio > $fim){
                             return 0; // Indisponível
                         }
                     }
@@ -144,7 +144,7 @@
                     if (date('w', strtotime($r->data)) == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
-                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim || $inicio > $fim)){
                             return 0; // Indisponível
                         }
                     }    
@@ -166,6 +166,25 @@
 
  // Funções para Listar Reservas //
 
+function convert_num_to_weekday($num){
+    if ($num == "1"){
+        return "Segunda";
+    }else if ($num == "2"){
+        return "Terça";
+    }else if ($num == "3"){
+        return "Quarta";
+    }else if ($num == "4"){
+        return "Quinta";
+    }else if ($num == "5"){
+        return "Sexta";
+    }else if ($num == "6"){
+        return "Sábado";
+    }else {
+        return "Domingo";
+    }
+}
+
+
  function print_reservas_da_pessoa($reservas){
     if ($reservas != null){
         ?>
@@ -175,7 +194,7 @@
                 <tr>
                     <th>Espaço</th>
                     <th>Tipo de Reserva</th>
-                    <th>Data</th>
+                    <th>Data/Dia</th>
                     <th>Início</th>
                     <th>Término</th>
                     <th class="has-text-centered">Deletar</th>
@@ -188,6 +207,11 @@
             echo '<tr>';
             echo '<td>'. $r->espaco .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
+            
+            if ($r->tipo_de_reserva == "Semanal"){
+                $r->data = convert_num_to_weekday($r->data);
+            }
+
             echo '<td>'. $r->data .'</div>';
             echo '<td>'. $r->inicio .'</div>';
             echo '<td>'. $r->fim .'</div>';
@@ -209,7 +233,7 @@ function print_reservas_por_espaco($reservas) {
                 <tr>
                     <th>Usuário</th>
                     <th>Tipo de Reserva</th>
-                    <th>Data</th>
+                    <th>Data/Dia</th>
                     <th>Início</th>
                     <th>Término</th>
                 </tr>
@@ -221,6 +245,11 @@ function print_reservas_por_espaco($reservas) {
             echo '<tr>';
             echo '<td>'. $r->matricula .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
+            
+            if ($r->tipo_de_reserva == "Semanal"){
+                $r->data = convert_num_to_weekday($r->data);
+            }
+            
             echo '<td>'. $r->data .'</div>';
             echo '<td>'. $r->inicio .'</div>';
             echo '<td>'. $r->fim .'</div>';
@@ -230,6 +259,47 @@ function print_reservas_por_espaco($reservas) {
         echo '</tbody></table>';
     }else{
         echo 'Nenhuma reserva cadastrada para esse espaço';
+    }
+}
+
+function print_reservas_semana($reservas){
+    if ($reservas != null){
+        ?>
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Espaço</th>
+                    <th>Usuário</th>
+                    <th>Tipo de Reserva</th>
+                    <th>Dia</th>
+                    <th>Início</th>
+                    <th>Término</th>
+                </tr>
+            </thead>
+            <tbody>
+        <?php
+        $i = 0;
+        foreach ( $reservas as $r ) {
+            echo '<tr>';
+            echo '<td>'. $r->espaco .'</div>';
+            echo '<td>'. $r->matricula .'</div>';
+            echo '<td>'. $r->tipo_de_reserva .'</div>';
+            
+            if ($r->tipo_de_reserva == "Semanal"){
+                $r->data = convert_num_to_weekday($r->data);
+            }else{
+                $r->data = convert_num_to_weekday(date('w', strtotime($r->data)));
+            }
+            
+            echo '<td>'. $r->data .'</div>';
+            echo '<td>'. $r->inicio .'</div>';
+            echo '<td>'. $r->fim .'</div>';
+            echo '</tr>';
+            $i++;
+        }
+        echo '</tbody></table>';
+    }else{
+        echo 'Nenhuma reserva';
     }
 }
 

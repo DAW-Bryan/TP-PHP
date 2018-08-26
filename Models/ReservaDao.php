@@ -61,6 +61,23 @@
             }
             return $reservas;
         }
+
+        function read_by_date($data){
+            $reservas = [];
+            $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
+            foreach ( $todas_reservas as $r ) {
+                if ($r->tipo_de_reserva == "Diária"){
+                    if ($data == $r->data){
+                        $reservas[] = new Reserva($r->matricula, $r->espaco, $r->tipo_de_reserva, $r->data, $r->inicio, $r->fim);
+                    }
+                }else{ // tipo_de_reserva == semanal
+                    if (date('w', strtotime($data)) == $r->data){
+                        $reservas[] = new Reserva($r->matricula, $r->espaco, $r->tipo_de_reserva, $r->data, $r->inicio, $r->fim);
+                    }
+                }
+            }
+            return $reservas;
+        }
     }
 
 ?>
