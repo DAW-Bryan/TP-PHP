@@ -21,7 +21,6 @@
   </head>
 
   <body>
-
         <!-- Menu navbar -->
         <?php include "Includes/menu.inc"; ?>
 
@@ -78,16 +77,9 @@
 
             </div>
         </section>
-
   </body>
 
+  <!-- Importando os scripts -->
+  <?php require "Includes/scripts.inc"; ?>
 
-  <script>
-        $(document).ready(function() {
-            $(".navbar-burger").click(function() {
-                $(".navbar-burger").toggleClass("is-active");
-                $(".navbar-menu").toggleClass("is-active");
-            });
-        });
-  </script>
 </html>
