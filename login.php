@@ -22,7 +22,7 @@
 
   <body>
 
-    <?php include "Includes/menu.inc";
+    <?php
 
     session_start();
 
@@ -58,6 +58,7 @@
         }
     }
 
+    include "Includes/menu.inc";
     echo "<section class='section'>
             <div class='container'>
               <h1 class='title'> Usuário não cadastrado! </h1>
