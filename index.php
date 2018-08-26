@@ -86,7 +86,7 @@
                             $data = date('Y-m-d');
                             $reservas = [];
 
-                            for ($i=0; $i < 7 /*- intval(date("w"))*/; $i++){ 
+                            for ($i=0; $i < 7 /*- intval(date("w"))*/; $i++){
                                 if ($i==0){
                                     $reservas = $dao->read_by_date($data);
                                 }else{
@@ -96,27 +96,27 @@
                             }
 
                             print_todas_as_reservas($reservas);
-                
-                            
+
+
                             if (isset($_POST["data"])){
                                 echo '<h1 class="title"> Dia pesquisado: </h1>';
                                 $reservas = $dao->read_by_date($_POST["data"]);
                                 print_todas_as_reservas($reservas);
                             }
-                ?>
+                        ?>
 
-            <br>
-            <form action="index.php" method="post">
-                <div class="label">Busca por data</div>
-                <div class="field has-addons">
-                    <div class="control">
-                        <input type="date" name="data" id="data" class="input">
-                    </div>
-                    <div class="control">
-                        <input type="submit" value="Buscar" class="button is-link">
-                    </div>
-                </div>
-            </form>
+                        <br>
+                        <form action="index.php" method="post">
+                            <div class="label">Busca por data</div>
+                            <div class="field has-addons">
+                                <div class="control">
+                                    <input type="date" name="data" id="data" class="input">
+                                </div>
+                                <div class="control">
+                                    <input type="submit" value="Buscar" class="button is-link">
+                                </div>
+                            </div>
+                        </form>
 
                       </div>
                 </div>

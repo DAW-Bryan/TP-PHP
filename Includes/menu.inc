@@ -44,24 +44,26 @@
                               </button>
                           </div>
 
-                          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                              <div class="dropdown-content">
-                                <div class="dropdown-item">
-                                    <div class="control">
-                                        <input class="input" type="number" name="numMatricula" placeholder="Matrícula">
-                                    </div>
+                          <form action="login.php" method="post">
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-content">
+                                  <div class="dropdown-item">
+                                      <div class="control">
+                                          <input class="input" type="number" name="numMatricula" placeholder="Matrícula">
+                                      </div>
+                                  </div>
+                                  <div class="dropdown-item">
+                                      <div class="control">
+                                          <input class="input" type="password" name="senha" placeholder="Senha">
+                                      </div>
+                                  </div>
+                                  <div class="dropdown-item">
+                                    <input type="submit" class="button is-success" value="Fazer login"></input>
+                                  </div>
                                 </div>
-                                <div class="dropdown-item">
-                                    <div class="control">
-                                        <input class="input" type="password" name="senha" placeholder="Senha">
-                                    </div>
-                                </div>
-                                <div class="dropdown-item">
-                                  <input type="submit" class="button is-success" value="Fazer login"></input>
-                                </div>
-                              </div>
-                          </div>
-
+                            </div>
+                        </form>
+                        
                       </div>
                   </p>
 
@@ -90,55 +92,57 @@
         </section>
 
         <!-- Modal para cadastro -->
-        <div class="modal" id="modal">
-          <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Cadastro de usuários</p>
-            <button class="delete" aria-label="close"></button>
-          </header>
-          <section class="modal-card-body">
-            <div class="field">
-                <label class="label">Nome Completo</label>
-                <div class="control">
-                    <input class="input" type="text" name="EntradaNome" placeholder="Seu nome completo">
-                </div>
-            </div>
+        <form method="post" action="autentica_cadastro.php">
+          <div class="modal" id="modal">
+            <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Cadastro de usuários</p>
+              <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+              <div class="field">
+                  <label class="label">Nome Completo</label>
+                  <div class="control">
+                      <input class="input" type="text" name="EntradaNome" placeholder="Seu nome completo">
+                  </div>
+              </div>
 
-            <div class="field">
-                <label class="label">Email</label>
-                <div class="control has-icons-left">
-                    <input class="input" type="email"  name="EntradaEmail"placeholder="Seu email">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-envelope"></i>
-                    </span>
-                </div>
-            </div>
+              <div class="field">
+                  <label class="label">Email</label>
+                  <div class="control has-icons-left">
+                      <input class="input" type="email"  name="EntradaEmail"placeholder="Seu email">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-envelope"></i>
+                      </span>
+                  </div>
+              </div>
 
-            <div class="field">
-                <label class="label">Número de Matrícula</label>
-                <div class="control">
-                    <input class="input" type="number" name="EntradaMatricula" placeholder="Sua Matrícula">
-                </div>
-            </div>
+              <div class="field">
+                  <label class="label">Número de Matrícula</label>
+                  <div class="control">
+                      <input class="input" type="number" name="EntradaMatricula" placeholder="Sua Matrícula">
+                  </div>
+              </div>
 
-            <div class="field">
-                <label class="label">Senha</label>
-                <div class="control">
-                    <input class="input" type="password" id="senha1" placeholder="Digite a senha" name="EntradaSenha" onchange="validaSenha()">
-                </div>
-            </div>
+              <div class="field">
+                  <label class="label">Senha</label>
+                  <div class="control">
+                      <input class="input" type="password" id="senha1" placeholder="Digite a senha" name="EntradaSenha" onchange="validaSenha()">
+                  </div>
+              </div>
 
-            <div class="field">
-                <label class="label">Repita a senha</label>
-                <div class="control">
-                    <input class="input" type="password" id="senha2" placeholder="Digite a senha" onchange="validaSenha()">
-                </div>
-            </div>
-          </section>
-          <footer class="modal-card-foot">
-            <button class="button is-success">Finalizar cadastro</button>
-            <button class="button">Cancelar</button>
-          </footer>
+              <div class="field">
+                  <label class="label">Repita a senha</label>
+                  <div class="control">
+                      <input class="input" type="password" id="senha2" placeholder="Digite a senha" onchange="validaSenha()">
+                  </div>
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <button class="button is-success">Finalizar cadastro</button>
+              <button class="button">Cancelar</button>
+            </footer>
+          </div>
         </div>
-      </div>
+      </form>
