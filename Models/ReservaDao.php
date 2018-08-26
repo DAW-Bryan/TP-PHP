@@ -5,7 +5,7 @@
         function insert($reserva){
             $reservaJSON = json_encode($reserva);
             $ArquivoJSON = file_get_contents("Arquivos/reservas.json");
-            if($ArquivoJSON == "[]"){ // Nenhum usuario cadastrado
+            if(strcmp($ArquivoJSON, "[]")){ // Nenhuma reserva cadastrada
                 $ArquivoJSON = str_replace("[", "[".$reservaJSON, $ArquivoJSON);
             }else{
                 $ArquivoJSON = str_replace("[", "[".$reservaJSON.",", $ArquivoJSON);

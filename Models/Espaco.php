@@ -7,7 +7,7 @@
         function __construct($nome, $tipo) {
             $this->nome = $nome;
             $this->tipo = $tipo;
-            $this->imagem = "Images/".$nome;
+            $this->imagem = "Images/".$tipo;
         }
 
     }

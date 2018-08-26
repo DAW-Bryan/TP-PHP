@@ -14,11 +14,20 @@
                 <div class="control">
                     <div class="select">
                     <select name="espaco">
-                        <option>Auditório</option>
-                        <option>Laboratório de Informática</option>
-                        <option>Laboratório de Química</option>
-                        <option>Quadra maior</option>
-                        <option>Quadra menor</option>
+                    <?php
+                        $dao_e = new EspacoDao();
+                        $espacos = $dao_e->read_all();
+                        foreach ($espacos as $e){
+                            echo '<option>' . $e->nome . '</option>';
+                        }
+
+                    ?>
+                    <!-- <option>Auditório</option>
+                    <option>Laboratório de Informática</option>
+                    <option>Laboratório de Química</option>
+                    <option>Quadra maior</option>
+                    <option>Quadra menor</option> -->
+
                     </select>
                     </div>
                 </div>

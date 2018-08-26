@@ -35,6 +35,8 @@
         <?php
             include "Models/Reserva.php";
             include "Models/ReservaDao.php";
+            include "Models/Espaco.php";
+            include "Models/EspacoDao.php";
             require "Includes/reserva.inc";
             
             date_default_timezone_set('America/Sao_Paulo');
@@ -43,13 +45,13 @@
             if (isset($_POST["espaco"])) { // Está na parte de Dados da Reserva
 
                 if ($_POST["declaracao"] == ""){
-                    carrega_dados_reserva(1); // Não aceitou os termos
+                    carrega_reserva(1); // Não aceitou os termos
 
                 }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == ""){
-                    carrega_dados_reserva(2); // Não preencheu todos os campos
+                    carrega_reserva(2); // Não preencheu todos os campos
 
                 }else if (verifica_disponibilidade($_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){ 
-                    carrega_dados_reserva(3); // Horário indisponível
+                    carrega_reserva(3); // Horário indisponível
 
                 }else{
                     $dao = new ReservaDao();

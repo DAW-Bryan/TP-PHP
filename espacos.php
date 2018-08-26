@@ -35,12 +35,31 @@
             include "Models/Espaco.php";
             include "Models/EspacoDao.php";
 
+            $dao_e = new EspacoDao();
+
+            if (isset($_POST["addEspaco"]) && $_POST["nome"] != ""){
+                $tipo = null;
+                if ($_POST["tipo_espaco"] == "Quadras"){
+                    $tipo = "quadras";
+                } else if ($_POST["tipo_espaco"] == "Salas de aula"){
+                    $tipo = "salas";   
+                } else {
+                    $tipo = "lab";
+                }
+
+                $espaco = new Espaco($_POST["nome"], $tipo);
+                $dao_e->insert($espaco);
+            }else if (isset($_POST["delEspaco"])){
+                $espacos = $dao_e->read_all();
+                $dao_e->delete($espacos[$_POST["delEspacoPos"]]);
+            }
+
+
             if (isset($_GET["tag"])){
 
-                $dao_e = new EspacoDao();
                 $dao_r = new ReservaDao();
 
-                $espacos = $dao->read_by_tipo($_GET["tag"]);
+                $espacos = $dao_e->read_by_tipo($_GET["tag"]);
                 
                 echo '<section class="section">';
                 foreach ($espacos as $e){
@@ -51,30 +70,6 @@
 
                 echo '</section>';
             }
-
-            /*
-            if ($_GET["tag"] == "quadras"){
-                $reservas = $dao->read_by_place("Quadra maior");
-                echo '<h1 class="title is-2">Quadra maior</h1>';
-                print_reservas_por_espaco($reservas);
-
-                $reservas = $dao->read_by_place("Quadra menor");
-                echo '<h1 class="title is-2">Quadra menor</h1>';
-                print_reservas_por_espaco($reservas);                
-            }else if ($_GET["tag"] =="lab"){
-                $reservas = $dao->read_by_place("Laboratório de Informática");
-                echo '<h1 class="title is-2">Laboratório de Informática</h1>';
-                print_reservas_por_espaco($reservas);
-
-                $reservas = $dao->read_by_place("Laboratório de Química");
-                echo '<h1 class="title is-2">Laboratório de Química</h1>';
-                print_reservas_por_espaco($reservas);                
-            }else if ($_GET["tag"] == "salas"){
-                $reservas = $dao->read_by_place("Auditório");
-                echo '<h1 class="title is-2">Auditório</h1>';
-                print_reservas_por_espaco($reservas);
-            }
-              */  
         ?>
 
         <p class="control" style="margin-left: 5px">
@@ -83,21 +78,30 @@
                     Adicionar Espaço
                 </span>
             </button>
+            <button class="button is-link" id="modal-trigger-del" data-target="modalDelEspaco">
+                <span>
+                    Deletar Espaço
+                </span>
+            </button>
         </p>
 
+        
+
         <!-- Modal para adicionar espaco -->
+        <form action="espacos.php" method="post">
+
         <div class="modal" id="modalEspaco">
           <div class="modal-background"></div>
             <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Cadastro de usuários</p>
+                <p class="modal-card-title">Adicionar Espaço</p>
                 <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
                 <div class="field">
                     <label class="label">Nome</label>
                     <div class="control">
-                        <input class="input" type="text" name="EntradaNome" placeholder="Nome do espaço">
+                        <input class="input" type="text" name="nome" placeholder="Nome do espaço">
                     </div>
                 </div>
 
@@ -105,7 +109,7 @@
                     <label class="label">Tipo</label>
                     <div class="control">
                         <div class="select">
-                            <select name="espaco">
+                            <select name="tipo_espaco">
                                 <option>Quadras</option>
                                 <option>Laboratórios</option>
                                 <option>Salas de aula</option>
@@ -116,31 +120,84 @@
 
             </section>
             <footer class="modal-card-foot">
-                <button class="button is-success">Adicionar</button>
+                <input type="hidden" id="addEspaco" name="addEspaco" value="true">
+                <input class="button is-success" type="submit" value="Adicionar">
             </footer>
             </div>
         </div>
+
+        </form>
+
+
+        <form action="espacos.php" method="post">
+        <!-- Modal deletar espaco -->
+        <div class="modal" id="modalDelEspaco">
+          <div class="modal-background"></div>
+            <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Deletar espaços</p>
+                <button class="delete deleteModal" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th class="has-text-centered">Deletar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <?php
+                $espacos = $dao_e->read_all();
+                if ($espacos != null){
+                    $i = 0;
+                    foreach ( $espacos as $e ) {
+                        echo '<tr>';
+                        echo '<td>'. $e->nome .'</div>';
+                        echo '<td class="has-text-centered"><button type="submit" name="delEspacoPos" value="'. $i . '" class="delete has-background-danger"></button></td>"';
+                        echo '</tr>';
+                        $i++;
+                    }
+                }
+                echo '</tbody></table>';
+                
+                ?>
+                <input type="hidden" id="delEspaco" name="delEspaco" value="true">
+            </section>
+            </div>
+        </div>
+
+        </form>
+        
         
     <!-- Importando os scripts -->
     <?php require "Includes/scripts.inc"; ?>
     <script>
-    // modal Espaco
+    // modal Adiciona Espaco
     var modal = document.querySelector('#modalEspaco');
     var trigger = document.querySelector('#modal-trigger-e');
     trigger.addEventListener('click', function(event){
         modal.classList.toggle('is-active');
     });
     
+    // modal Deleta Espaco
+
+    var modalDel = document.querySelector('#modalDelEspaco');
+    var triggerDel = document.querySelector('#modal-trigger-del');
+    triggerDel.addEventListener('click', function(event){
+        modalDel.classList.toggle('is-active');
+    });
+
     // Delete Modal
     var del = $(".delete");
     del.click(function() {
         modal.classList.remove("is-active");
     })
 
-
-    
+    var delModal = $(".deleteModal");
+    del.click(function() {
+        modalDel.classList.remove("is-active");
+    })
     </script>
-
-
-  </body>  
+  </body> 
 </html>
