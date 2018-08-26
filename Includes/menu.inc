@@ -19,8 +19,11 @@
               <a class="navbar-item is-hoverable" href="reservar.php">
                 Reservas
               </a>
-              <a class="navbar-item is-hoverable">
+              <a class="navbar-item is-hoverable" href="espacos.php">
                 Espaços
+              </a>
+              <a class="navbar-item is-hoverable" href="admin.php">
+                Administrador
               </a>
           </div>
 
