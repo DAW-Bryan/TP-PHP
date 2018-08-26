@@ -1,3 +1,4 @@
+
       <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="index.php">
@@ -29,6 +30,9 @@
 
           <div class="navbar-end">
             <div class="navbar-item">
+
+                <?php if (!($_SESSION['login'])) { ?>
+
                 <div class="field is-grouped">
                   <p class="control">
                       <div class="dropdown is-right">
@@ -52,7 +56,7 @@
                                 <div class="dropdown-content">
                                   <div class="dropdown-item">
                                       <div class="control">
-                                          <input class="input" type="number" name="numMatricula" placeholder="Matrícula">
+                                          <input class="input" type="number" name="matricula" placeholder="Matrícula">
                                       </div>
                                   </div>
                                   <div class="dropdown-item">
@@ -66,7 +70,7 @@
                                 </div>
                             </div>
                         </form>
-                        
+
                       </div>
                   </p>
 
@@ -82,6 +86,13 @@
                   </p>
 
                 </div>
+
+              <?php } else { ?>
+
+              <?php echo '<p> Logado como ' . $_SESSION['login'] . ', </p>'; ?>
+              <a href="index.php?logout=1">  Sair </a>
+
+              <?php } ?>
               </div>
             </div>
           </div>

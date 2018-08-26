@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+        <?php session_start(); ?>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Reserva de Espaço</title>
@@ -18,7 +19,7 @@
          - Escrever Reserva em arquivos json (ok)
          - Diferenciar Dia unico, semanal e mensal (JS?) (OK)
          - Adicionar horario de termino (ok)
-         - Verificar Disponibilidade (ok) 
+         - Verificar Disponibilidade (ok)
          - Setar ano (ok)
          - Busca de Reservas
 
@@ -38,9 +39,9 @@
             include "Models/Espaco.php";
             include "Models/EspacoDao.php";
             require "Includes/reserva.inc";
-            
+
             date_default_timezone_set('America/Sao_Paulo');
-            
+
 
             if (isset($_POST["espaco"])) { // Está na parte de Dados da Reserva
 
@@ -50,12 +51,12 @@
                 }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == ""){
                     carrega_reserva(2); // Não preencheu todos os campos
 
-                }else if (verifica_disponibilidade($_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){ 
+                }else if (verifica_disponibilidade($_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){
                     carrega_reserva(3); // Horário indisponível
 
                 }else{
                     $dao = new ReservaDao();
-                    $reserva = new Reserva($_POST["nome"], "123", $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
+                    $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
                     $dao->insert($reserva);
                     echo 'Reserva realizada com sucesso';
                 }
@@ -72,13 +73,13 @@
                     var yyyy = dia.getFullYear();
                     if(dd<10){
                         dd='0'+dd;
-                    } 
+                    }
                     if(mm<10){
                         mm='0'+mm;
-                    } 
+                    }
                     dia = yyyy + '-' + mm + '-' + dd;
 
-            $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">'); 
+            $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">');
             $('#reservas-form .radio').on('change', function() {
                 $("#input-dia").remove();
                 if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Diária"){ // Dia único
@@ -93,7 +94,7 @@
                         + '<option value="6">Sábado</option>'
                     + '</select>');
                 }
-                
+
             });
 
         </script>

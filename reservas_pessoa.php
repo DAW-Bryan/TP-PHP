@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+        <?php session_start(); ?>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Reservas Coltec</title>
@@ -26,8 +27,8 @@
         <?php include "Includes/menu.inc"; ?>
 
         <section class="section">
-            <?php 
-            
+            <?php
+
             include "Includes/reserva.inc";
             include "Models/ReservaDao.php";
             include "Models/Reserva.php";

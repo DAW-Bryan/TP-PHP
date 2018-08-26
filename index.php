@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
+
+        <?php
+
+        session_start();
+
+        if((($_SESSION['login']) == true) and (($_SESSION['matricula']) == true) and (($_SESSION['senha']) == true)) {
+          $logado = $_SESSION['login'];
+          $matricula = $_SESSION["matricula"];
+        }
+
+        if (($_GET['logout'])) {
+          unset($_SESSION['login']);
+          unset($_SESSION['matricula']);
+          unset($_SESSION['senha']);
+          header("location:index.php");
+        }
+
+        ?>
+
+
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Reservas Coltec</title>
@@ -71,13 +91,14 @@
         </section>
 
 
-        <!-- TODO: Nessa section,pensei em fazer uma parte voltada para o usuários
+        <!-- TODO: Nessa section, pensei em fazer uma parte voltada para o usuários
          Como assim? Vamos trabalhar com sessões:
          Se a pessoa tiver logada, aparece como "Bem vindo de volta, Usuário", e embaixo as reservas feitas e um botão caso queira fazer outra
          Se a pessoa não estiver logada, aparece um mini form para o cadastro, ou para o login, e um botão para ver todas as Reservas-->
         <section class="hero is-light">
             <div class="hero-body">
 
+              <?php if (!($logado)) { ?>
                 <div class="container">
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
                       <div class="content">
@@ -121,18 +142,29 @@
                       </div>
                 </div>
 
-            </div>
-        </section>
-
-        <section class="hero is-medium">
-            <div class="hero-body">
+              <?php } else { ?>
 
                 <div class="container">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  <section class="section">
+                  <?php echo '<h1 class="title"> Bem vindo, ' . $logado . '</h1>';
+
+                    $reservas = $dao->read_by_matricula($matricula);
+
+                    print_reservas_da_pessoa($reservas);
+
+                  ?>
+                  </section>
+
+                  <section class="section">
+                    <a class="button is-link is-outlined" href="reservar.php"> Fazer outra reserva </a>
+                  </section
                 </div>
+
+              <?php } ?>
 
             </div>
         </section>
+
   </body>
 
   <!-- Importando os scripts -->

@@ -2,7 +2,7 @@
 <?php
 
     // Funções para realizar reservas //
-    
+
     function carrega_reserva($erro){
         ?>
 
@@ -153,6 +153,7 @@ function convert_num_to_weekday($num){
     if ($reservas != null){
         ?>
         <form method="GET">
+          <h2 class='subtitle'> Reservas realizadas </h2>
         <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>

@@ -13,23 +13,23 @@
 
             $file = fopen("Arquivos/reservas.json", "w");
             fwrite($file, $ArquivoJSON);
-            fclose($file); 
+            fclose($file);
         }
-        
+
         function deleta_antigas(){
             $reservas = null;
             $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
             foreach ( $todas_reservas as $r ) {
                 if (strtotime($r->data) < strtotime(date('Y-m-d')) && $r->tipo_de_reserva != "Semanal"){
-                    $this->delete($r);       
+                    $this->delete($r);
                 }
             }
         }
-        
+
         function delete($reserva){
             $ArquivoJSON = file_get_contents("Arquivos/reservas.json");
             $reservaJSON = json_encode($reserva);
-            
+
             if (strpos($ArquivoJSON, "[".$reservaJSON."]") !== false){ // Nenhum usuario cadastrado
                 $ArquivoJSON = str_replace($reservaJSON, "", $ArquivoJSON);
             }else if(strpos($ArquivoJSON, "[".$reservaJSON) !== false){ // É a primeira reserva
@@ -40,13 +40,13 @@
 
             $file = fopen("Arquivos/reservas.json", "w");
             fwrite($file, $ArquivoJSON);
-            fclose($file); 
+            fclose($file);
         }
 
 
         // Leitura //
         function read_all(){
-            return json_decode(file_get_contents("Arquivos/reservas.json"));            
+            return json_decode(file_get_contents("Arquivos/reservas.json"));
         }
 
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+        <?php session_start(); ?>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Reservas Coltec</title>
@@ -31,7 +32,7 @@
             include "Models/Reserva.php";
             include "Models/ReservaDao.php";
             include "Includes/reserva.inc";
-        
+
             include "Models/Espaco.php";
             include "Models/EspacoDao.php";
 
@@ -39,11 +40,11 @@
             $dao_r = new ReservaDao();
 
             if (isset($_GET["tag"])){
-                $espacos = $dao_e->read_by_tipo($_GET["tag"]);                
+                $espacos = $dao_e->read_by_tipo($_GET["tag"]);
             }else{
                 $espacos = $dao_e->read_all();
             }
-            
+
             echo '<section class="section">';
             foreach ($espacos as $e){
                 echo '<h2 class="title is-2">'. $e->nome .'</h2>';
@@ -54,10 +55,10 @@
             echo '</section>';
         ?>
 
-        
-        
+
+
     <!-- Importando os scripts -->
     <?php require "Includes/scripts.inc"; ?>
-    
-  </body> 
+
+  </body>
 </html>

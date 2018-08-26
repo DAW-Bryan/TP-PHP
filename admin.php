@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+        <?php session_start(); ?>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Reservas Coltec</title>
@@ -24,12 +25,12 @@
 
         <!-- Menu navbar -->
         <?php include "Includes/menu.inc"; ?>
-        
+
         <?php
             include "Models/Reserva.php";
             include "Models/ReservaDao.php";
             include "Includes/reserva.inc";
-        
+
             include "Models/Espaco.php";
             include "Models/EspacoDao.php";
 
@@ -41,7 +42,7 @@
                 if ($_POST["tipo_espaco"] == "Quadras"){
                     $tipo = "quadras";
                 } else if ($_POST["tipo_espaco"] == "Salas de aula"){
-                    $tipo = "salas";   
+                    $tipo = "salas";
                 } else {
                     $tipo = "lab";
                 }
@@ -51,12 +52,12 @@
             }else if (isset($_POST["delEspaco"])){ // Deletou Espaço
                 $espacos = $dao_e->read_all();
                 $dao_e->delete($espacos[$_POST["delEspacoPos"]]);
-            }else if (isset($_POST["delReserva"])){ // Deletou Reserva 
+            }else if (isset($_POST["delReserva"])){ // Deletou Reserva
                 $reservas = $dao_r->read_all();
                 $dao_r->delete($reservas[$_POST["reserva"]]);
             }
         ?>
-        
+
         <p class="control" style="margin-left: 5px">
             <button class="button is-link" id="modal-trigger-e" data-target="modalEspaco">
                 <span>
@@ -78,10 +79,10 @@
                     Deletar Reserva
                 </span>
             </button>
-            
+
         </p>
 
-        
+
 
         <!-- Modal para adicionar espaco -->
         <form action="admin.php" method="post">
@@ -125,7 +126,7 @@
         </form>
 
         <!-- Modal deletar espaco -->
-        
+
         <form action="admin.php" method="post">
         <div class="modal" id="modalDelEspaco">
           <div class="modal-background"></div>
@@ -156,7 +157,7 @@
                     }
                 }
                 echo '</tbody></table>';
-                
+
                 ?>
                 <input type="hidden" id="delEspaco" name="delEspaco" value="true">
             </section>
@@ -166,7 +167,7 @@
         </form>
 
     <!-- Modal para deletar Reserva -->
-        
+
     <form action="admin.php" method="post">
         <div class="modal" id="modalDelReserva">
           <div class="modal-background"></div>
@@ -206,7 +207,7 @@
                     $i++;
                 }
                 echo '</tbody></table>';
-        
+
                 ?>
                 <input type="hidden" id="delEspaco" name="delReserva" value="true">
             </section>
@@ -223,7 +224,7 @@
         trigger.addEventListener('click', function(event){
             modal.classList.toggle('is-active');
         });
-        
+
         // modal Deleta Espaco
 
         var modalDel = document.querySelector('#modalDelEspaco');
@@ -258,8 +259,8 @@
             modalDelReserva.classList.remove("is-active");
         })
         </script>
-        
+
     <!-- Importando os scripts -->
     <?php require "Includes/scripts.inc"; ?>
-  </body> 
+  </body>
 </html>
