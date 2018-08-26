@@ -39,18 +39,8 @@
             
             date_default_timezone_set('America/Sao_Paulo');
             
-            if (isset($_POST["nome"])){ // Está na parte de Dados Pessoais
 
-                if($_POST["nome"] == "" || $_POST["email"] == "" || $_POST["matricula"] == ""){ // Deixou algum campo em branco
-                    carrega_dados_pessoais(1); // 1 = mensagem de erro
-                }else{
-                    setcookie("nome", $_POST["nome"]);
-                    setcookie("email", $_POST["email"]);
-                    setcookie("matricula", $_POST["matricula"]);
-                    carrega_dados_reserva(0);
-                }
-
-            }else if (isset($_POST["espaco"])) { // Está na parte de Dados da Reserva
+            if (isset($_POST["espaco"])) { // Está na parte de Dados da Reserva
 
                 if ($_POST["declaracao"] == ""){
                     carrega_dados_reserva(1); // Não aceitou os termos
@@ -63,13 +53,13 @@
 
                 }else{
                     $dao = new ReservaDao();
-                    $reserva = new Reserva($_COOKIE["matricula"], $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
+                    $reserva = new Reserva("123", $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
                     $dao->insert($reserva);
                     echo 'Reserva realizada com sucesso';
                 }
 
             }else{ // Primeiro acesso ao site
-                carrega_dados_pessoais(0);
+                carrega_reserva(0);
             }
         ?>
 

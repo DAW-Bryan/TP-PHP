@@ -2,56 +2,12 @@
 <?php
 
     // Funções para realizar reservas //
-    function carrega_dados_pessoais($erro){
-        ?>
-
-        <form action="reservar.php" method="POST">
-            <h1 class="title">Dados Pessoais</h1>
-            <progress class="progress is-info" value="0" max="100"></progress>
-            <div class="field">
-                <label class="label">Nome Completo</label>
-                <div class="control">
-                  <input class="input" type="text" placeholder="Seu nome completo" name="nome">
-                </div>
-              </div>
-
-              <div class="field">
-                <label class="label">Email</label>
-                <div class="control has-icons-left">
-                  <input class="input" type="email" placeholder="Seu email" name="email">
-                  <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
-                  </span>
-                </div>
-              </div>
-
-              <div class="field">
-                  <label class="label">Número de Matrícula</label>
-                  <div class="control">
-                      <input class="input" type="number" name="matricula" placeholder="Sua Matrícula">
-                  </div>
-              </div>
-
-              <div class="field is-grouped">
-                <div class="control">
-                  <button class="button is-link">Próximo</button>
-                </div>
-                <?php
-                    if ($erro){
-                        echo '<span class="msg-erro">Todos os campos devem estar preenchidos<span>';
-                    }
-                ?>
-              </div>
-            </form>
-        <?php
-    }
-
-    function carrega_dados_reserva($erro){
+    
+    function carrega_reserva($erro){
         ?>
         
         <form action="reservar.php" class="container" method="POST" id="reservas-form">            
             <h1 class="title">Dados da Reserva</h1>
-            <progress class="progress is-info" value="50" max="100"></progress>
 
             <div class="field">
                 <label class="label">Espaço</label>
