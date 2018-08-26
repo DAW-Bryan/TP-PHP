@@ -26,7 +26,7 @@
 
 
         <!-- Deleta reservas antigas -->
-        <?php 
+        <?php
             include "Models/Reserva.php";
             include "Models/ReservaDao.php";
             date_default_timezone_set('America/Sao_Paulo');
@@ -70,11 +70,18 @@
         </section>
 
 
+        <!-- TODO: Nessa section,pensei em fazer uma parte voltada para o usuários
+         Como assim? Vamos trabalhar com sessões:
+         Se a pessoa tiver logada, aparece como "Bem vindo de volta, Usuário", e embaixo as reservas feitas e um botão caso queira fazer outra
+         Se a pessoa não estiver logada, aparece um mini form para o cadastro, ou para o login, e um botão para ver todas as Reservas-->
         <section class="hero is-light">
             <div class="hero-body">
 
                 <div class="container">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  <h1 class="title"> Veja as reservas da semana </h1>
+                      <div class="content">
+
+                      </div>
                 </div>
 
             </div>

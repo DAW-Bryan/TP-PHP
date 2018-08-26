@@ -5,8 +5,8 @@
     
     function carrega_reserva($erro){
         ?>
-        
-        <form action="reservar.php" class="container" method="POST" id="reservas-form">            
+
+        <form action="reservar.php" class="container" method="POST" id="reservas-form">
             <h1 class="title">Dados da Reserva</h1>
 
             <div class="field">
@@ -80,7 +80,7 @@
         list ($horas, $minutos) = explode (':', $horario);
         return ($horas*60)+$minutos;
     }
-    
+
     function verifica_disponibilidade($espaco, $tipo, $data, $inicio, $fim){
         $dao = new ReservaDao();
         $reservas = $dao->read_by_place($espaco);
@@ -103,7 +103,7 @@
                         if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim || $inicio > $fim)){
                             return 0; // Indisponível
                         }
-                    }    
+                    }
                 }else{
                     if (date('w', strtotime($data)) == $r->data){
                         $r->inicio = converte_horario_minutos($r->inicio);
@@ -111,7 +111,7 @@
                         if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
                             return 0; // Indisponível
                         }
-                    
+
                     }
                 }
             }
@@ -163,7 +163,7 @@ function convert_num_to_weekday($num){
             echo '<tr>';
             echo '<td>'. $r->espaco .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
-            
+
             if ($r->tipo_de_reserva == "Semanal"){
                 $r->data = convert_num_to_weekday($r->data);
             }
@@ -201,11 +201,11 @@ function print_reservas_por_espaco($reservas) {
             echo '<tr>';
             echo '<td>'. $r->matricula .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
-            
+
             if ($r->tipo_de_reserva == "Semanal"){
                 $r->data = convert_num_to_weekday($r->data);
             }
-            
+
             echo '<td>'. $r->data .'</div>';
             echo '<td>'. $r->inicio .'</div>';
             echo '<td>'. $r->fim .'</div>';
@@ -240,13 +240,13 @@ function print_reservas_semana($reservas){
             echo '<td>'. $r->espaco .'</div>';
             echo '<td>'. $r->matricula .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
-            
+
             if ($r->tipo_de_reserva == "Semanal"){
                 $r->data = convert_num_to_weekday($r->data);
             }else{
                 $r->data = convert_num_to_weekday(date('w', strtotime($r->data)));
             }
-            
+
             echo '<td>'. $r->data .'</div>';
             echo '<td>'. $r->inicio .'</div>';
             echo '<td>'. $r->fim .'</div>';
@@ -257,6 +257,48 @@ function print_reservas_semana($reservas){
     }else{
         echo 'Nenhuma reserva';
     }
+}
+
+function print_todas_as_reservas($reservas) {
+  if ($reservas) {
+      ?>
+      <table class="table is-hoverable is-fullwidth">
+          <thead>
+              <tr>
+                  <th>Espaço</th>
+                  <th>Usuário</th>
+                  <th>Tipo de Reserva</th>
+                  <th>Dia</th>
+                  <th>Início</th>
+                  <th>Término</th>
+              </tr>
+          </thead>
+          <tbody>
+      <?php
+      $i = 0;
+      foreach ( $reservas as $r ) {
+          echo '<tr>';
+          echo '<td>'. $r->espaco .'</div>';
+          echo '<td>'. $r->matricula .'</div>';
+          echo '<td>'. $r->tipo_de_reserva .'</div>';
+
+          if ($r->tipo_de_reserva == "Semanal"){
+              $r->data = convert_num_to_weekday($r->data);
+          }else{
+              $r->data = convert_num_to_weekday(date('w', strtotime($r->data)));
+          }
+
+          echo '<td>'. $r->data .'</div>';
+          echo '<td>'. $r->inicio .'</div>';
+          echo '<td>'. $r->fim .'</div>';
+          echo '</tr>';
+          $i++;
+      }
+      echo '</tbody></table>';
+  }else{
+      echo '<p>Nenhuma reserva realizada</p>
+            <button class="button is-successis-outlined"> Fazer uma reserva</button>';
+  }
 }
 
 

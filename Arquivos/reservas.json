@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 [{"matricula":"123","espaco":"Audit\u00f3rio","tipo_de_reserva":"Semanal","data":"1","inicio":"13:30","fim":"13:30"},{"matricula":"123","espaco":"Audit\u00f3rio","tipo_de_reserva":"Di\u00e1ria","data":"2018-08-28","inicio":"13:03","fim":"13:04"}]
+=======
+[{"matricula":null,"espaco":"Quadra maior","tipo_de_reserva":"Di\u00e1ria","data":"2018-08-28","inicio":"10:00","fim":"17:00"},{"matricula":null,"espaco":"Quadra maior","tipo_de_reserva":"Di\u00e1ria","data":"2018-08-27","inicio":"13:30","fim":"15:00"},{"matricula":"123","espaco":"Audit\u00f3rio","tipo_de_reserva":"Semanal","data":"1","inicio":"13:30","fim":"13:30"},{"matricula":"123","espaco":"Audit\u00f3rio","tipo_de_reserva":"Di\u00e1ria","data":"2018-08-28","inicio":"13:03","fim":"13:04"}]
+>>>>>>> afbef8a6bcb0413ca666946f904d68c0b70b9e8d
