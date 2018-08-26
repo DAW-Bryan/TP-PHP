@@ -179,7 +179,7 @@ function convert_num_to_weekday($num){
             echo '<td>'. $r->data .'</div>';
             echo '<td>'. $r->inicio .'</div>';
             echo '<td>'. $r->fim .'</div>';
-            echo '<td class="has-text-centered"><button type="submit" name="reserva" value="'. $i . '" class="delete has-background-danger"></button></td>"';
+            echo '<td class="has-text-centered"><button type="submit" name="reserva" value="'. $i . '" class="delete has-background-danger"></button></td>';
             echo '</tr>';
             $i++;
         }
