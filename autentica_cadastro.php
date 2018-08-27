@@ -92,7 +92,7 @@
               ";
           }
 
-          include "Inludes/scripts.inc";
+          include "Includes/scripts.inc";
       ?>
   </body>
 </html>
