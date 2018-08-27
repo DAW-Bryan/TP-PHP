@@ -1,3 +1,5 @@
+<script src="js/bulma-toast.min.js"></script>
+
 <script>
       $(document).ready(function() {
 
@@ -23,10 +25,15 @@
           });
 
           // Delete Modal
-          var del = $(".delete");
+          var del = $(".deletar");
           del.click(function() {
             modal.classList.remove("is-active");
           })
+
+          // toast
+          if ($("#toast").value == 1) {
+            bulmaToast.toast({ message: "Reserva deletada", type: "is-danger" });
+          }
       });
 
 </script>

@@ -92,6 +92,7 @@
               ";
           }
 
+          require "Inludes/scripts.inc";
       ?>
   </body>
 </html>

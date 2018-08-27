@@ -76,13 +76,6 @@
         </section>
   </body>
 
+  <?php require "Includes/scripts.inc"; ?>
 
-  <script>
-        $(document).ready(function() {
-            $(".navbar-burger").click(function() {
-                $(".navbar-burger").toggleClass("is-active");
-                $(".navbar-menu").toggleClass("is-active");
-            });
-        });
-  </script>
 </html>

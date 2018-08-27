@@ -103,6 +103,7 @@
                     });
 
                 </script>
-            <?php } ?>
+
+            <?php } require "Includes/scripts.inc"; ?>
   </body>
 </html>

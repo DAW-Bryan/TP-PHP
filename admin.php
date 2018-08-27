@@ -66,14 +66,14 @@
                     "tipo"=>"root",
                     "email"=>$usuarios[$pos]->email
                 );
-  
+
                 $usuarioSemAdm_str = json_encode($usuarios[$pos]);
                 $usuarioAtual_str = json_encode($usuarioAtual);
-  
+
                 //retira o colchete e coloca a vírgula no arquivo
                 $ArquivoJSON = file_get_contents("Arquivos/usuarios.json");
                 $ArquivoJSON = str_replace($usuarioSemAdm_str, $usuarioAtual_str, $ArquivoJSON); //Substitui User antigo por User com adm
-                
+
                 //abre o arquivo
                 $usuarios = fopen("Arquivos/usuarios.json", "w"); //sobreescreve
                 fwrite($usuarios, $ArquivoJSON);
@@ -81,36 +81,39 @@
             }
         ?>
 
-        <p class="control" style="margin-left: 5px">
-            <button class="button is-link" id="modal-trigger-e" data-target="modalEspaco">
-                <span>
-                    Adicionar Espaço
-                </span>
-            </button>
-            <button class="button is-link" id="modal-trigger-del" data-target="modalDelEspaco">
-                <span>
-                    Deletar Espaço
-                </span>
-            </button>
-            <a href="reservar.php" class="button is-link">
-                <span>
-                    Adicionar Reserva
-                </span>
-            </a>
-            <button class="button is-link" id="modal-trigger-del-reserva" data-target="modalDelReserva">
-                <span>
-                    Deletar Reserva
-                </span>
-            </button>
+        <section class="section">
+          <div class="container">
+            <h1 class="title"> Funções de administrador </h1>
+            <p class="control" style="margin-left: 5px">
+              <button class="button is-link" id="modal-trigger-e" data-target="modalEspaco">
+                  <span>
+                      Adicionar Espaço
+                  </span>
+              </button>
+              <button class="button is-link" id="modal-trigger-del" data-target="modalDelEspaco">
+                  <span>
+                      Deletar Espaço
+                  </span>
+              </button>
+              <a href="reservar.php" class="button is-link">
+                  <span>
+                      Adicionar Reserva
+                  </span>
+              </a>
+              <button class="button is-link" id="modal-trigger-del-reserva" data-target="modalDelReserva">
+                  <span>
+                      Deletar Reserva
+                  </span>
+              </button>
 
-            <button class="button is-link" id="modal-trigger-adm" data-target="modalGiveAdm">
-                <span>
-                    Adicionar Administrador
-                </span>
-            </button>
-            
-
-        </p>
+              <button class="button is-link" id="modal-trigger-adm" data-target="modalGiveAdm">
+                  <span>
+                      Adicionar Administrador
+                  </span>
+              </button>
+            </p>
+          </div>
+        </section>
 
 
 
@@ -266,7 +269,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php                
+                <?php
                     $arquivo_str = file_get_contents("Arquivos/usuarios.json");
                     $usuarios = json_decode($arquivo_str);
                     $i=0;
@@ -341,7 +344,7 @@
             modalDelReserva.classList.remove("is-active");
         })
 
-        
+
         var delModalAdm = $(".deleteModalAdm");
         delModalAdm.click(function() {
             modalGiveAdm.classList.remove("is-active");
@@ -349,9 +352,9 @@
         </script>
 
     <!-- Importando os scripts -->
-    <?php 
+    <?php
         }
-        require "Includes/scripts.inc"; 
+        require "Includes/scripts.inc";
     ?>
   </body>
 </html>

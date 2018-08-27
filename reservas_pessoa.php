@@ -48,13 +48,6 @@
 
   </body>
 
-
-  <script>
-        $(document).ready(function() {
-            $(".navbar-burger").click(function() {
-                $(".navbar-burger").toggleClass("is-active");
-                $(".navbar-menu").toggleClass("is-active");
-            });
-        });
-  </script>
+  <?php require "Includes/scripts.inc"; ?>
+  
 </html>

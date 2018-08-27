@@ -56,19 +56,24 @@
 
             // Senha incorreta
             else {
-              echo "<div class='container'> <h1 class='title'> Senha incorreta! </h1> </div>";
-              break;
+              $user_nao_existe = false;
+              include "Includes/menu.inc";
+              echo " <div class='notification is-danger'>
+                        <h1 class='title'> Senha incorreta! </h1>
+                     </div>";
             }
         }
     }
 
-    include "Includes/menu.inc";
-    echo "<section class='section'>
-            <div class='container'>
-              <h1 class='title'> Usuário não cadastrado! </h1>
-            </div>
-          </section>";
+    if (!isset($user_nao_existe)) {
+      include "Includes/menu.inc";
+      echo " <div class='notification is-danger'>
+                <h1 class='title'> Usuário não cadastrado! </h1>
+             </div>";
+    }
 
     ?>
   </body>
+
+  <?php require "Includes/scripts.inc"; ?>
 </html>
