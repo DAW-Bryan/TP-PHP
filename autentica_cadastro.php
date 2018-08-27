@@ -34,7 +34,7 @@
               $usuarios = json_decode($arquivo_str);
 
               foreach ($usuarios as $valor) {
-                  if (($valor->matricula == $matricula) || ($valor->email == $emaill)) { //dando errado **************
+                  if (($valor->matricula == $matricula) and (strcmp($valor->email, $emaill) == 0)) { //dando errado **************
                       return false;
                   }
               }
@@ -92,7 +92,7 @@
               ";
           }
 
-          require "Inludes/scripts.inc";
+          include "Inludes/scripts.inc";
       ?>
   </body>
 </html>

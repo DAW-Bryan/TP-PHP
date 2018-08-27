@@ -12,19 +12,6 @@
 
   </head>
 
-
-  <!--
-      TO DO:
-         - Estilizar erros (ok)
-         - Escrever Reserva em arquivos json (ok)
-         - Diferenciar Dia unico, semanal e mensal (JS?) (OK)
-         - Adicionar horario de termino (ok)
-         - Verificar Disponibilidade (ok)
-         - Setar ano (ok)
-         - Busca de Reservas
-
-      -->
-
   <body>
 
     <?php include "Includes/menu.inc"; ?>

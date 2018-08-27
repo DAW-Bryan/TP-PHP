@@ -14,7 +14,7 @@
 
         <div id="navbar" class="navbar-menu">
           <div class="navbar-start">
-              <a class="navbar-item" href="index.php">
+              <a class="navbar-item" href="index.php" id="trigger">
                 Home
               </a>
               <a class="navbar-item is-hoverable" href="reservar.php">
@@ -94,7 +94,7 @@
               <?php } else { ?>
 
               <?php echo '<p> Logado como ' . $_SESSION['login'] . ', </p>'; ?>
-              <a href="index.php?logout=1">  Sair </a>
+              <a id='logout' href="index.php?logout=1">  Sair </a>
 
               <?php } ?>
               </div>
@@ -121,8 +121,11 @@
             <section class="modal-card-body">
               <div class="field">
                   <label class="label">Nome Completo</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                       <input class="input" type="text" name="EntradaNome" placeholder="Seu nome completo">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-user"></i>
+                      </span>
                   </div>
               </div>
 
@@ -138,27 +141,27 @@
 
               <div class="field">
                   <label class="label">Número de Matrícula</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                       <input class="input" type="number" name="EntradaMatricula" placeholder="Sua Matrícula">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-id-card"></i>
+                      </span>
                   </div>
               </div>
 
               <div class="field">
                   <label class="label">Senha</label>
-                  <div class="control">
+                  <div class="control has-icons-left">
                       <input class="input" type="password" id="senha1" placeholder="Digite a senha" name="EntradaSenha" onchange="validaSenha()">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-key"></i>
+                      </span>
                   </div>
               </div>
 
-              <div class="field">
-                  <label class="label">Repita a senha</label>
-                  <div class="control">
-                      <input class="input" type="password" id="senha2" placeholder="Digite a senha" onchange="validaSenha()">
-                  </div>
-              </div>
             </section>
             <footer class="modal-card-foot">
-              <button class="button is-success">Finalizar cadastro</button>
+              <button class="button is-success" type="submit">Finalizar cadastro</button>
               <a class="button deletar">Cancelar</a>
             </footer>
           </div>

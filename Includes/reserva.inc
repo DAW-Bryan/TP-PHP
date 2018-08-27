@@ -193,7 +193,9 @@ function convert_num_to_weekday($num){
 function print_reservas_por_espaco($reservas) {
     if ($reservas != null){
         ?>
-        <table class="table is-hoverable is-fullwidth">
+        <div class="card is-horizontal">
+        <div class="card-content" style="overflow-y: scroll">
+          <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
                     <th>Usuário</th>
@@ -221,9 +223,16 @@ function print_reservas_por_espaco($reservas) {
             echo '</tr>';
             $i++;
         }
-        echo '</tbody></table>';
+        echo '</tbody></table> </div> </div>';
     }else{
-        echo 'Nenhuma reserva cadastrada para esse espaço';
+        echo '<div class="card is-horizontal">
+                <div class="card-content">
+                  <span class="icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </span>
+                  <span class="title is-5"> Nenhuma reserva cadastrada para esse espaço </span>
+                </div>
+              </div>';
     }
 }
 
@@ -308,7 +317,7 @@ function print_todas_as_reservas($reservas) {
       echo '</tbody></table>';
   }else{
       echo '<p>Nenhuma reserva realizada</p>
-            <a class="button is-successis-outlined" href="reservar.php"> Fazer uma reserva</a>';
+            <a class="button is-info is-outlined" href="reservar.php"> Fazer uma reserva</a> <br>';
   }
 }
 
