@@ -55,6 +55,11 @@
             $dao = new ReservaDao();
             $dao->deleta_antigas();
 
+            if (isset($_GET["reserva"])){ // Usuário deletou reserva
+                $reservas_da_pessoa = $dao->read_by_matricula($_SESSION["matricula"]);
+                $dao->delete($reservas_da_pessoa[$_GET["reserva"]]);
+            }
+
         ?>
 
         <section class="section">

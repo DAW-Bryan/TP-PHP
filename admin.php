@@ -24,13 +24,14 @@
   <body>
 
         <!-- Menu navbar -->
-        <?php include "Includes/menu.inc"; ?>
-
         <?php
+        if (!isset($_SESSION["root"])){
+            header("location:index.php");
+        }else{
+            include "Includes/menu.inc";
             include "Models/Reserva.php";
             include "Models/ReservaDao.php";
             include "Includes/reserva.inc";
-
             include "Models/Espaco.php";
             include "Models/EspacoDao.php";
 
@@ -55,6 +56,28 @@
             }else if (isset($_POST["delReserva"])){ // Deletou Reserva
                 $reservas = $dao_r->read_all();
                 $dao_r->delete($reservas[$_POST["reserva"]]);
+            }else if(isset($_POST["addAdm"])){
+                $usuarios = json_decode(file_get_contents("Arquivos/usuarios.json"));
+                $pos = $_POST["user"];
+                $usuarioAtual = array(
+                    "matricula"=>$usuarios[$pos]->matricula,
+                    "senha"=>$usuarios[$pos]->senha,
+                    "nome"=>$usuarios[$pos]->nome,
+                    "tipo"=>"root",
+                    "email"=>$usuarios[$pos]->email
+                );
+  
+                $usuarioSemAdm_str = json_encode($usuarios[$pos]);
+                $usuarioAtual_str = json_encode($usuarioAtual);
+  
+                //retira o colchete e coloca a vírgula no arquivo
+                $ArquivoJSON = file_get_contents("Arquivos/usuarios.json");
+                $ArquivoJSON = str_replace($usuarioSemAdm_str, $usuarioAtual_str, $ArquivoJSON); //Substitui User antigo por User com adm
+                
+                //abre o arquivo
+                $usuarios = fopen("Arquivos/usuarios.json", "w"); //sobreescreve
+                fwrite($usuarios, $ArquivoJSON);
+                fclose($usuarios);
             }
         ?>
 
@@ -79,6 +102,13 @@
                     Deletar Reserva
                 </span>
             </button>
+
+            <button class="button is-link" id="modal-trigger-adm" data-target="modalGiveAdm">
+                <span>
+                    Adicionar Administrador
+                </span>
+            </button>
+            
 
         </p>
 
@@ -173,7 +203,7 @@
           <div class="modal-background"></div>
             <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Deletar espaços</p>
+                <p class="modal-card-title">Deletar reserva</p>
                 <button class="delete deleteModalReseva" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
@@ -193,15 +223,15 @@
                 $i = 0;
                 foreach ( $reservas as $r ) {
                     echo '<tr>';
-                    echo '<td>'. $r->espaco .'</div>';
+                    echo '<td>'. $r->espaco .'</td>';
 
                     if ($r->tipo_de_reserva == "Semanal"){
                         $r->data = convert_num_to_weekday($r->data);
                     }
 
-                    echo '<td>'. $r->data .'</div>';
-                    echo '<td>'. $r->inicio .'</div>';
-                    echo '<td>'. $r->fim .'</div>';
+                    echo '<td>'. $r->data .'</td>';
+                    echo '<td>'. $r->inicio .'</td>';
+                    echo '<td>'. $r->fim .'</td>';
                     echo '<td class="has-text-centered"><button type="submit" name="reserva" value="'. $i . '" class="delete has-background-danger"></button></td>';
                     echo '</tr>';
                     $i++;
@@ -209,13 +239,55 @@
                 echo '</tbody></table>';
 
                 ?>
-                <input type="hidden" id="delEspaco" name="delReserva" value="true">
+                <input type="hidden" id="delReserva" name="delReserva" value="true">
             </section>
             </div>
         </div>
     </form>
 
 
+    <!-- Modal para dar adm -->
+
+    <form action="admin.php" method="post">
+        <div class="modal" id="modalGiveAdm">
+          <div class="modal-background"></div>
+            <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Adicionar administrador</p>
+                <button class="delete deleteModalAdm" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+            <table class="table is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Matrícula</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php                
+                    $arquivo_str = file_get_contents("Arquivos/usuarios.json");
+                    $usuarios = json_decode($arquivo_str);
+                    $i=0;
+                    foreach ($usuarios as $user) {
+                        if (!isset($user->tipo)) {
+                            echo '<tr>';
+                            echo '<td>'. $user->nome .'</td>';
+                            echo '<td>'. $user->matricula .'</td>';
+                            echo '<td>'. $user->email .'</td>';
+                            echo '<td class="has-text-centered"><button type="submit" name="user" value="'. $i . '" class="button is-link">Dar adm</button></td>';
+                            echo '</tr>';
+                        }
+                        $i++;
+                    }
+                    echo '</tbody></table>';
+                ?>
+                <input type="hidden" name="addAdm" value="true">
+            </section>
+            </div>
+        </div>
+    </form>
 
     <script>
         // modal Adiciona Espaco
@@ -243,6 +315,16 @@
         });
 
 
+        // modal Adiciona Adm
+
+        var modalGiveAdm = document.querySelector('#modalGiveAdm');
+        var triggerAdm = document.querySelector('#modal-trigger-adm');
+        triggerAdm.addEventListener('click', function(event){
+            modalGiveAdm.classList.toggle('is-active');
+        });
+
+
+
         // Delete Modal
         var del = $(".delete");
         del.click(function() {
@@ -258,9 +340,18 @@
         delModalReserva.click(function() {
             modalDelReserva.classList.remove("is-active");
         })
+
+        
+        var delModalAdm = $(".deleteModalAdm");
+        delModalAdm.click(function() {
+            modalGiveAdm.classList.remove("is-active");
+        })
         </script>
 
     <!-- Importando os scripts -->
-    <?php require "Includes/scripts.inc"; ?>
+    <?php 
+        }
+        require "Includes/scripts.inc"; 
+    ?>
   </body>
 </html>

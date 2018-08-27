@@ -30,7 +30,7 @@
             $ArquivoJSON = file_get_contents("Arquivos/reservas.json");
             $reservaJSON = json_encode($reserva);
 
-            if (strpos($ArquivoJSON, "[".$reservaJSON."]") !== false){ // Nenhum usuario cadastrado
+            if (strpos($ArquivoJSON, "[".$reservaJSON."]") !== false){ // Nenhuma reserva cadastrada
                 $ArquivoJSON = str_replace($reservaJSON, "", $ArquivoJSON);
             }else if(strpos($ArquivoJSON, "[".$reservaJSON) !== false){ // É a primeira reserva
                 $ArquivoJSON = str_replace($reservaJSON . ",", "", $ArquivoJSON);

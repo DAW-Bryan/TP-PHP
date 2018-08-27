@@ -23,9 +23,13 @@
               <a class="navbar-item is-hoverable" href="espacos.php">
                 Espaços
               </a>
+
+            <?php if (isset($_SESSION["root"])){ ?>
               <a class="navbar-item is-hoverable" href="admin.php">
                 Administrador
               </a>
+            <?php } ?>
+
           </div>
 
           <div class="navbar-end">

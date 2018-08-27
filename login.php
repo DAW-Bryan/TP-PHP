@@ -45,6 +45,10 @@
               $_SESSION["matricula"] = $matricula;
               $_SESSION["senha"] = $senha;
 
+              if ($user->tipo != null){
+                $_SESSION["root"] = "true";
+              }
+
               // Redireciona para a homepage logado
               header("location:index.php");
 
