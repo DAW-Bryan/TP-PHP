@@ -160,7 +160,7 @@
 
                   <section class="section">
                     <a class="button is-link is-outlined" href="reservar.php"> Fazer outra reserva </a>
-                  </section
+                  </section>
                 </div>
 
               <?php } ?>
