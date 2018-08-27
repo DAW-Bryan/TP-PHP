@@ -54,6 +54,9 @@
             $dao->deleta_antigas();
 
             if (isset($_GET["reserva"])){ // Usuário deletou reserva
+              echo " <div class='notification is-success'>
+                        <h2 class='title'> Reserva deletada com sucesso! </h1>
+                     </div>";;
                 $reservas_da_pessoa = $dao->read_by_matricula($_SESSION["matricula"]);
                 $dao->delete($reservas_da_pessoa[$_GET["reserva"]]);
             }
@@ -94,10 +97,7 @@
         </section>
 
 
-        <!-- TODO: Nessa section, pensei em fazer uma parte voltada para o usuários
-         Como assim? Vamos trabalhar com sessões:
-         Se a pessoa tiver logada, aparece como "Bem vindo de volta, Usuário", e embaixo as reservas feitas e um botão caso queira fazer outra
-         Se a pessoa não estiver logada, aparece um mini form para o cadastro, ou para o login, e um botão para ver todas as Reservas-->
+        <!-- Section voltada para o usuário / Ou para as reservas dos próximos dias -->
         <section class="hero is-light">
             <div class="hero-body">
 

@@ -18,7 +18,7 @@
                 Home
               </a>
               <a class="navbar-item is-hoverable" href="reservar.php">
-                Reservas
+                Fazer reserva
               </a>
               <a class="navbar-item is-hoverable" href="espacos.php">
                 Espaços
@@ -116,7 +116,7 @@
           <div class="modal-card">
             <header class="modal-card-head">
               <p class="modal-card-title">Cadastro de usuários</p>
-              <button class="delete" aria-label="close"></button>
+              <a class="delete deletar" aria-label="close"></a>
             </header>
             <section class="modal-card-body">
               <div class="field">
@@ -159,7 +159,7 @@
             </section>
             <footer class="modal-card-foot">
               <button class="button is-success">Finalizar cadastro</button>
-              <button class="button">Cancelar</button>
+              <a class="button deletar">Cancelar</a>
             </footer>
           </div>
         </div>
