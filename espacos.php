@@ -45,14 +45,15 @@
                 $espacos = $dao_e->read_all();
             }
 
-            echo '<section class="section">';
             foreach ($espacos as $e){
-                echo '<h2 class="title is-2">'. $e->nome .'</h2>';
+              echo '<section class="section">';
+              echo '<div class="container">';
+                echo '<h2 class="title">'. $e->nome .'</h2>';
                 $reservas = $dao_r->read_by_place($e->nome);
                 print_reservas_por_espaco($reservas);
+              echo '</div>';
+              echo '</section>';
             }
-
-            echo '</section>';
         ?>
 
 
