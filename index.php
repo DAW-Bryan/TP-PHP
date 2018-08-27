@@ -15,6 +15,9 @@
           unset($_SESSION['login']);
           unset($_SESSION['matricula']);
           unset($_SESSION['senha']);
+          if (isset($_SESSION["root"])){
+              unset($_SESSION['root']);
+          }
           header("location:index.php");
         }
 
