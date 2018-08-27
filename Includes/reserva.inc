@@ -90,17 +90,22 @@
     }
 
     function verifica_disponibilidade($espaco, $tipo, $data, $inicio, $fim){
+        $inicio = converte_horario_minutos($inicio);
+        $fim = converte_horario_minutos($fim);
+            
+        if ($inicio >= $fim){
+            return 0;
+        }
+        
         $dao = new ReservaDao();
         $reservas = $dao->read_by_place($espaco);
         if ($reservas != null){
-            $inicio = converte_horario_minutos($inicio);
-            $fim = converte_horario_minutos($fim);
             foreach ( $reservas as $r ) {
                 if ($r->tipo_de_reserva == $tipo){
                     if ($r->data == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
-                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim) || $inicio > $fim){
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
                             return 0; // Indisponível
                         }
                     }
@@ -108,7 +113,7 @@
                     if (date('w', strtotime($r->data)) == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
-                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim || $inicio > $fim)){
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim) ){
                             return 0; // Indisponível
                         }
                     }
