@@ -35,7 +35,7 @@
           <div class="navbar-end">
             <div class="navbar-item">
 
-                <?php if (!($_SESSION['login'])) { ?>
+                <?php if (!isset($_SESSION['login'])) { ?>
 
                 <div class="field is-grouped">
                   <p class="control">

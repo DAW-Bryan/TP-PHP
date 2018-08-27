@@ -6,15 +6,13 @@
 
         session_start();
 
-        if((($_SESSION['login']) == true) and (($_SESSION['matricula']) == true) and (($_SESSION['senha']) == true)) {
+        if( (isset($_SESSION["login"]) == true) and (isset($_SESSION["matricula"]) == true) and (isset($_SESSION["senha"]) == true) ) {
           $logado = $_SESSION['login'];
           $matricula = $_SESSION["matricula"];
         }
 
-        if (($_GET['logout'])) {
-          unset($_SESSION['login']);
-          unset($_SESSION['matricula']);
-          unset($_SESSION['senha']);
+        if (isset($_GET['logout'])) {
+          session_destroy();
           header("location:index.php");
         }
 
@@ -103,7 +101,7 @@
         <section class="hero is-light">
             <div class="hero-body">
 
-              <?php if (!($logado)) { ?>
+              <?php if (!isset($logado)) { ?>
                 <div class="container">
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
                       <div class="content">
