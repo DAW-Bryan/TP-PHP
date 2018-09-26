@@ -1,31 +1,5 @@
-  <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Autenticação</title>
-
-    <link rel="shortcut icon" href="Images/logo.png">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/custom.css">
-
-    <!-- Bulma CSS -->
-    <link rel="stylesheet" href="./css/bulma.min.css">
-
-    <!-- Font Awesome -->
-    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
-
-    <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  </head>
-
-  <body>
-
-    <?php
-
+<?php
     session_start();
-
     $matricula  = $_POST["matricula"];
     $senha      = $_POST["senha"];
 
@@ -57,23 +31,50 @@
             // Senha incorreta
             else {
               $user_nao_existe = false;
-              include "Includes/menu.inc";
-              echo " <div class='notification is-danger'>
-                        <h1 class='title'> Senha incorreta! </h1>
-                     </div>";
+              break;
             }
         }
     }
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Autenticação</title>
+
+        <link rel="shortcut icon" href="Images/logo.png">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/custom.css">
+
+        <!-- Bulma CSS -->
+        <link rel="stylesheet" href="./css/bulma.min.css">
+
+        <!-- Font Awesome -->
+        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+
+        <!-- JQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      </head>
+
+      <body>
+<?php
+    include "Includes/menu.inc";
 
     if (!isset($user_nao_existe)) {
-      include "Includes/menu.inc";
-      echo " <div class='notification is-danger'>
+        echo " <div class='notification is-danger'>
                 <h1 class='title'> Usuário não cadastrado! </h1>
-             </div>";
+               </div>";
+    }else{
+
+        echo " <div class='notification is-danger'>
+                  <h1 class='title'> Senha incorreta! </h1>
+               </div>";
     }
 
     ?>
-  </body>
+           </body>
 
   <?php require "Includes/scripts.inc"; ?>
 </html>

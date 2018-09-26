@@ -1,7 +1,8 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html>
   <head>
-        <?php session_start(); ?>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Reserva de Espaço</title>
@@ -50,7 +51,11 @@
                             $dao = new ReservaDao();
                             $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $_POST["espaco"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
                             $dao->insert($reserva);
-                            echo 'Reserva realizada com sucesso';
+                            echo "<section class='section'>
+                              <div class='container'>
+                                <h1 class='title'> Reserva realizada com sucesso! </h1>
+                              </div>
+                            </section>";
                         }
 
                     }else{ // Primeiro acesso ao site
