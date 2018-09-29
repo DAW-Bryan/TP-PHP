@@ -76,3 +76,25 @@ img {
     flex: 3;
     flex-shrink: 3
 }
+
+
+/* View do Calendário */
+#cal .table{
+  width: 100%;
+}
+
+#cal td{
+  border: 10px solid black !important;
+  background-color: #363636;
+  color: white;
+  font-size: 130%;
+  font-weight: bold;
+}
+
+#cal th{
+  text-align: center !important;
+}
+
+#cal {
+  margin-bottom: 50px;
+}

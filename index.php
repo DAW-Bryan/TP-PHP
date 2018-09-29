@@ -103,6 +103,9 @@ if (isset($_GET['logout'])) {
 
               <?php if (!isset($logado)) { ?>
                 <div class="container">
+
+                <?php include "Includes/cal.inc"; ?>
+
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
                       <div class="content">
                         <?php
@@ -122,15 +125,15 @@ if (isset($_GET['logout'])) {
                             print_todas_as_reservas($reservas);
 
 
-                            if (isset($_POST["data"])){
+                            if (isset($_GET["data"])){
                                 echo '<h1 class="title"> Dia pesquisado: </h1>';
-                                $reservas = $dao->read_by_date($_POST["data"]);
+                                $reservas = $dao->read_by_date($_GET["data"]);
                                 print_todas_as_reservas($reservas);
                             }
                         ?>
 
                         <br>
-                        <form action="index.php" method="post">
+                        <form action="index.php" method="get">
                             <div class="label">Busca por data</div>
                             <div class="field has-addons">
                                 <div class="control">
