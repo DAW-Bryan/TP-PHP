@@ -34,8 +34,38 @@ if (isset($_GET['logout'])) {
         <!-- Font Awesome -->
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 
+        <!-- fullcalendar -->
+        <link rel='stylesheet' href='css/fullcalendar.css' />
+        <script src='css/lib/jquery.min.js'></script>
+        <script src='css/lib/moment.min.js'></script>
+        <script src='css/fullcalendar.js'></script>
+
+        <script>
+            $(function() {
+
+              $('#calendar').fullCalendar({
+                  header: {
+                    left: 'today, prev, next',
+                    center: 'title',
+                    right: 'month, basicWeek, basicDay'
+                  },
+
+                views: {
+                  month: { // name of view
+                    titleFormat: 'MM/YYYY'
+                    // other view-specific options here
+                    }
+                },
+
+                navLinks: true,
+                eventLimit: true
+              })
+
+            });
+
+        </script>
         <!-- JQuery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
   </head>
 
   <body>
@@ -104,7 +134,9 @@ if (isset($_GET['logout'])) {
               <?php if (!isset($logado)) { ?>
                 <div class="container">
 
-                <?php include "Includes/cal.inc"; ?>
+                <?php/* include "Includes/cal.inc"; */?>
+
+                <div id="calendar"></div>
 
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
                       <div class="content">
