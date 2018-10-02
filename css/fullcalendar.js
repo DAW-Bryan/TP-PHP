@@ -2658,7 +2658,7 @@ function locale(localeCode, newFcOptions) {
 exports.locale = locale;
 // Returns moment's internal locale data. If doesn't exist, returns English.
 function getMomentLocaleData(localeCode) {
-    return moment.localeData(localeCode) || moment.localeData('en');
+    return /* moment.localeData(localeCode) ||*/ moment.localeData('pt-br');
 }
 exports.getMomentLocaleData = getMomentLocaleData;
 // Initialize English by forcing computation of moment-derived options.
@@ -2713,11 +2713,11 @@ exports.globalDefaults = {
         next: 'next',
         prevYear: 'prev year',
         nextYear: 'next year',
-        year: 'year',
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day'
+        year: 'Ano',
+        today: 'Hoje',
+        month: 'Mês',
+        week: 'Semana',
+        day: 'Dia'
     },
     // buttonIcons: null,
     allDayText: 'all-day',
@@ -3885,7 +3885,7 @@ var View = /** @class */ (function (_super) {
         if (dateMutation) {
             eventInstance.dateProfile = dateMutation.buildNewDateProfile(eventInstance.dateProfile, this.calendar);
         }
-        this.triggerEventDrop(eventInstance, 
+        this.triggerEventDrop(eventInstance,
         // a drop doesn't necessarily mean a date mutation (ex: resource change)
         (dateMutation && dateMutation.dateDelta) || moment.duration(), undoFunc, el, ev);
     };

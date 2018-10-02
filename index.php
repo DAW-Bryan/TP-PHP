@@ -37,11 +37,15 @@ if (isset($_GET['logout'])) {
         <!-- fullcalendar -->
         <link rel='stylesheet' href='css/fullcalendar.css' />
         <script src='css/lib/jquery.min.js'></script>
-        <script src='css/lib/moment.min.js'></script>
+        <script src='css/lib/moment-with-locales.js'></script>
         <script src='css/fullcalendar.js'></script>
 
         <script>
             $(function() {
+                moment.locale('pt-br');
+                console.log(moment(1316116057189).fromNow()); // an hour ago
+
+
 
               $('#calendar').fullCalendar({
                   header: {

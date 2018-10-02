@@ -29,6 +29,7 @@
             modal.classList.remove("is-active");
           })
 
+
       });
 
 </script>
