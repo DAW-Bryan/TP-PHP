@@ -1,5 +1,7 @@
 
 <?php
+    require "Controllers/ReservaDao.php";
+
 
     // Funções para realizar reservas //
 
@@ -15,15 +17,15 @@
             </div>
 
             <div class="field">
-                <label class="label">Espaço</label>
+                <label class="label">Itens</label>
                 <div class="control">
                     <div class="select">
-                    <select name="espaco">
+                    <select name="item">
                     <?php
-                        $dao_e = new EspacoDao();
-                        $espacos = $dao_e->read_all();
-                        foreach ($espacos as $e){
-                            echo '<option>' . $e->nome . '</option>';
+                        $dao_i = new ItemDao();
+                        $itens = $dao_i->read_all();
+                        foreach ($itens as $i){
+                            echo '<option>' . $i->nome . '</option>';
                         }
 
                     ?>
@@ -89,16 +91,16 @@
         return ($horas*60)+$minutos;
     }
 
-    function verifica_disponibilidade($espaco, $tipo, $data, $inicio, $fim){
+    function verifica_disponibilidade($item, $tipo, $data, $inicio, $fim){
         $inicio = converte_horario_minutos($inicio);
         $fim = converte_horario_minutos($fim);
-            
+
         if ($inicio >= $fim){
             return 0;
         }
-        
+
         $dao = new ReservaDao();
-        $reservas = $dao->read_by_place($espaco);
+        $reservas = $dao->read_by_place($item);
         if ($reservas != null){
             foreach ( $reservas as $r ) {
                 if ($r->tipo_de_reserva == $tipo){
@@ -157,12 +159,12 @@ function convert_num_to_weekday($num){
  function print_reservas_da_pessoa($reservas){
     if ($reservas != null){
         ?>
-        <form method="GET">
+        <form action="index.php" method="GET">
           <h2 class='subtitle'> Reservas realizadas </h2>
         <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
-                    <th>Espaço</th>
+                    <th>Item</th>
                     <th>Tipo de Reserva</th>
                     <th>Data/Dia</th>
                     <th>Início</th>
@@ -175,7 +177,7 @@ function convert_num_to_weekday($num){
         $i = 0;
         foreach ( $reservas as $r ) {
             echo '<tr>';
-            echo '<td>'. $r->espaco .'</div>';
+            echo '<td>'. $r->item .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
 
             if ($r->tipo_de_reserva == "Semanal"){
@@ -195,7 +197,7 @@ function convert_num_to_weekday($num){
     }
 }
 
-function print_reservas_por_espaco($reservas) {
+function print_reservas_por_item($reservas) {
     if ($reservas != null){
         ?>
         <div class="card is-horizontal">
@@ -235,7 +237,7 @@ function print_reservas_por_espaco($reservas) {
                   <span class="icon">
                     <i class="fas fa-exclamation-triangle"></i>
                   </span>
-                  <span class="title is-5"> Nenhuma reserva cadastrada para esse espaço </span>
+                  <span class="title is-5"> Nenhuma reserva cadastrada para esse item </span>
                 </div>
               </div>';
     }
@@ -247,7 +249,7 @@ function print_reservas_semana($reservas){
         <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
-                    <th>Espaço</th>
+                    <th>Item</th>
                     <th>Usuário</th>
                     <th>Tipo de Reserva</th>
                     <th>Dia</th>
@@ -260,7 +262,7 @@ function print_reservas_semana($reservas){
         $i = 0;
         foreach ( $reservas as $r ) {
             echo '<tr>';
-            echo '<td>'. $r->espaco .'</div>';
+            echo '<td>'. $r->item .'</div>';
             echo '<td>'. $r->matricula .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
 
@@ -289,7 +291,7 @@ function print_todas_as_reservas($reservas) {
           <thead>
               <tr>
                   <th>Nome</th>
-                  <th>Espaço</th>
+                  <th>Item</th>
                   <th>Usuário</th>
                   <th>Tipo de Reserva</th>
                   <th>Dia</th>
@@ -303,7 +305,7 @@ function print_todas_as_reservas($reservas) {
       foreach ( $reservas as $r ) {
           echo '<tr>';
           echo '<td>'. $r->nome . '</div>';
-          echo '<td>'. $r->espaco .'</div>';
+          echo '<td>'. $r->item .'</div>';
           echo '<td>'. $r->matricula .'</div>';
           echo '<td>'. $r->tipo_de_reserva .'</div>';
 

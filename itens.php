@@ -29,28 +29,24 @@
 
         <!-- Reservas -->
         <?php
-            include "Models/Reserva.php";
-            include "Models/ReservaDao.php";
             include "Includes/reserva.inc";
+            include "Controllers/ItemDao.php";
 
-            include "Models/Espaco.php";
-            include "Models/EspacoDao.php";
-
-            $dao_e = new EspacoDao();
+            $dao_i = new ItemDao();
             $dao_r = new ReservaDao();
 
             if (isset($_GET["tag"])){
-                $espacos = $dao_e->read_by_tipo($_GET["tag"]);
+                $itens = $dao_i->read_by_tipo($_GET["tag"]);
             }else{
-                $espacos = $dao_e->read_all();
+                $itens = $dao_i->read_all();
             }
 
-            foreach ($espacos as $e){
+            foreach ($itens as $i){
               echo '<section class="section">';
               echo '<div class="container">';
-                echo '<h2 class="title">'. $e->nome .'</h2>';
-                $reservas = $dao_r->read_by_place($e->nome);
-                print_reservas_por_espaco($reservas);
+                echo '<h2 class="title">'. $i->nome .'</h2>';
+                $reservas = $dao_r->read_by_place($i->nome);
+                print_reservas_por_item($reservas);
               echo '</div>';
               echo '</section>';
             }

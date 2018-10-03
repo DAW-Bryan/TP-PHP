@@ -1,4 +1,6 @@
 <?php
+    require "Models/Reserva.php";
+    
     class ReservaDao{
 
         // Escrita //

@@ -29,30 +29,27 @@
             header("location:index.php");
         }else{
             include "Includes/menu.inc";
-            include "Models/Reserva.php";
-            include "Models/ReservaDao.php";
             include "Includes/reserva.inc";
-            include "Models/Espaco.php";
-            include "Models/EspacoDao.php";
+            include "Controllers/ItemDao.php";
 
-            $dao_e = new EspacoDao();
+            $dao_e = new ItemDao();
             $dao_r = new ReservaDao();
 
-            if (isset($_POST["addEspaco"]) && $_POST["nome"] != ""){ // Adicionou Espaço
+            if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
                 $tipo = null;
-                if ($_POST["tipo_espaco"] == "Quadras"){
+                if ($_POST["tipo_item"] == "Quadras"){
                     $tipo = "quadras";
-                } else if ($_POST["tipo_espaco"] == "Salas de aula"){
+                } else if ($_POST["tipo_item"] == "Salas de aula"){
                     $tipo = "salas";
                 } else {
                     $tipo = "lab";
                 }
 
-                $espaco = new Espaco($_POST["nome"], $tipo);
-                $dao_e->insert($espaco);
-            }else if (isset($_POST["delEspaco"])){ // Deletou Espaço
-                $espacos = $dao_e->read_all();
-                $dao_e->delete($espacos[$_POST["delEspacoPos"]]);
+                $item = new Item($_POST["nome"], $tipo);
+                $dao_e->insert($item);
+            }else if (isset($_POST["delItem"])){ // Deletou Item
+                $itens = $dao_e->read_all();
+                $dao_e->delete($itens[$_POST["delItemPos"]]);
             }else if (isset($_POST["delReserva"])){ // Deletou Reserva
                 $reservas = $dao_r->read_all();
                 $dao_r->delete($reservas[$_POST["reserva"]]);
@@ -85,14 +82,14 @@
           <div class="container">
             <h1 class="title"> Funções de administrador </h1>
             <p class="control" style="margin-left: 5px">
-              <button class="button is-link" id="modal-trigger-e" data-target="modalEspaco">
+              <button class="button is-link" id="modal-trigger-e" data-target="modalItem">
                   <span>
-                      Adicionar Espaço
+                      Adicionar Item
                   </span>
               </button>
-              <button class="button is-link" id="modal-trigger-del" data-target="modalDelEspaco">
+              <button class="button is-link" id="modal-trigger-del" data-target="modalDelItem">
                   <span>
-                      Deletar Espaço
+                      Deletar Item
                   </span>
               </button>
               <a href="reservar.php" class="button is-link">
@@ -117,21 +114,21 @@
 
 
 
-        <!-- Modal para adicionar espaco -->
+        <!-- Modal para adicionar item -->
         <form action="admin.php" method="post">
 
-        <div class="modal" id="modalEspaco">
+        <div class="modal" id="modalItem">
           <div class="modal-background"></div>
             <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Adicionar Espaço</p>
+                <p class="modal-card-title">Adicionar Item</p>
                 <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
                 <div class="field">
                     <label class="label">Nome</label>
                     <div class="control">
-                        <input class="input" type="text" name="nome" placeholder="Nome do espaço">
+                        <input class="input" type="text" name="nome" placeholder="Nome do item">
                     </div>
                 </div>
 
@@ -139,7 +136,7 @@
                     <label class="label">Tipo</label>
                     <div class="control">
                         <div class="select">
-                            <select name="tipo_espaco">
+                            <select name="tipo_item">
                                 <option>Quadras</option>
                                 <option>Laboratórios</option>
                                 <option>Salas de aula</option>
@@ -150,7 +147,7 @@
 
             </section>
             <footer class="modal-card-foot">
-                <input type="hidden" id="addEspaco" name="addEspaco" value="true">
+                <input type="hidden" id="addItem" name="addItem" value="true">
                 <input class="button is-success" type="submit" value="Adicionar">
             </footer>
             </div>
@@ -158,14 +155,14 @@
 
         </form>
 
-        <!-- Modal deletar espaco -->
+        <!-- Modal deletar item -->
 
         <form action="admin.php" method="post">
-        <div class="modal" id="modalDelEspaco">
+        <div class="modal" id="modalDelItem">
           <div class="modal-background"></div>
             <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Deletar espaços</p>
+                <p class="modal-card-title">Deletar itens</p>
                 <button class="delete deleteModal" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
@@ -178,13 +175,13 @@
                     </thead>
                     <tbody>
                 <?php
-                $espacos = $dao_e->read_all();
-                if ($espacos != null){
+                $itens = $dao_e->read_all();
+                if ($itens != null){
                     $i = 0;
-                    foreach ( $espacos as $e ) {
+                    foreach ( $itens as $e ) {
                         echo '<tr>';
                         echo '<td>'. $e->nome .'</div>';
-                        echo '<td class="has-text-centered"><button type="submit" name="delEspacoPos" value="'. $i . '" class="delete has-background-danger"></button></td>';
+                        echo '<td class="has-text-centered"><button type="submit" name="delItemPos" value="'. $i . '" class="delete has-background-danger"></button></td>';
                         echo '</tr>';
                         $i++;
                     }
@@ -192,7 +189,7 @@
                 echo '</tbody></table>';
 
                 ?>
-                <input type="hidden" id="delEspaco" name="delEspaco" value="true">
+                <input type="hidden" id="delItem" name="delItem" value="true">
             </section>
             </div>
         </div>
@@ -213,7 +210,7 @@
             <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
-                    <th>Espaço</th>
+                    <th>Item</th>
                     <th>Data/Dia</th>
                     <th>Início</th>
                     <th>Término</th>
@@ -226,7 +223,7 @@
                 $i = 0;
                 foreach ( $reservas as $r ) {
                     echo '<tr>';
-                    echo '<td>'. $r->espaco .'</td>';
+                    echo '<td>'. $r->item .'</td>';
 
                     if ($r->tipo_de_reserva == "Semanal"){
                         $r->data = convert_num_to_weekday($r->data);
@@ -293,16 +290,16 @@
     </form>
 
     <script>
-        // modal Adiciona Espaco
-        var modal = document.querySelector('#modalEspaco');
+        // modal Adiciona Item
+        var modal = document.querySelector('#modalItem');
         var trigger = document.querySelector('#modal-trigger-e');
         trigger.addEventListener('click', function(event){
             modal.classList.toggle('is-active');
         });
 
-        // modal Deleta Espaco
+        // modal Deleta Item
 
-        var modalDel = document.querySelector('#modalDelEspaco');
+        var modalDel = document.querySelector('#modalDelItem');
         var triggerDel = document.querySelector('#modal-trigger-del');
         triggerDel.addEventListener('click', function(event){
             modalDel.classList.toggle('is-active');

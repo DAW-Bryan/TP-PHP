@@ -12,6 +12,9 @@ if (isset($_GET['logout'])) {
   header("location:index.php");
 }
 
+require "Includes/reserva.inc";
+$dao = new ReservaDao();
+
 ?>
 
 
@@ -34,42 +37,17 @@ if (isset($_GET['logout'])) {
         <!-- Font Awesome -->
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 
-        <!-- fullcalendar -->
-        <link rel='stylesheet' href='css/fullcalendar.css' />
+
+        <!-- JQuery -->
         <script src='css/lib/jquery.min.js'></script>
+
+        <!-- Moment.js -->
         <script src='css/lib/moment-with-locales.js'></script>
+
+        <!-- FullCalendar -->
+        <link rel='stylesheet' href='css/fullcalendar.css' />
         <script src='css/fullcalendar.js'></script>
 
-        <script>
-            $(function() {
-                moment.locale('pt-br');
-                console.log(moment(1316116057189).fromNow()); // an hour ago
-
-
-
-              $('#calendar').fullCalendar({
-                  header: {
-                    left: 'today, prev, next',
-                    center: 'title',
-                    right: 'month, basicWeek, basicDay'
-                  },
-
-                views: {
-                  month: { // name of view
-                    titleFormat: 'MM/YYYY'
-                    // other view-specific options here
-                    }
-                },
-
-                navLinks: true,
-                eventLimit: true
-              })
-
-            });
-
-        </script>
-        <!-- JQuery -->
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
   </head>
 
   <body>
@@ -79,12 +57,7 @@ if (isset($_GET['logout'])) {
 
         <!-- Deleta reservas antigas -->
         <?php
-            include "Models/Reserva.php";
-            include "Models/ReservaDao.php";
-            include "Includes/reserva.inc";
-            date_default_timezone_set('America/Sao_Paulo');
-
-            $dao = new ReservaDao();
+            date_default_timezone_set('America/Sao_Paulo');;
             $dao->deleta_antigas();
 
             if (isset($_GET["reserva"])){ // Usuário deletou reserva
@@ -100,7 +73,7 @@ if (isset($_GET['logout'])) {
         <section class="section">
             <nav class="columns">
 
-                <a class="column has-text-centered" href="espacos.php?tag=quadras">
+                <a class="column has-text-centered" href="itens.php?tag=quadras">
                     <p class="title is-4"> Quadras esportivas </p>
                     <p class="subtitle is-6"> Jogue seu futebol! </p>
 
@@ -109,7 +82,7 @@ if (isset($_GET['logout'])) {
                     </figure>
                 </a>
 
-                <a class="column has-text-centered" href="espacos.php?tag=lab">
+                <a class="column has-text-centered" href="itens.php?tag=lab">
                     <p class="title is-4"> Laboratórios </p>
                     <p class="subtitle is-6"> Informática, Química, entre outros </p>
 
@@ -118,7 +91,7 @@ if (isset($_GET['logout'])) {
                     </figure>
                 </a>
 
-                <a class="column has-text-centered" href="espacos.php?tag=salas">
+                <a class="column has-text-centered" href="itens.php?tag=salas">
                     <p class="title is-4"> Salas de aula </p>
                     <p class="subtitle is-6"> Auditório, Sala de dança, etc </p>
 
@@ -138,18 +111,14 @@ if (isset($_GET['logout'])) {
               <?php if (!isset($logado)) { ?>
                 <div class="container">
 
-                <?php/* include "Includes/cal.inc"; */?>
-
-                <div id="calendar"></div>
-
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
                       <div class="content">
                         <?php
-                            $dao = new ReservaDao();
+                            //$dao = new ReservaDao();
                             $data = date('Y-m-d');
                             $reservas = [];
 
-                            for ($i=0; $i < 7 /*- intval(date("w"))*/; $i++){
+                            for ($i=0; $i < 7; $i++){
                                 if ($i==0){
                                     $reservas = $dao->read_by_date($data);
                                 }else{
@@ -204,8 +173,46 @@ if (isset($_GET['logout'])) {
 
               <?php } ?>
 
+                <!-- FullCalendar -->
+                <div id="calendar" class="container"></div>
             </div>
         </section>
+
+
+        <script>
+            $(document).ready(function() {
+
+              $('#calendar').fullCalendar({
+                  header: {
+                    left: 'today, prev, next',
+                    center: 'title',
+                    right: 'month, agendaWeek, basicDay'
+                  },
+
+                views: {
+                  month: { // name of view
+                    titleFormat: 'MMMM, YYYY'
+                    }
+                },
+
+                navLinks: true,
+                eventLimit: true,
+
+                events: [<?php
+                    $reservas = $dao->read_all();
+                    $i = 0;
+                    foreach ($reservas as $r) {
+                        $i++;
+                        if ($i == $reservas.length){
+                            echo "{title  : '". $r->nome . "', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'}";
+                        }else{
+                            echo "{title  : '". $r->nome . "', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'},";
+                        }
+                    }
+                ?>]
+              })
+            });
+        </script>
 
   </body>
 

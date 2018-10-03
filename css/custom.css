@@ -79,3 +79,15 @@ img {
 
 
 /* View do Calendário */
+#calendar {
+    margin-top: 80px;
+}
+
+.fc-event, .fc-event:hover{
+    color: white !important;
+}
+
+.fc-center h2{
+    font-size: 1.5em !important;
+    font-weight: bold;
+}
