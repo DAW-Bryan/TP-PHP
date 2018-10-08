@@ -1,56 +1,66 @@
 <?php
-    require "Models/Item.php";
 
-    class ItemDao{
-
-        // Escrita //
-        function insert($item){
-            $itemJSON = json_encode($item);
-            $ArquivoJSON = file_get_contents("Arquivos/itens.json");
-            if(!strcmp($ArquivoJSON, "[]")){ // Nenhum usuario cadastrado
-                $ArquivoJSON = str_replace("[", "[".$itemJSON, $ArquivoJSON);
-            }else{
-                $ArquivoJSON = str_replace("[", "[".$itemJSON.",", $ArquivoJSON);
-            }
-
-            $file = fopen("Arquivos/itens.json", "w");
-            fwrite($file, $ArquivoJSON);
-            fclose($file);
-        }
-
-        function delete($item){
-            $ArquivoJSON = file_get_contents("Arquivos/itens.json");
-            $itemJSON = json_encode($item);
-
-            if (strpos($ArquivoJSON, "[".$itemJSON."]") !== false){ // Nenhum item cadastrado
-                $ArquivoJSON = str_replace($itemJSON, "", $ArquivoJSON);
-            }else if(strpos($ArquivoJSON, "[".$itemJSON) !== false){ // É o primeiro item
-                $ArquivoJSON = str_replace($itemJSON . ",", "", $ArquivoJSON);
-            }else{
-                $ArquivoJSON = str_replace(",".$itemJSON, "", $ArquivoJSON);
-            }
-
-            $file = fopen("Arquivos/itens.json", "w");
-            fwrite($file, $ArquivoJSON);
-            fclose($file);
-        }
+require "Models/Item.php";
 
 
-        // Leitura //
-        function read_all(){
-            return json_decode(file_get_contents("Arquivos/itens.json"));
-        }
+class ItemDao{
+   var $SERVER = "app.coltec.ufmg.br";
+   var $_USER = "sys-reservas";
+   var $_PWD = "@c0lteCReserv@s";
+   var $_DB = "my-reservas";
+   var $table = "item";
+
+   // Conexão //
+   private function connect(){
+       return mysqli_connect($SERVER, $_USER, $_PWD, $_DB);
+   }
+
+   private function close($conexao){
+       return mysqli_close($conexao);
+   }
 
 
-        function read_by_tipo($tipo){
-            $itens = null;
-            $todos_itens = json_decode(file_get_contents("Arquivos/itens.json"));
-            foreach ( $todos_itens as $i ) {
-                if ($i->tipo == $tipo){
-                    $itens[] = new Item($i->nome, $i->tipo);
-                }
-            }
-            return $itens;
-        }
-    }
+   // Escrita //
+   function insert($nome, $tipo){
+       $conexao = $this->connect();
+       $resultado = mysqli_query($conexao, "INSERT INTO " . $table . "(nome, tipo) VALUES (". $nome .", ". $tipo .");");
+       $this->close($conexao);
+       return $resultado;
+   }
+
+   function delete($item){
+       $conexao = $this->connect();
+       $resultado = mysqli_query($conexao, "DELETE FROM " . $table . " WHERE nome LIKE '" . $item->nome . "';");
+       $this->close($conexao);
+       return $resultado;
+   }
+
+
+   // Leitura //
+   function read_all(){
+       $conexao = $this->connect();
+       $resultado = mysqli_query($conexao, "SELECT * FROM " . $table . ";");
+       $this->close($conexao);
+
+       $itens;
+       for ($i=0; $i< msqli_num_rows(); $i++){
+           $itens[$i] = mysqli_fetch_object($resultado);
+       }
+       return $itens;
+   }
+
+   function read_by_tipo($tipo){
+       $conexao = $this->connect();
+       $resultado = mysqli_query($conexao, "SELECT * FROM " . $table . " WHERE tipo LIKE '" . $tipo . "';");
+       $this->close($conexao);
+
+       $itens;
+       for ($i=0; $i< msqli_num_rows(); $i++){
+           $itens[$i] = mysqli_fetch_object($resultado);
+       }
+       return $itens;
+   }
+
+}
+
 ?>
