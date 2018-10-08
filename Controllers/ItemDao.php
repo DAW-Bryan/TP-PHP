@@ -4,7 +4,7 @@ require "Models/Item.php";
 
 
 class ItemDao{
-   var $SERVER = "app.coltec.ufmg.br";
+   var $SERVER = "150.164.102.161";
    var $_USER = "sys-reservas";
    var $_PWD = "@c0lteCReserv@s";
    var $_DB = "my-reservas";
@@ -43,7 +43,7 @@ class ItemDao{
        $this->close($conexao);
 
        $itens;
-       for ($i=0; $i< msqli_num_rows(); $i++){
+       for ($i=0; $i< mysqli_num_rows($resultado); $i++){
            $itens[$i] = mysqli_fetch_object($resultado);
        }
        return $itens;
@@ -55,7 +55,7 @@ class ItemDao{
        $this->close($conexao);
 
        $itens;
-       for ($i=0; $i< msqli_num_rows(); $i++){
+       for ($i=0; $i< mysqli_num_rows($resultado); $i++){
            $itens[$i] = mysqli_fetch_object($resultado);
        }
        return $itens;
