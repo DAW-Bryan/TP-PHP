@@ -22,7 +22,6 @@
   </head>
 
   <body>
-
         <!-- Menu navbar -->
         <?php
         if (!isset($_SESSION["root"])){
@@ -31,11 +30,21 @@
             include "Includes/menu.inc";
             include "Includes/reserva.inc";
             include "Controllers/ItemDao.php";
+            include "Controllers/CategoriaDao.php";
 
+            $dao_c = new CategoriaDao();
             $dao_e = new ItemDao();
             $dao_r = new ReservaDao();
 
-            if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
+            if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
+                $cat = new Categoria($_POST["nome"]);
+                $dao_c->insert($cat);
+                echo "Inseriu";
+            }else if(isset($_POST["delCat"]) && isset($_POST["delCatPos"])){ // Deletou categoria
+                $cats = $dao_c->read_all();
+                $dao_c->delete($cats[$_POST["delCatPos"]]);
+                echo "Deletou";
+            }else if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
                 $tipo = null;
                 if ($_POST["tipo_item"] == "Quadras"){
                     $tipo = "quadras";
@@ -82,6 +91,18 @@
           <div class="container">
             <h1 class="title"> Funções de administrador </h1>
             <p class="control" style="margin-left: 5px">
+
+            <button class="button is-link" id="modal-trigger-cat" data-target="modalCat">
+                <span>
+                    Adicionar Categoria
+                </span>
+            </button>
+            <button class="button is-link" id="modal-trigger-delcat" data-target="modalDelCat">
+                <span>
+                    Deletar Categoria
+                </span>
+            </button>
+
               <button class="button is-link" id="modal-trigger-e" data-target="modalItem">
                   <span>
                       Adicionar Item
@@ -113,6 +134,72 @@
         </section>
 
 
+        <!-- Modal para adicionar categoria -->
+        <form action="admin.php" method="post">
+
+        <div class="modal" id="modalCat">
+          <div class="modal-background"></div>
+            <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Adicionar Categoria</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label">Nome</label>
+                    <div class="control">
+                        <input class="input" type="text" name="nome" placeholder="Nome da categoria">
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <input type="hidden" id="addCat" name="addCat" value="true">
+                <input class="button is-success" type="submit" value="Adicionar">
+            </footer>
+            </div>
+        </div>
+
+        </form>
+
+        <!-- Modal deletar categoria -->
+        <form action="admin.php" method="post">
+        <div class="modal" id="modalDelCat">
+          <div class="modal-background"></div>
+            <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Deletar categorias</p>
+                <button class="delete deleteModal" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th class="has-text-centered">Deletar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <?php
+                $categorias = $dao_c->read_all();
+                if ($categorias != null){
+                    $i = 0;
+                    foreach ( $categorias as $c ) {
+                        echo '<tr>';
+                        echo '<td>'. $c->nome .'</div>';
+                        echo '<td class="has-text-centered"><button type="submit" name="delCatPos" value="'. $i . '" class="delete has-background-danger"></button></td>';
+                        echo '</tr>';
+                        $i++;
+                    }
+                }
+                echo '</tbody></table>';
+
+                ?>
+                <input type="hidden" id="delCat" name="delCat" value="true">
+            </section>
+            </div>
+        </div>
+
+        </form>
 
         <!-- Modal para adicionar item -->
         <form action="admin.php" method="post">
@@ -290,19 +377,33 @@
     </form>
 
     <script>
+        // modal Adiciona Categoria
+        var modalCat = document.querySelector('#modalCat');
+        var triggerCat = document.querySelector('#modal-trigger-cat');
+        triggerCat.addEventListener('click', function(event){
+            modalCat.classList.toggle('is-active');
+        });
+
+        // modal Deleta Categoria
+        var modalCatDel = document.querySelector('#modalDelCat');
+        var triggerCatDel = document.querySelector('#modal-trigger-delcat');
+        triggerCatDel.addEventListener('click', function(event){
+            modalCatDel.classList.toggle('is-active');
+        });
+
         // modal Adiciona Item
-        var modal = document.querySelector('#modalItem');
-        var trigger = document.querySelector('#modal-trigger-e');
-        trigger.addEventListener('click', function(event){
-            modal.classList.toggle('is-active');
+        var modalItem = document.querySelector('#modalItem');
+        var triggerItem = document.querySelector('#modal-trigger-e');
+        triggerItem.addEventListener('click', function(event){
+            modalItem.classList.toggle('is-active');
         });
 
         // modal Deleta Item
 
-        var modalDel = document.querySelector('#modalDelItem');
-        var triggerDel = document.querySelector('#modal-trigger-del');
-        triggerDel.addEventListener('click', function(event){
-            modalDel.classList.toggle('is-active');
+        var modalItemDel = document.querySelector('#modalDelItem');
+        var triggerItemDel = document.querySelector('#modal-trigger-del');
+        triggerItemDel.addEventListener('click', function(event){
+            modalItemDel.classList.toggle('is-active');
         });
 
 

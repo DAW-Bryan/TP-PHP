@@ -4,33 +4,42 @@ require "Models/Item.php";
 
 
 class ItemDao{
-   var $SERVER = "150.164.102.161";
-   var $_USER = "sys-reservas";
-   var $_PWD = "@c0lteCReserv@s";
-   var $_DB = "my-reservas";
-   var $table = "item";
+
+    var $DB_USERNAME = 'root';
+    var $DB_PASSWORD = 'root';
+    var $DB_HOST =  'localhost';
+    var $DB_DATABASE = 'my-reservas';
+
+    var $table = "item";
 
    // Conexão //
    private function connect(){
-       return mysqli_connect($SERVER, $_USER, $_PWD, $_DB);
+
+       $mysqli = new mysqli($this->DB_HOST, $this->DB_USERNAME, $this->DB_PASSWORD, $this->DB_DATABASE);
+
+       if (mysqli_connect_error()) {
+           die('Connect Error ('.mysqli_connect_errno().') '.mysqli_connect_error());
+       }
+
+       return $mysqli;
    }
 
    private function close($conexao){
-       return mysqli_close($conexao);
+       return $conexao->close();
    }
 
 
    // Escrita //
-   function insert($nome, $tipo){
+   function insert($item){
        $conexao = $this->connect();
-       $resultado = mysqli_query($conexao, "INSERT INTO " . $table . "(nome, tipo) VALUES (". $nome .", ". $tipo .");");
+       $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome, tipo) VALUES (". $item->nome .", ". $item->tipo .");");
        $this->close($conexao);
        return $resultado;
    }
 
    function delete($item){
        $conexao = $this->connect();
-       $resultado = mysqli_query($conexao, "DELETE FROM " . $table . " WHERE nome LIKE '" . $item->nome . "';");
+       $resultado = mysqli_query($conexao, "DELETE FROM " . $this->table . " WHERE nome LIKE '" . $item->nome . "';");
        $this->close($conexao);
        return $resultado;
    }
@@ -39,10 +48,10 @@ class ItemDao{
    // Leitura //
    function read_all(){
        $conexao = $this->connect();
-       $resultado = mysqli_query($conexao, "SELECT * FROM " . $table . ";");
+       $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . ";");
        $this->close($conexao);
 
-       $itens;
+       $itens = null;
        for ($i=0; $i< mysqli_num_rows($resultado); $i++){
            $itens[$i] = mysqli_fetch_object($resultado);
        }
