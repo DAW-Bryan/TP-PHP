@@ -26,6 +26,7 @@
                 echo "<h1 class='title'> Você não está logado! </h1>";
                 echo "<p>Entre na plataforma para realizar uma reserva</p>";
             }else{
+                    require "Controllers/Database.php";
                     require "Controllers/ItemDao.php";
                     require "Includes/reserva.inc";
 
@@ -44,8 +45,10 @@
                             carrega_reserva(3); // Horário indisponível
 
                         }else{
+                            $dao_i = new ItemDao();
+                            $item = $dao_i->read_by_nome($_POST["item"]);
                             $dao = new ReservaDao();
-                            $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
+                            $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $item->id, $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
                             $dao->insert($reserva);
                             echo "<section class='section'>
                               <div class='container'>

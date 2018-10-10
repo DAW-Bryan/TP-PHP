@@ -2,25 +2,21 @@
     require "Models/Reserva.php";
     
     class ReservaDao{
+        var $table = "reservas";
 
         // Escrita //
         function insert($reserva){
-            $reservaJSON = json_encode($reserva);
-            $ArquivoJSON = file_get_contents("Arquivos/reservas.json");
-            if(!strcmp($ArquivoJSON, "[]")){ // Nenhuma reserva cadastrada
-                $ArquivoJSON = str_replace("[", "[".$reservaJSON, $ArquivoJSON);
-            }else{
-                $ArquivoJSON = str_replace("[", "[".$reservaJSON.",", $ArquivoJSON);
-            }
+            $conexao = connect();
 
-            $file = fopen("Arquivos/reservas.json", "w");
-            fwrite($file, $ArquivoJSON);
-            fclose($file);
+            $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome, item_id, tipo_de_reserva, data, inicio, fim, user_matricula) 
+            VALUES ('". $reserva->nome ."', ". $reserva->item_id .", '". $reserva->tipo_de_reserva ."', '". $reserva->data ."', 
+            '". $reserva->inicio ."', '". $reserva->fim ."', '". $reserva->matricula ."');");
+            close($conexao);
+            return $resultado;
         }
 
         function deleta_antigas(){
-            $reservas = null;
-            $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
+            $todas_reservas = $this->read_all();
             foreach ( $todas_reservas as $r ) {
                 if (strtotime($r->data) < strtotime(date('Y-m-d')) && $r->tipo_de_reserva != "Semanal"){
                     $this->delete($r);
@@ -29,64 +25,59 @@
         }
 
         function delete($reserva){
-            $ArquivoJSON = file_get_contents("Arquivos/reservas.json");
-            $reservaJSON = json_encode($reserva);
-
-            if (strpos($ArquivoJSON, "[".$reservaJSON."]") !== false){ // Nenhuma reserva cadastrada
-                $ArquivoJSON = str_replace($reservaJSON, "", $ArquivoJSON);
-            }else if(strpos($ArquivoJSON, "[".$reservaJSON) !== false){ // É a primeira reserva
-                $ArquivoJSON = str_replace($reservaJSON . ",", "", $ArquivoJSON);
-            }else{
-                $ArquivoJSON = str_replace(",".$reservaJSON, "", $ArquivoJSON);
-            }
-
-            $file = fopen("Arquivos/reservas.json", "w");
-            fwrite($file, $ArquivoJSON);
-            fclose($file);
+            $conexao = connect();
+            $resultado = mysqli_query($conexao, "DELETE FROM " . $this->table . " WHERE nome LIKE '" . $reserva->nome . "';");
+            close($conexao);
+            return $resultado;
         }
 
 
         // Leitura //
         function read_all(){
-            return json_decode(file_get_contents("Arquivos/reservas.json"));
+            $conexao = connect();
+            $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . ";");
+            close($conexao);
+
+            $reservas = null;
+            for ($i=0; $i< mysqli_num_rows($resultado); $i++){
+                $reservas[$i] = mysqli_fetch_object($resultado);
+            }
+            return $reservas;
         }
 
 
-        function read_by_place($espaco){
+        function read_by_item($nome_item){
+            $conexao = connect();
+            $resultado = mysqli_query($conexao, "SELECT r.* FROM " . $this->table . " r JOIN item i ON r.item_id = i.id WHERE i.nome LIKE '" . $nome_item . "' ;");
+            close($conexao);
+            
             $reservas = null;
-            $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
-            foreach ( $todas_reservas as $r ) {
-                if ($r->espaco == $espaco){
-                    $reservas[] = new Reserva($r->nome, $r->matricula, $r->espaco, $r->tipo_de_reserva, $r->data, $r->inicio, $r->fim);
-                }
+            for ($i=0; $i< mysqli_num_rows($resultado); $i++){
+                $reservas[$i] = mysqli_fetch_object($resultado);
             }
             return $reservas;
         }
 
         function read_by_matricula($matricula){
+            $conexao = connect();
+            $resultado = mysqli_query($conexao, "SELECT * FROM " . $table . " WHERE user_matricula = " . $matricula . ";");
+            close($conexao);
+            
             $reservas = null;
-            $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
-            foreach ( $todas_reservas as $r ) {
-                if ($r->matricula == $matricula){
-                    $reservas[] = new Reserva($r->nome, $r->matricula, $r->espaco, $r->tipo_de_reserva, $r->data, $r->inicio, $r->fim);
-                }
+            for ($i=0; $i< mysqli_num_rows($resultado); $i++){
+                $reservas[$i] = mysqli_fetch_object($resultado);
             }
             return $reservas;
         }
 
         function read_by_date($data){
+            $conexao = connect();
+            $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE data = '" . $data . "' AND tipo_de_reserva LIKE 'Diaria';");
+            close($conexao);
+            
             $reservas = [];
-            $todas_reservas = json_decode(file_get_contents("Arquivos/reservas.json"));
-            foreach ( $todas_reservas as $r ) {
-                if ($r->tipo_de_reserva == "Diária"){
-                    if ($data == $r->data){
-                        $reservas[] = new Reserva($r->nome, $r->matricula, $r->espaco, $r->tipo_de_reserva, $r->data, $r->inicio, $r->fim);
-                    }
-                }else{ // tipo_de_reserva == semanal
-                    if (date('w', strtotime($data)) == $r->data){
-                        $reservas[] = new Reserva($r->nome, $r->matricula, $r->espaco, $r->tipo_de_reserva, $r->data, $r->inicio, $r->fim);
-                    }
-                }
+            for ($i=0; $i< mysqli_num_rows($resultado); $i++){
+                $reservas[$i] = mysqli_fetch_object($resultado);
             }
             return $reservas;
         }

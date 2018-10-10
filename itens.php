@@ -30,7 +30,6 @@
         <!-- Reservas -->
         <?php
             include "Includes/reserva.inc";
-            include "Controllers/ItemDao.php";
 
             $dao_i = new ItemDao();
             $dao_r = new ReservaDao();

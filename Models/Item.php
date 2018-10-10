@@ -1,13 +1,11 @@
 <?php
     class Item{
         var $nome;
-        var $tipo;
-        var $imagem;
+        var $categoria_id;
 
-        function __construct($nome, $tipo) {
+        function __construct($nome, $categoria_id) {
             $this->nome = $nome;
-            $this->tipo = $tipo;
-            $this->imagem = "Images/".$tipo;
+            $this->categoria_id = $categoria_id;
         }
 
     }

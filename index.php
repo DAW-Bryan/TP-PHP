@@ -12,6 +12,7 @@ if (isset($_GET['logout'])) {
   header("location:index.php");
 }
 
+include "Controllers/Database.php";
 require "Includes/reserva.inc";
 $dao = new ReservaDao();
 
@@ -114,10 +115,9 @@ $dao = new ReservaDao();
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
                       <div class="content">
                         <?php
-                            //$dao = new ReservaDao();
+                            
                             $data = date('Y-m-d');
                             $reservas = [];
-
                             for ($i=0; $i < 7; $i++){
                                 if ($i==0){
                                     $reservas = $dao->read_by_date($data);
@@ -203,7 +203,7 @@ $dao = new ReservaDao();
                     $i = 0;
                     foreach ($reservas as $r) {
                         $i++;
-                        if ($i == $reservas.length){
+                        if ($i == count($reservas)){
                             echo "{title  : '". $r->nome . "', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'}";
                         }else{
                             echo "{title  : '". $r->nome . "', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'},";

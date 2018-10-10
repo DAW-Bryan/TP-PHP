@@ -29,6 +29,7 @@
         }else{
             include "Includes/menu.inc";
             include "Includes/reserva.inc";
+            include "Controllers/Database.php";
             include "Controllers/ItemDao.php";
             include "Controllers/CategoriaDao.php";
 
@@ -39,30 +40,25 @@
             if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
                 $cat = new Categoria($_POST["nome"]);
                 $dao_c->insert($cat);
-                echo "Inseriu";
+
             }else if(isset($_POST["delCat"]) && isset($_POST["delCatPos"])){ // Deletou categoria
                 $cats = $dao_c->read_all();
                 $dao_c->delete($cats[$_POST["delCatPos"]]);
-                echo "Deletou";
-            }else if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
-                $tipo = null;
-                if ($_POST["tipo_item"] == "Quadras"){
-                    $tipo = "quadras";
-                } else if ($_POST["tipo_item"] == "Salas de aula"){
-                    $tipo = "salas";
-                } else {
-                    $tipo = "lab";
-                }
 
-                $item = new Item($_POST["nome"], $tipo);
+            }else if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
+                $categoria = $dao_c->read_by_name($_POST["tipo_item"]);
+                $item = new Item($_POST["nome"], $categoria->id);
                 $dao_e->insert($item);
-            }else if (isset($_POST["delItem"])){ // Deletou Item
+
+            }else if (isset($_POST["delItem"]) && isset($_POST["delItemPos"])){ // Deletou Item
                 $itens = $dao_e->read_all();
                 $dao_e->delete($itens[$_POST["delItemPos"]]);
-            }else if (isset($_POST["delReserva"])){ // Deletou Reserva
+
+            }else if (isset($_POST["delReserva"]) && isset($_POST["reserva"])){ // Deletou Reserva
                 $reservas = $dao_r->read_all();
                 $dao_r->delete($reservas[$_POST["reserva"]]);
-            }else if(isset($_POST["addAdm"])){
+
+            }else if(isset($_POST["addAdm"]) && 0==1){
                 $usuarios = json_decode(file_get_contents("Arquivos/usuarios.json"));
                 $pos = $_POST["user"];
                 $usuarioAtual = array(
@@ -224,9 +220,12 @@
                     <div class="control">
                         <div class="select">
                             <select name="tipo_item">
-                                <option>Quadras</option>
-                                <option>Laboratórios</option>
-                                <option>Salas de aula</option>
+                            <?php
+                                $categorias = $dao_c->read_all();
+                                foreach ($categorias as $c){
+                                    echo "<option>". $c->nome ."</option>";
+                                }
+                            ?>
                             </select>
                         </div>
                     </div>
@@ -307,24 +306,26 @@
             <tbody>
                 <?php
                 $reservas = $dao_r->read_all();
-                $i = 0;
-                foreach ( $reservas as $r ) {
-                    echo '<tr>';
-                    echo '<td>'. $r->item .'</td>';
+                if ($reservas != null){
+                    $i = 0;
+                    foreach ( $reservas as $r ) {
+                        $item = $dao_e->read_by_id($r->item_id);
+                        echo '<tr>';
+                        echo '<td>'. $item->nome .'</td>';
 
-                    if ($r->tipo_de_reserva == "Semanal"){
-                        $r->data = convert_num_to_weekday($r->data);
+                        if ($r->tipo_de_reserva == "Semanal"){
+                            $r->data = convert_num_to_weekday($r->data);
+                        }
+
+                        echo '<td>'. $r->data .'</td>';
+                        echo '<td>'. $r->inicio .'</td>';
+                        echo '<td>'. $r->fim .'</td>';
+                        echo '<td class="has-text-centered"><button type="submit" name="reserva" value="'. $i . '" class="delete has-background-danger"></button></td>';
+                        echo '</tr>';
+                        $i++;
                     }
-
-                    echo '<td>'. $r->data .'</td>';
-                    echo '<td>'. $r->inicio .'</td>';
-                    echo '<td>'. $r->fim .'</td>';
-                    echo '<td class="has-text-centered"><button type="submit" name="reserva" value="'. $i . '" class="delete has-background-danger"></button></td>';
-                    echo '</tr>';
-                    $i++;
+                    echo '</tbody></table>';
                 }
-                echo '</tbody></table>';
-
                 ?>
                 <input type="hidden" id="delReserva" name="delReserva" value="true">
             </section>
