@@ -1,6 +1,6 @@
 <?php
     require "Models/Reserva.php";
-    
+
     class ReservaDao{
         var $table = "reservas";
 
@@ -8,8 +8,8 @@
         function insert($reserva){
             $conexao = connect();
 
-            $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome, item_id, tipo_de_reserva, data, inicio, fim, user_matricula) 
-            VALUES ('". $reserva->nome ."', ". $reserva->item_id .", '". $reserva->tipo_de_reserva ."', '". $reserva->data ."', 
+            $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome, item_id, tipo_de_reserva, data, inicio, fim, matricula)
+            VALUES ('". $reserva->nome ."', ". $reserva->item_id .", '". $reserva->tipo_de_reserva ."', '". $reserva->data ."',
             '". $reserva->inicio ."', '". $reserva->fim ."', '". $reserva->matricula ."');");
             close($conexao);
             return $resultado;
@@ -50,7 +50,7 @@
             $conexao = connect();
             $resultado = mysqli_query($conexao, "SELECT r.* FROM " . $this->table . " r JOIN item i ON r.item_id = i.id WHERE i.nome LIKE '" . $nome_item . "' ;");
             close($conexao);
-            
+
             $reservas = null;
             for ($i=0; $i< mysqli_num_rows($resultado); $i++){
                 $reservas[$i] = mysqli_fetch_object($resultado);
@@ -60,9 +60,9 @@
 
         function read_by_matricula($matricula){
             $conexao = connect();
-            $resultado = mysqli_query($conexao, "SELECT * FROM " . $table . " WHERE user_matricula = " . $matricula . ";");
+            $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE matricula LIKE '" . $matricula . "';");
             close($conexao);
-            
+
             $reservas = null;
             for ($i=0; $i< mysqli_num_rows($resultado); $i++){
                 $reservas[$i] = mysqli_fetch_object($resultado);
@@ -74,7 +74,7 @@
             $conexao = connect();
             $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE data = '" . $data . "' AND tipo_de_reserva LIKE 'Diaria';");
             close($conexao);
-            
+
             $reservas = [];
             for ($i=0; $i< mysqli_num_rows($resultado); $i++){
                 $reservas[$i] = mysqli_fetch_object($resultado);

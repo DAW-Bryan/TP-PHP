@@ -3,6 +3,7 @@
     require "Controllers/ReservaDao.php";
     include "Controllers/ItemDao.php";
     include "Controllers/CategoriaDao.php";
+    include "Controllers/UserDao.php";
     include "Controllers/Database.php";
 
 
@@ -24,7 +25,7 @@
                 <div class="control">
                     <div class="select">
                     <select name="item">
-                    <?php                    
+                    <?php
                         $dao_i = new ItemDao();
                         $itens = $dao_i->read_all();
 

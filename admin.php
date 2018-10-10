@@ -29,13 +29,11 @@
         }else{
             include "Includes/menu.inc";
             include "Includes/reserva.inc";
-            include "Controllers/Database.php";
-            include "Controllers/ItemDao.php";
-            include "Controllers/CategoriaDao.php";
 
             $dao_c = new CategoriaDao();
             $dao_e = new ItemDao();
             $dao_r = new ReservaDao();
+            $dao_u = new UserDao();
 
             if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
                 $cat = new Categoria($_POST["nome"]);
@@ -58,35 +56,17 @@
                 $reservas = $dao_r->read_all();
                 $dao_r->delete($reservas[$_POST["reserva"]]);
 
-            }else if(isset($_POST["addAdm"]) && 0==1){
-                $usuarios = json_decode(file_get_contents("Arquivos/usuarios.json"));
+            }else if(isset($_POST["addAdm"]) && isset($_POST["user"])){ // Adicionou admim
+                $usuarios = $dao_u->read_all();
                 $pos = $_POST["user"];
-                $usuarioAtual = array(
-                    "matricula"=>$usuarios[$pos]->matricula,
-                    "senha"=>$usuarios[$pos]->senha,
-                    "nome"=>$usuarios[$pos]->nome,
-                    "tipo"=>"root",
-                    "email"=>$usuarios[$pos]->email
-                );
-
-                $usuarioSemAdm_str = json_encode($usuarios[$pos]);
-                $usuarioAtual_str = json_encode($usuarioAtual);
-
-                //retira o colchete e coloca a vírgula no arquivo
-                $ArquivoJSON = file_get_contents("Arquivos/usuarios.json");
-                $ArquivoJSON = str_replace($usuarioSemAdm_str, $usuarioAtual_str, $ArquivoJSON); //Substitui User antigo por User com adm
-
-                //abre o arquivo
-                $usuarios = fopen("Arquivos/usuarios.json", "w"); //sobreescreve
-                fwrite($usuarios, $ArquivoJSON);
-                fclose($usuarios);
+                $dao_u->give_adm($usuarios[$pos]);
             }
         ?>
 
         <section class="section">
           <div class="container">
             <h1 class="title"> Funções de administrador </h1>
-            <p class="control" style="margin-left: 5px">
+            <span class="control" style="margin-left: 5px">
 
             <button class="button is-link" id="modal-trigger-cat" data-target="modalCat">
                 <span>
@@ -125,7 +105,13 @@
                       Adicionar Administrador
                   </span>
               </button>
-            </p>
+
+              <button class="button is-link" id="modal-trigger-caduser" data-target="modalGiveAdm">
+                  <span>
+                      Cadastrar Usuário
+                  </span>
+              </button>
+          </span>
           </div>
         </section>
 
@@ -324,8 +310,8 @@
                         echo '</tr>';
                         $i++;
                     }
-                    echo '</tbody></table>';
                 }
+                echo '</tbody></table>';
                 ?>
                 <input type="hidden" id="delReserva" name="delReserva" value="true">
             </section>
@@ -335,7 +321,6 @@
 
 
     <!-- Modal para dar adm -->
-
     <form action="admin.php" method="post">
         <div class="modal" id="modalGiveAdm">
           <div class="modal-background"></div>
@@ -350,24 +335,21 @@
                 <tr>
                     <th>Nome</th>
                     <th>Matrícula</th>
-                    <th>Email</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                    $arquivo_str = file_get_contents("Arquivos/usuarios.json");
-                    $usuarios = json_decode($arquivo_str);
+                    $usuarios = $dao_u->read_non_admin();
                     $i=0;
-                    foreach ($usuarios as $user) {
-                        if (!isset($user->tipo)) {
-                            echo '<tr>';
-                            echo '<td>'. $user->nome .'</td>';
-                            echo '<td>'. $user->matricula .'</td>';
-                            echo '<td>'. $user->email .'</td>';
-                            echo '<td class="has-text-centered"><button type="submit" name="user" value="'. $i . '" class="button is-link">Dar adm</button></td>';
-                            echo '</tr>';
+                    if ($usuarios != null){
+                        foreach ($usuarios as $user) {
+                                echo '<tr>';
+                                echo '<td>'. $user->nome .'</td>';
+                                echo '<td>'. $user->matricula .'</td>';
+                                echo '<td class="has-text-centered"><button type="submit" name="user" value="'. $i . '" class="button is-link">Dar adm</button></td>';
+                                echo '</tr>';
+                            $i++;
                         }
-                        $i++;
                     }
                     echo '</tbody></table>';
                 ?>
@@ -376,6 +358,66 @@
             </div>
         </div>
     </form>
+
+        <!-- Modal para cadastro de usuário -->
+        <form method="post" action="autentica_cadastro.php">
+          <div class="modal" id="modalCadUser">
+            <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Cadastro de usuários</p>
+              <a class="delete deletar" aria-label="close"></a>
+            </header>
+            <section class="modal-card-body">
+              <div class="field">
+                  <label class="label">Nome Completo</label>
+                  <div class="control has-icons-left">
+                      <input class="input" type="text" name="EntradaNome" placeholder="Seu nome completo">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-user"></i>
+                      </span>
+                  </div>
+              </div>
+
+              <div class="field">
+                  <label class="label">Email</label>
+                  <div class="control has-icons-left">
+                      <input class="input" type="email"  name="EntradaEmail"placeholder="Seu email">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-envelope"></i>
+                      </span>
+                  </div>
+              </div>
+
+              <div class="field">
+                  <label class="label">Número de Matrícula</label>
+                  <div class="control has-icons-left">
+                      <input class="input" type="number" name="EntradaMatricula" placeholder="Sua Matrícula">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-id-card"></i>
+                      </span>
+                  </div>
+              </div>
+
+              <div class="field">
+                  <label class="label">Senha</label>
+                  <div class="control has-icons-left">
+                      <input class="input" type="password" id="senha1" placeholder="Digite a senha" name="EntradaSenha" onchange="validaSenha()">
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-key"></i>
+                      </span>
+                  </div>
+              </div>
+
+            </section>
+            <footer class="modal-card-foot">
+              <button class="button is-success" type="submit">Finalizar cadastro</button>
+              <a class="button deletar">Cancelar</a>
+            </footer>
+          </div>
+        </div>
+      </form>
+
 
     <script>
         // modal Adiciona Categoria
@@ -425,9 +467,17 @@
             modalGiveAdm.classList.toggle('is-active');
         });
 
+        // modal Cadastra User
+
+        var modalCadUser = document.querySelector('#modalCadUser');
+        var triggerCadUser = document.querySelector('#modal-trigger-caduser');
+        triggerCadUser.addEventListener('click', function(event){
+            modalCadUser.classList.toggle('is-active');
+        });
 
 
-        // Delete Modal
+
+    /*    // Delete Modal
         var del = $(".delete");
         del.click(function() {
             modal.classList.remove("is-active");
@@ -447,7 +497,7 @@
         var delModalAdm = $(".deleteModalAdm");
         delModalAdm.click(function() {
             modalGiveAdm.classList.remove("is-active");
-        })
+        })*/
         </script>
 
     <!-- Importando os scripts -->

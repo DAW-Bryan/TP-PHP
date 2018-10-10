@@ -1,6 +1,6 @@
 <?php
-    DEFINE('DB_USERNAME', 'reservas');
-    DEFINE('DB_PASSWORD', '123');
+    DEFINE('DB_USERNAME', 'root');
+    DEFINE('DB_PASSWORD', 'root');
     DEFINE('DB_HOST', 'localhost');
     DEFINE('DB_DATABASE', 'my-reservas');
 

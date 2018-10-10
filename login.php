@@ -3,36 +3,31 @@
     $matricula  = $_POST["matricula"];
     $senha      = $_POST["senha"];
 
-    // Lendo os dados do arquivo json
-    $arquivo_str = file_get_contents("Arquivos/usuarios.json");
-    $usuarios = json_decode($arquivo_str);
+    // Lendo os dados do banco
+    include 'Includes/reserva.inc';
 
-    // Verificando se existe o usuário
-    foreach ($usuarios as $user) {
+    $dao_user = new UserDao();
+    $user = $dao_user->read_by_id($matricula); // Verificando se existe o usuário
 
-        if (strcmp($user->matricula, $matricula) == 0) {
+    if ($user != null){
+        if (strcmp($user->senha, $senha) == 0) { // Verifica se a senha está correta
 
-            // Verifica se a senha está correta
-            if (strcmp($user->senha, $senha) == 0) {
+          $_SESSION["login"] = $user->nome;
+          $_SESSION["matricula"] = $matricula;
+          $_SESSION["senha"] = $senha;
 
-              $_SESSION["login"] = $user->nome;
-              $_SESSION["matricula"] = $matricula;
-              $_SESSION["senha"] = $senha;
+          if ($user->admin){
+            $_SESSION["root"] = "true";
+          }
 
-              if ($user->tipo != null){
-                $_SESSION["root"] = "true";
-              }
+          // Redireciona para a homepage logado
+          header("location:index.php");
 
-              // Redireciona para a homepage logado
-              header("location:index.php");
+        }
 
-            }
-
-            // Senha incorreta
-            else {
-              $user_nao_existe = false;
-              break;
-            }
+        // Senha incorreta
+        else {
+          $user_nao_existe = false;
         }
     }
 ?>

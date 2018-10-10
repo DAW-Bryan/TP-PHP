@@ -44,7 +44,7 @@
               echo '<section class="section">';
               echo '<div class="container">';
                 echo '<h2 class="title">'. $i->nome .'</h2>';
-                $reservas = $dao_r->read_by_place($i->nome);
+                $reservas = $dao_r->read_by_item($i->nome);
                 print_reservas_por_item($reservas);
               echo '</div>';
               echo '</section>';

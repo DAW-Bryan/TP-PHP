@@ -26,8 +26,6 @@
                 echo "<h1 class='title'> Você não está logado! </h1>";
                 echo "<p>Entre na plataforma para realizar uma reserva</p>";
             }else{
-                    require "Controllers/Database.php";
-                    require "Controllers/ItemDao.php";
                     require "Includes/reserva.inc";
 
                     date_default_timezone_set('America/Sao_Paulo');

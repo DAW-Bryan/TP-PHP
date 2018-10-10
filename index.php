@@ -12,7 +12,6 @@ if (isset($_GET['logout'])) {
   header("location:index.php");
 }
 
-include "Controllers/Database.php";
 require "Includes/reserva.inc";
 $dao = new ReservaDao();
 
@@ -115,7 +114,7 @@ $dao = new ReservaDao();
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
                       <div class="content">
                         <?php
-                            
+
                             $data = date('Y-m-d');
                             $reservas = [];
                             for ($i=0; $i < 7; $i++){
@@ -160,7 +159,6 @@ $dao = new ReservaDao();
                   <?php echo '<h1 class="title"> Bem vindo, ' . $logado . '</h1>';
 
                     $reservas = $dao->read_by_matricula($matricula);
-
                     print_reservas_da_pessoa($reservas);
 
                   ?>
@@ -200,18 +198,30 @@ $dao = new ReservaDao();
 
                 events: [<?php
                     $reservas = $dao->read_all();
+                    $dao_item = new ItemDao();
                     $i = 0;
                     foreach ($reservas as $r) {
+                        $item = $dao_item->read_by_id($r->item_id);
                         $i++;
-                        if ($i == count($reservas)){
-                            echo "{title  : '". $r->nome . "', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'}";
+
+                        if ($r->tipo_de_reserva == "Semanal"){
+                            if ($i == count($reservas)){
+                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]}";
+                            }else{
+                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]},";
+                            }
+
                         }else{
-                            echo "{title  : '". $r->nome . "', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'},";
+                            if ($i == count($reservas)){
+                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'}";
+                            }else{
+                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'},";
+                            }
                         }
                     }
-                ?>]
-              })
-            });
+                    ?>]
+            })
+        });
         </script>
 
   </body>
