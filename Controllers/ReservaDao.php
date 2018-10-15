@@ -17,9 +17,11 @@
 
         function deleta_antigas(){
             $todas_reservas = $this->read_all();
-            foreach ( $todas_reservas as $r ) {
-                if (strtotime($r->data) < strtotime(date('Y-m-d')) && $r->tipo_de_reserva != "Semanal"){
-                    $this->delete($r);
+            if ($todas_reservas != null){
+                foreach ( $todas_reservas as $r ) {
+                    if (strtotime($r->data) < strtotime(date('Y-m-d')) && $r->tipo_de_reserva != "Semanal"){
+                        $this->delete($r);
+                    }
                 }
             }
         }
@@ -72,7 +74,8 @@
 
         function read_by_date($data){
             $conexao = connect();
-            $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE data = '" . $data . "' AND tipo_de_reserva LIKE 'Diaria';");
+            $dia_da_semana = date('w', strtotime($data));
+            $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE data = '" . $data . "' OR data = '". $dia_da_semana . "';");
             close($conexao);
 
             $reservas = [];
@@ -81,6 +84,25 @@
             }
             return $reservas;
         }
+
+        function read_veiculos($nome_item){
+
+            $conexao = connect();
+            if (mysqli_query($conexao, "SELECT * FROM item JOIN categoria ON item.categoria_id = categoria.id WHERE item.nome LIKE '" . $nome_item . "' AND categoria.nome LIKE 'Veículos';") != null){
+                $resultado = mysqli_query($conexao, "SELECT reservas.* FROM " . $this->table . " JOIN item ON item.id = reservas.item_id
+                    JOIN categoria ON item.categoria_id = categoria.id WHERE categoria.nome LIKE 'Veículos';");
+
+                $reservas = [];
+                for ($i=0; $i< mysqli_num_rows($resultado); $i++){
+                    $reservas[$i] = mysqli_fetch_object($resultado);
+                }
+                return $reservas;
+            }else{
+                return false;
+            }
+        }
     }
+
+    $dao_r = new ReservaDao();
 
 ?>

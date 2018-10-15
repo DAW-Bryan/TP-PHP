@@ -43,7 +43,7 @@ class ItemDao{
 
        return mysqli_fetch_object($resultado);
    }
- 
+
    function read_by_id($id){
         $conexao = connect();
         $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE id =" . $id . ";");
@@ -51,6 +51,19 @@ class ItemDao{
 
         return mysqli_fetch_object($resultado);
     }
+
+    function read_by_categoria($nome_categoria){
+        $conexao = connect();
+        $resultado = mysqli_query($conexao, "SELECT item.nome FROM " . $this->table . " JOIN categoria ON  item.categoria_id = categoria.id WHERE categoria.nome LIKE '" . $nome_categoria . "';");
+        close($conexao);
+        $itens = null;
+        for ($i=0; $i< mysqli_num_rows($resultado); $i++){
+            $itens[$i] = mysqli_fetch_object($resultado);
+        }
+        return $itens;
+    }
+
 }
 
+$dao_i = new ItemDao();
 ?>

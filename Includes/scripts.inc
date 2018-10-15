@@ -17,7 +17,7 @@
           });
 
           // modal
-          var modal = document.querySelector('.modal');
+        /*  var modal = document.querySelector('.modal');
           var trigger = document.querySelector('#modal-trigger');
           trigger.addEventListener('click', function(event){
             modal.classList.toggle('is-active');
@@ -28,7 +28,7 @@
           del.click(function() {
             modal.classList.remove("is-active");
           })
-
+*/
 
       });
 

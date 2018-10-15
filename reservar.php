@@ -3,14 +3,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Reserva de Item</title>
-        <link rel="stylesheet" href="./css/bulma.min.css">
-        <link rel="stylesheet" href="css/custom.css">
-        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reservas Coltec</title>
 
+    <link rel="shortcut icon" href="Images/logo.png">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="./css/bulma.min.css">
+
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+
+    <!-- JQuery -->
+    <script src="scripts/jquery.min.js"></script>
   </head>
 
   <body>
@@ -43,11 +52,9 @@
                             carrega_reserva(3); // Horário indisponível
 
                         }else{
-                            $dao_i = new ItemDao();
                             $item = $dao_i->read_by_nome($_POST["item"]);
-                            $dao = new ReservaDao();
                             $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $item->id, $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
-                            $dao->insert($reserva);
+                            $dao_r->insert($reserva);
                             echo "<section class='section'>
                               <div class='container'>
                                 <h1 class='title'> Reserva realizada com sucesso! </h1>
@@ -93,6 +100,8 @@
 
                 </script>
 
-            <?php } require "Includes/scripts.inc"; ?>
+            <?php } ?>
+
+            <script src="scripts/main_script.js"></script>
   </body>
 </html>

@@ -39,9 +39,11 @@ class CategoriaDao{
         $conexao = connect();
         $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE nome LIKE '" . $nome . "';");
         close($conexao);
-        
+
         return mysqli_fetch_object($resultado);;
     }
 }
+
+$dao_c = new CategoriaDao();
 
 ?>

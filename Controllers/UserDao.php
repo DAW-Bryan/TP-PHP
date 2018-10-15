@@ -28,6 +28,18 @@ class UserDao{
        return $resultado;
    }
 
+   function changePsw($matricula, $nova_senha, $senha_atual){
+       $conexao = connect();
+
+       $resultado = 0;
+       if($senha_atual == $this->read_by_id($matricula)->senha){
+           $resultado = mysqli_query($conexao, "UPDATE " . $this->table . " SET senha='". $nova_senha . "' WHERE matricula LIKE '" . $matricula . "';");
+       }
+
+       close($conexao);
+       return $resultado;
+   }
+
 
    // Leitura //
    function read_all(){
@@ -71,4 +83,5 @@ class UserDao{
 
 }
 
+    $dao_u = new UserDao();
 ?>

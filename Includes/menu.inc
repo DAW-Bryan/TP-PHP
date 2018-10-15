@@ -77,24 +77,79 @@
 
                       </div>
                   </p>
-
-                  <p class="control" style="margin-left: 5px">
-                      <button class="button is-link" id="modal-trigger" data-target="modal">
-                          <span class="icon">
-                            <i class="fas fa-user"></i>
-                          </span>
-                          <span>
-                            Cadastro
-                          </span>
-                      </button>
-                  </p>
-
                 </div>
 
               <?php } else { ?>
 
-              <?php echo '<p> Logado como ' . $_SESSION['login'] . ', </p>'; ?>
-              <a id='logout' href="index.php?logout=1">  Sair </a>
+              <p class="control" style="margin-left: 5px">
+                  <a href="index.php?logout=1" class="button is-light" id="logout">
+                      <span class="icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                      </span>
+                      <span>
+                        Sair
+                      </span>
+                  </a>
+              </p>
+
+              <p class="control" style="margin-left: 5px">
+                  <button class="button is-link" id="modal-trigger-psw" data-target="modal">
+                      <span class="icon">
+                        <i class="fas fa-user"></i>
+                      </span>
+                      <span>
+                        Mudar Senha
+                      </span>
+                  </button>
+              </p>
+
+              <!-- Modal para mudar senha do usuário -->
+              <form method="post" action="index.php">
+                <div class="modal" id="modalChangePsw">
+                  <div class="modal-background"></div>
+                <div class="modal-card">
+                  <header class="modal-card-head">
+                    <p class="modal-card-title">Mudar Senha</p>
+                    <a class="delete deletarModalChangePsw" aria-label="close"></a>
+                  </header>
+                  <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Senha atual</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="password" name="atual" placeholder="Sua senha atual" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Nova senha</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="password" id="senha1" placeholder="Sua nova senha" name="senha1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Repita a nova senha</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="password" id="senha2" placeholder="Sua nova senha" name="senha2" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                  </section>
+                  <footer class="modal-card-foot">
+                    <button class="button is-success" id="btn_finalizar" type="submit" disabled>Finalizar mudança</button>
+                  </footer>
+                </div>
+              </div>
+              </form>
 
               <?php } ?>
               </div>
@@ -108,62 +163,3 @@
                 <h2 class="subtitle has-text-centered has-text-light"> Para reservar a sala ou item que você precisa no Colégio!</h2>
             </div>
         </section>
-
-        <!-- Modal para cadastro -->
-        <form method="post" action="autentica_cadastro.php">
-          <div class="modal" id="modal">
-            <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Cadastro de usuários</p>
-              <a class="delete deletar" aria-label="close"></a>
-            </header>
-            <section class="modal-card-body">
-              <div class="field">
-                  <label class="label">Nome Completo</label>
-                  <div class="control has-icons-left">
-                      <input class="input" type="text" name="EntradaNome" placeholder="Seu nome completo">
-                      <span class="icon is-small is-left">
-                          <i class="fas fa-user"></i>
-                      </span>
-                  </div>
-              </div>
-
-              <div class="field">
-                  <label class="label">Email</label>
-                  <div class="control has-icons-left">
-                      <input class="input" type="email"  name="EntradaEmail"placeholder="Seu email">
-                      <span class="icon is-small is-left">
-                          <i class="fas fa-envelope"></i>
-                      </span>
-                  </div>
-              </div>
-
-              <div class="field">
-                  <label class="label">Número de Matrícula</label>
-                  <div class="control has-icons-left">
-                      <input class="input" type="number" name="EntradaMatricula" placeholder="Sua Matrícula">
-                      <span class="icon is-small is-left">
-                          <i class="fas fa-id-card"></i>
-                      </span>
-                  </div>
-              </div>
-
-              <div class="field">
-                  <label class="label">Senha</label>
-                  <div class="control has-icons-left">
-                      <input class="input" type="password" id="senha1" placeholder="Digite a senha" name="EntradaSenha" onchange="validaSenha()">
-                      <span class="icon is-small is-left">
-                          <i class="fas fa-key"></i>
-                      </span>
-                  </div>
-              </div>
-
-            </section>
-            <footer class="modal-card-foot">
-              <button class="button is-success" type="submit">Finalizar cadastro</button>
-              <a class="button deletar">Cancelar</a>
-            </footer>
-          </div>
-        </div>
-      </form>

@@ -1,23 +1,21 @@
 <?php
-
 session_start();
+require "Includes/reserva.inc";
 
 if( (isset($_SESSION["login"]) == true) and (isset($_SESSION["matricula"]) == true) and (isset($_SESSION["senha"]) == true) ) {
   $logado = $_SESSION['login'];
   $matricula = $_SESSION["matricula"];
+
+  if(isset($_POST["atual"]) && isset($_POST["senha1"])){ //Usuário mudou de senha
+      $changePsw =  $dao_u->changePsw($matricula, $_POST["senha1"], $_POST["atual"]);
+  }
 }
 
 if (isset($_GET['logout'])) {
   session_destroy();
   header("location:index.php");
 }
-
-require "Includes/reserva.inc";
-$dao = new ReservaDao();
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html>
@@ -37,16 +35,15 @@ $dao = new ReservaDao();
         <!-- Font Awesome -->
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 
-
         <!-- JQuery -->
-        <script src='css/lib/jquery.min.js'></script>
+        <script src='scripts/jquery.min.js'></script>
 
         <!-- Moment.js -->
-        <script src='css/lib/moment-with-locales.js'></script>
+        <script src='scripts/moment-with-locales.js'></script>
 
         <!-- FullCalendar -->
         <link rel='stylesheet' href='css/fullcalendar.css' />
-        <script src='css/fullcalendar.js'></script>
+        <script src='scripts/fullcalendar.js'></script>
 
   </head>
 
@@ -58,14 +55,26 @@ $dao = new ReservaDao();
         <!-- Deleta reservas antigas -->
         <?php
             date_default_timezone_set('America/Sao_Paulo');;
-            $dao->deleta_antigas();
+            $dao_r->deleta_antigas();
 
             if (isset($_GET["reserva"])){ // Usuário deletou reserva
               echo " <div class='notification is-success'>
                         <h2 class='title'> Reserva deletada com sucesso! </h1>
                      </div>";;
-                $reservas_da_pessoa = $dao->read_by_matricula($_SESSION["matricula"]);
-                $dao->delete($reservas_da_pessoa[$_GET["reserva"]]);
+                $reservas_da_pessoa = $dao_r->read_by_matricula($_SESSION["matricula"]);
+                $dao_r->delete($reservas_da_pessoa[$_GET["reserva"]]);
+            }
+
+            if (isset($changePsw)){ // Usuário mudou de senha
+                if ($changePsw){
+                    echo " <div class='notification is-success'>
+                              <h2 class='title'> Senha alterada com sucesso! </h1>
+                           </div>";
+                }else{
+                    echo " <div class='notification is-danger'>
+                              <h2 class='title'> Senha não foi alterada, verifique se digitou a senha atual corretamente </h1>
+                           </div>";
+                }
             }
 
         ?>
@@ -73,7 +82,7 @@ $dao = new ReservaDao();
         <section class="section">
             <nav class="columns">
 
-                <a class="column has-text-centered" href="itens.php?tag=quadras">
+                <a class="column has-text-centered" href="itens.php?tag=Quadras">
                     <p class="title is-4"> Quadras esportivas </p>
                     <p class="subtitle is-6"> Jogue seu futebol! </p>
 
@@ -82,7 +91,17 @@ $dao = new ReservaDao();
                     </figure>
                 </a>
 
-                <a class="column has-text-centered" href="itens.php?tag=lab">
+                <a class="column has-text-centered" href="itens.php?tag=Veículos">
+                    <p class="title is-4"> Veículos </p>
+                    <p class="subtitle is-6"> Ônibus e van </p>
+
+                    <figure class="bd-focus-icon">
+                      <img src="Images/ic_veiculo.jpg" width="200px">
+                    </figure>
+                </a>
+
+
+                <a class="column has-text-centered" href="itens.php?tag=Laboratórios">
                     <p class="title is-4"> Laboratórios </p>
                     <p class="subtitle is-6"> Informática, Química, entre outros </p>
 
@@ -91,7 +110,7 @@ $dao = new ReservaDao();
                     </figure>
                 </a>
 
-                <a class="column has-text-centered" href="itens.php?tag=salas">
+                <a class="column has-text-centered" href="itens.php?tag=Salas de aula">
                     <p class="title is-4"> Salas de aula </p>
                     <p class="subtitle is-6"> Auditório, Sala de dança, etc </p>
 
@@ -119,24 +138,26 @@ $dao = new ReservaDao();
                             $reservas = [];
                             for ($i=0; $i < 7; $i++){
                                 if ($i==0){
-                                    $reservas = $dao->read_by_date($data);
+                                    $reservas = $dao_r->read_by_date($data);
                                 }else{
-                                    $reservas = array_merge($reservas, $dao->read_by_date($data));
+                                    $reservas = array_merge($reservas, $dao_r->read_by_date($data));
                                 }
                                 $data = date('Y-m-d', strtotime('+1 day', strtotime($data)));
                             }
-
                             print_todas_as_reservas($reservas);
 
 
                             if (isset($_GET["data"])){
                                 echo '<h1 class="title"> Dia pesquisado: </h1>';
-                                $reservas = $dao->read_by_date($_GET["data"]);
+                                $reservas = $dao_r->read_by_date($_GET["data"]);
                                 print_todas_as_reservas($reservas);
                             }
                         ?>
 
-                        <br>
+                        <!-- FullCalendar -->
+                        <div id="calendar" class="container"></div>
+
+                        <br><br>
                         <form action="index.php" method="get">
                             <div class="label">Busca por data</div>
                             <div class="field has-addons">
@@ -151,14 +172,14 @@ $dao = new ReservaDao();
 
                       </div>
                 </div>
-
               <?php } else { ?>
+
 
                 <div class="container">
                   <section class="section">
                   <?php echo '<h1 class="title"> Bem vindo, ' . $logado . '</h1>';
 
-                    $reservas = $dao->read_by_matricula($matricula);
+                    $reservas = $dao_r->read_by_matricula($matricula);
                     print_reservas_da_pessoa($reservas);
 
                   ?>
@@ -169,10 +190,9 @@ $dao = new ReservaDao();
                   </section>
                 </div>
 
-              <?php } ?>
-
                 <!-- FullCalendar -->
                 <div id="calendar" class="container"></div>
+              <?php } ?>
             </div>
         </section>
 
@@ -184,7 +204,7 @@ $dao = new ReservaDao();
                   header: {
                     left: 'today, prev, next',
                     center: 'title',
-                    right: 'month, agendaWeek, basicDay'
+                    right: 'month, basicWeek, basicDay'
                   },
 
                 views: {
@@ -197,11 +217,10 @@ $dao = new ReservaDao();
                 eventLimit: true,
 
                 events: [<?php
-                    $reservas = $dao->read_all();
-                    $dao_item = new ItemDao();
+                    $reservas = $dao_r->read_all();
                     $i = 0;
                     foreach ($reservas as $r) {
-                        $item = $dao_item->read_by_id($r->item_id);
+                        $item = $dao_i->read_by_id($r->item_id);
                         $i++;
 
                         if ($r->tipo_de_reserva == "Semanal"){
@@ -224,9 +243,8 @@ $dao = new ReservaDao();
         });
         </script>
 
+        <!-- Importando os scripts -->
+        <script src="scripts/main_script.js"></script>
+
   </body>
-
-  <!-- Importando os scripts -->
-  <?php require "Includes/scripts.inc"; ?>
-
 </html>

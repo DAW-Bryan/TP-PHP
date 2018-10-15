@@ -18,32 +18,27 @@
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 
     <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="scripts/jquery.min.js"></script>
   </head>
 
   <body>
 
     <!-- Menu navbar -->
-    <?php include "Includes/menu.inc"; ?>
+    <?php include "Includes/menu.inc";
 
-      <?php
           include "Includes/reserva.inc";
 
           $matricula = $_POST["EntradaMatricula"];
           $senha = $_POST["EntradaSenha"];
           $nome = $_POST["EntradaNome"];
-          $email = $_POST["EntradaEmail"];
 
-          $dao_user = new UserDao();
-
-          if ($dao_user->read_by_id($matricula) == null){ // Usuário não cadastrado
+          if ($dao_u->read_by_id($matricula) == null){ // Usuário não cadastrado
               $user = new User($nome, $matricula, $senha);
-              $dao_user->insert($user);
+              $dao_u->insert($user);
               echo "
                 <section class='section'>
                   <div class='container'>
                     <h1 class='title'> Cadastro realizado com sucesso! </h1>
-                    <h2 class='subtitle'> Faça o login para fazer uma reserva </h2>
                   </div>
                 </section>
               ";
@@ -56,8 +51,7 @@
                 </section>
               ";
           }
-
-          include "Includes/scripts.inc";
       ?>
+      <script src="scripts/main_script.js"></script>
   </body>
 </html>

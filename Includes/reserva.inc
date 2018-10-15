@@ -1,15 +1,15 @@
 
 <?php
     require "Controllers/ReservaDao.php";
-    include "Controllers/ItemDao.php";
-    include "Controllers/CategoriaDao.php";
-    include "Controllers/UserDao.php";
-    include "Controllers/Database.php";
-
+    require "Controllers/ItemDao.php";
+    require "Controllers/CategoriaDao.php";
+    require "Controllers/UserDao.php";
+    require "Controllers/Database.php";
 
     // Funções para realizar reservas //
 
     function carrega_reserva($erro){
+            $dao_i = new ItemDao();
         ?>
 
         <form action="reservar.php" class="container" method="POST" id="reservas-form">
@@ -17,7 +17,7 @@
 
             <div class="field">
                 <label class="label">Nome da Reserva</label>
-                <input type="text" name="nome" placeholder="Exemplo: Peladinha dos brothers" class="input">
+                <input type="text" name="nome" placeholder="Digite o nome da sua reserva" class="input">
             </div>
 
             <div class="field">
@@ -26,7 +26,6 @@
                     <div class="select">
                     <select name="item">
                     <?php
-                        $dao_i = new ItemDao();
                         $itens = $dao_i->read_all();
 
                         foreach ($itens as $i){
@@ -96,6 +95,9 @@
     }
 
     function verifica_disponibilidade($item, $tipo, $data, $inicio, $fim){
+        $dao_r = new ReservaDao();
+
+
         $inicio = converte_horario_minutos($inicio);
         $fim = converte_horario_minutos($fim);
 
@@ -103,11 +105,11 @@
             return 0;
         }
 
-        $dao = new ReservaDao();
-        $reservas = $dao->read_by_item($item);
+        $reservas = $dao_r->read_by_item($item);
+
         if ($reservas != null){
             foreach ( $reservas as $r ) {
-                if ($r->tipo_de_reserva == $tipo){
+                if ($r->tipo_de_reserva == $tipo){ // Mesmo tipo
                     if ($r->data == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
@@ -115,7 +117,7 @@
                             return 0; // Indisponível
                         }
                     }
-                }else if ($r->tipo_de_reserva == "Diaria"){
+                }else if ($r->tipo_de_reserva == "Diaria"){ // Diária x Semanal
                     if (date('w', strtotime($r->data)) == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
@@ -123,7 +125,7 @@
                             return 0; // Indisponível
                         }
                     }
-                }else{
+                }else{ // Reserva Semanal x Diária
                     if (date('w', strtotime($data)) == $r->data){
                         $r->inicio = converte_horario_minutos($r->inicio);
                         $r->fim = converte_horario_minutos($r->fim);
@@ -135,6 +137,42 @@
                 }
             }
         }
+
+
+        $reservas = $dao_r->read_veiculos($item);
+        if ($reservas != false){
+            foreach ( $reservas as $r ) {
+                if ($r->tipo_de_reserva == $tipo){ // Mesmo tipo
+                    if ($r->data == $data){
+                        $r->inicio = converte_horario_minutos($r->inicio);
+                        $r->fim = converte_horario_minutos($r->fim);
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                            return 0; // Indisponível
+                        }
+                    }
+                }else if ($r->tipo_de_reserva == "Diaria"){ // Diária x Semanal
+                    if (date('w', strtotime($r->data)) == $data){
+                        $r->inicio = converte_horario_minutos($r->inicio);
+                        $r->fim = converte_horario_minutos($r->fim);
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim) ){
+                            return 0; // Indisponível
+                        }
+                    }
+                }else{ // Reserva Semanal x Diária
+                    if (date('w', strtotime($data)) == $r->data){
+                        $r->inicio = converte_horario_minutos($r->inicio);
+                        $r->fim = converte_horario_minutos($r->fim);
+                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                            return 0; // Indisponível
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+
         return 1; // Disponível
     }
 
@@ -161,6 +199,8 @@ function convert_num_to_weekday($num){
 
 
  function print_reservas_da_pessoa($reservas){
+     $dao_i = new ItemDao();
+
     if ($reservas != null){
         ?>
         <form action="index.php" method="GET">
@@ -180,8 +220,7 @@ function convert_num_to_weekday($num){
         <?php
         $i = 0;
         foreach ( $reservas as $r ) {
-            $dao_item = new ItemDao();
-            $item = $dao_item->read_by_id($r->item_id);
+            $item = $dao_i->read_by_id($r->item_id);
             echo '<tr>';
             echo '<td>'. $item->nome .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
@@ -250,6 +289,7 @@ function print_reservas_por_item($reservas) {
 }
 
 function print_reservas_semana($reservas){
+    $dao_i = new ItemDao();
     if ($reservas != null){
         ?>
         <table class="table is-hoverable is-fullwidth">
@@ -267,8 +307,7 @@ function print_reservas_semana($reservas){
         <?php
         $i = 0;
         foreach ( $reservas as $r ) {
-            $dao_item = new ItemDao();
-            $item = $dao_item->read_by_id($r->item_id);
+            $item = $dao_i->read_by_id($r->item_id);
             echo '<tr>';
             echo '<td>'. $item->nome .'</div>';
             echo '<td>'. $r->matricula .'</div>';
@@ -293,6 +332,7 @@ function print_reservas_semana($reservas){
 }
 
 function print_todas_as_reservas($reservas) {
+    $dao_i = new ItemDao;
   if ($reservas) {
       ?>
       <table class="table is-hoverable is-fullwidth">
@@ -311,8 +351,7 @@ function print_todas_as_reservas($reservas) {
       <?php
       $i = 0;
       foreach ( $reservas as $r ) {
-          $dao_item = new ItemDao();
-          $item = $dao_item->read_by_id($r->item_id);
+          $item = $dao_i->read_by_id($r->item_id);
           echo '<tr>';
           echo '<td>'. $r->nome . '</div>';
           echo '<td>'. $item->nome .'</div>';

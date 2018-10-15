@@ -6,8 +6,7 @@
     // Lendo os dados do banco
     include 'Includes/reserva.inc';
 
-    $dao_user = new UserDao();
-    $user = $dao_user->read_by_id($matricula); // Verificando se existe o usuário
+    $user = $dao_u->read_by_id($matricula); // Verificando se existe o usuário
 
     if ($user != null){
         if (strcmp($user->senha, $senha) == 0) { // Verifica se a senha está correta
@@ -50,26 +49,26 @@
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 
         <!-- JQuery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="scripts/jquery.min.js"></script>
       </head>
 
       <body>
-<?php
-    include "Includes/menu.inc";
+            <?php
+                include "Includes/menu.inc";
 
-    if (!isset($user_nao_existe)) {
-        echo " <div class='notification is-danger'>
-                <h1 class='title'> Usuário não cadastrado! </h1>
-               </div>";
-    }else{
+                if (!isset($user_nao_existe)) {
+                    echo " <div class='notification is-danger'>
+                            <h1 class='title'> Usuário não cadastrado! </h1>
+                           </div>";
+                }else{
 
-        echo " <div class='notification is-danger'>
-                  <h1 class='title'> Senha incorreta! </h1>
-               </div>";
-    }
+                    echo " <div class='notification is-danger'>
+                              <h1 class='title'> Senha incorreta! </h1>
+                           </div>";
+                }
+            ?>
 
-    ?>
-           </body>
-
-  <?php require "Includes/scripts.inc"; ?>
+            <!-- Importando os scripts -->
+            <script src="scripts/main_script.js"></script>
+    </body>
 </html>

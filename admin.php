@@ -18,7 +18,8 @@
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 
         <!-- JQuery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="scripts/jquery.min.js"></script>
+
   </head>
 
   <body>
@@ -29,11 +30,6 @@
         }else{
             include "Includes/menu.inc";
             include "Includes/reserva.inc";
-
-            $dao_c = new CategoriaDao();
-            $dao_e = new ItemDao();
-            $dao_r = new ReservaDao();
-            $dao_u = new UserDao();
 
             if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
                 $cat = new Categoria($_POST["nome"]);
@@ -46,11 +42,11 @@
             }else if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
                 $categoria = $dao_c->read_by_name($_POST["tipo_item"]);
                 $item = new Item($_POST["nome"], $categoria->id);
-                $dao_e->insert($item);
+                $dao_i->insert($item);
 
             }else if (isset($_POST["delItem"]) && isset($_POST["delItemPos"])){ // Deletou Item
-                $itens = $dao_e->read_all();
-                $dao_e->delete($itens[$_POST["delItemPos"]]);
+                $itens = $dao_i->read_all();
+                $dao_i->delete($itens[$_POST["delItemPos"]]);
 
             }else if (isset($_POST["delReserva"]) && isset($_POST["reserva"])){ // Deletou Reserva
                 $reservas = $dao_r->read_all();
@@ -150,7 +146,7 @@
             <div class="modal-card">
             <header class="modal-card-head">
                 <p class="modal-card-title">Deletar categorias</p>
-                <button class="delete deleteModal" aria-label="close"></button>
+                <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
                 <table class="table is-hoverable is-fullwidth">
@@ -235,7 +231,7 @@
             <div class="modal-card">
             <header class="modal-card-head">
                 <p class="modal-card-title">Deletar itens</p>
-                <button class="delete deleteModal" aria-label="close"></button>
+                <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
                 <table class="table is-hoverable is-fullwidth">
@@ -247,7 +243,7 @@
                     </thead>
                     <tbody>
                 <?php
-                $itens = $dao_e->read_all();
+                $itens = $dao_i->read_all();
                 if ($itens != null){
                     $i = 0;
                     foreach ( $itens as $e ) {
@@ -276,7 +272,7 @@
             <div class="modal-card">
             <header class="modal-card-head">
                 <p class="modal-card-title">Deletar reserva</p>
-                <button class="delete deleteModalReseva" aria-label="close"></button>
+                <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
             <table class="table is-hoverable is-fullwidth">
@@ -295,7 +291,7 @@
                 if ($reservas != null){
                     $i = 0;
                     foreach ( $reservas as $r ) {
-                        $item = $dao_e->read_by_id($r->item_id);
+                        $item = $dao_i->read_by_id($r->item_id);
                         echo '<tr>';
                         echo '<td>'. $item->nome .'</td>';
 
@@ -327,7 +323,7 @@
             <div class="modal-card">
             <header class="modal-card-head">
                 <p class="modal-card-title">Adicionar administrador</p>
-                <button class="delete deleteModalAdm" aria-label="close"></button>
+                <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
             <table class="table is-hoverable is-fullwidth">
@@ -366,13 +362,13 @@
           <div class="modal-card">
             <header class="modal-card-head">
               <p class="modal-card-title">Cadastro de usuários</p>
-              <a class="delete deletar" aria-label="close"></a>
+             <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
               <div class="field">
                   <label class="label">Nome Completo</label>
                   <div class="control has-icons-left">
-                      <input class="input" type="text" name="EntradaNome" placeholder="Seu nome completo">
+                      <input class="input" type="text" name="EntradaNome" placeholder="Digite o nome completo" required>
                       <span class="icon is-small is-left">
                           <i class="fas fa-user"></i>
                       </span>
@@ -380,19 +376,9 @@
               </div>
 
               <div class="field">
-                  <label class="label">Email</label>
-                  <div class="control has-icons-left">
-                      <input class="input" type="email"  name="EntradaEmail"placeholder="Seu email">
-                      <span class="icon is-small is-left">
-                          <i class="fas fa-envelope"></i>
-                      </span>
-                  </div>
-              </div>
-
-              <div class="field">
                   <label class="label">Número de Matrícula</label>
                   <div class="control has-icons-left">
-                      <input class="input" type="number" name="EntradaMatricula" placeholder="Sua Matrícula">
+                      <input class="input" type="number" name="EntradaMatricula" placeholder="Digite o número de matrícula" required>
                       <span class="icon is-small is-left">
                           <i class="fas fa-id-card"></i>
                       </span>
@@ -402,7 +388,7 @@
               <div class="field">
                   <label class="label">Senha</label>
                   <div class="control has-icons-left">
-                      <input class="input" type="password" id="senha1" placeholder="Digite a senha" name="EntradaSenha" onchange="validaSenha()">
+                      <input class="input" type="password" placeholder="Digite a senha" name="EntradaSenha" required>
                       <span class="icon is-small is-left">
                           <i class="fas fa-key"></i>
                       </span>
@@ -412,98 +398,14 @@
             </section>
             <footer class="modal-card-foot">
               <button class="button is-success" type="submit">Finalizar cadastro</button>
-              <a class="button deletar">Cancelar</a>
             </footer>
           </div>
         </div>
       </form>
+    <?php } ?>
 
-
-    <script>
-        // modal Adiciona Categoria
-        var modalCat = document.querySelector('#modalCat');
-        var triggerCat = document.querySelector('#modal-trigger-cat');
-        triggerCat.addEventListener('click', function(event){
-            modalCat.classList.toggle('is-active');
-        });
-
-        // modal Deleta Categoria
-        var modalCatDel = document.querySelector('#modalDelCat');
-        var triggerCatDel = document.querySelector('#modal-trigger-delcat');
-        triggerCatDel.addEventListener('click', function(event){
-            modalCatDel.classList.toggle('is-active');
-        });
-
-        // modal Adiciona Item
-        var modalItem = document.querySelector('#modalItem');
-        var triggerItem = document.querySelector('#modal-trigger-e');
-        triggerItem.addEventListener('click', function(event){
-            modalItem.classList.toggle('is-active');
-        });
-
-        // modal Deleta Item
-
-        var modalItemDel = document.querySelector('#modalDelItem');
-        var triggerItemDel = document.querySelector('#modal-trigger-del');
-        triggerItemDel.addEventListener('click', function(event){
-            modalItemDel.classList.toggle('is-active');
-        });
-
-
-        // modal Deleta Reserva
-
-        var modalDelReserva = document.querySelector('#modalDelReserva');
-        var triggerDelReserva = document.querySelector('#modal-trigger-del-reserva');
-        triggerDelReserva.addEventListener('click', function(event){
-            modalDelReserva.classList.toggle('is-active');
-        });
-
-
-        // modal Adiciona Adm
-
-        var modalGiveAdm = document.querySelector('#modalGiveAdm');
-        var triggerAdm = document.querySelector('#modal-trigger-adm');
-        triggerAdm.addEventListener('click', function(event){
-            modalGiveAdm.classList.toggle('is-active');
-        });
-
-        // modal Cadastra User
-
-        var modalCadUser = document.querySelector('#modalCadUser');
-        var triggerCadUser = document.querySelector('#modal-trigger-caduser');
-        triggerCadUser.addEventListener('click', function(event){
-            modalCadUser.classList.toggle('is-active');
-        });
-
-
-
-    /*    // Delete Modal
-        var del = $(".delete");
-        del.click(function() {
-            modal.classList.remove("is-active");
-        })
-
-        var delModal = $(".deleteModal");
-        delModal.click(function() {
-            modalDel.classList.remove("is-active");
-        })
-
-        var delModalReserva = $(".deleteModal");
-        delModalReserva.click(function() {
-            modalDelReserva.classList.remove("is-active");
-        })
-
-
-        var delModalAdm = $(".deleteModalAdm");
-        delModalAdm.click(function() {
-            modalGiveAdm.classList.remove("is-active");
-        })*/
-        </script>
 
     <!-- Importando os scripts -->
-    <?php
-        }
-        require "Includes/scripts.inc";
-    ?>
+    <script src="scripts/main_script.js"></script>
   </body>
 </html>
