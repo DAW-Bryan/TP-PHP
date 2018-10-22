@@ -53,7 +53,7 @@
                 $dao_r->delete($reservas[$_POST["reserva"]]);
 
             }else if(isset($_POST["addAdm"]) && isset($_POST["user"])){ // Adicionou admim
-                $usuarios = $dao_u->read_all();
+                $usuarios = $dao_u->read_non_admin();
                 $pos = $_POST["user"];
                 $dao_u->give_adm($usuarios[$pos]);
             }
