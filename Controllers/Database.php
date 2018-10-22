@@ -1,6 +1,13 @@
 <?php
+/*
     DEFINE('DB_USERNAME', 'sys-reservas');
     DEFINE('DB_PASSWORD', '@c0lteCReserv@s');
+    DEFINE('DB_HOST', 'localhost');
+    DEFINE('DB_DATABASE', 'my-reservas');
+*/
+
+    DEFINE('DB_USERNAME', 'root');
+    DEFINE('DB_PASSWORD', 'root');
     DEFINE('DB_HOST', 'localhost');
     DEFINE('DB_DATABASE', 'my-reservas');
 

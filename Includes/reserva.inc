@@ -9,7 +9,7 @@
     // Funções para realizar reservas //
 
     function carrega_reserva($erro){
-            $dao_i = new ItemDao();
+        $dao_i = new ItemDao();
         ?>
 
         <form action="reservar.php" class="container" method="POST" id="reservas-form">
@@ -27,7 +27,6 @@
                     <select name="item">
                     <?php
                         $itens = $dao_i->read_all();
-
                         foreach ($itens as $i){
                             echo '<option>' . $i->nome . '</option>';
                         }
@@ -243,6 +242,7 @@ function convert_num_to_weekday($num){
 }
 
 function print_reservas_por_item($reservas) {
+    $dao_u = new UserDao();
     if ($reservas != null){
         ?>
         <div class="card is-horizontal">
@@ -261,8 +261,9 @@ function print_reservas_por_item($reservas) {
         <?php
         $i = 0;
         foreach ( $reservas as $r ) {
+            $usuario = $dao_u->read_by_id($r->matricula);
             echo '<tr>';
-            echo '<td>'. $r->matricula .'</div>';
+            echo '<td>'. $usuario->nome .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
 
             if ($r->tipo_de_reserva == "Semanal"){
@@ -290,6 +291,7 @@ function print_reservas_por_item($reservas) {
 
 function print_reservas_semana($reservas){
     $dao_i = new ItemDao();
+    $dao_u = new UserDao();
     if ($reservas != null){
         ?>
         <table class="table is-hoverable is-fullwidth">
@@ -308,9 +310,10 @@ function print_reservas_semana($reservas){
         $i = 0;
         foreach ( $reservas as $r ) {
             $item = $dao_i->read_by_id($r->item_id);
+            $usuario = $dao_u->read_by_id($r->matricula);
             echo '<tr>';
             echo '<td>'. $item->nome .'</div>';
-            echo '<td>'. $r->matricula .'</div>';
+            echo '<td>'. $usuario->nome .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
 
             if ($r->tipo_de_reserva == "Semanal"){
@@ -333,6 +336,7 @@ function print_reservas_semana($reservas){
 
 function print_todas_as_reservas($reservas) {
     $dao_i = new ItemDao;
+    $dao_u = new UserDao();
   if ($reservas) {
       ?>
       <table class="table is-hoverable is-fullwidth">
@@ -352,10 +356,11 @@ function print_todas_as_reservas($reservas) {
       $i = 0;
       foreach ( $reservas as $r ) {
           $item = $dao_i->read_by_id($r->item_id);
+          $usuario = $dao_u->read_by_id($r->matricula);
           echo '<tr>';
           echo '<td>'. $r->nome . '</div>';
           echo '<td>'. $item->nome .'</div>';
-          echo '<td>'. $r->matricula .'</div>';
+          echo '<td>'. $usuario->nome .'</div>';
           echo '<td>'. $r->tipo_de_reserva .'</div>';
 
           if ($r->tipo_de_reserva == "Semanal"){

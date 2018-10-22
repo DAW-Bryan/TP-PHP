@@ -14,6 +14,7 @@
 
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="./css/bulma.min.css">
+    <link rel="stylesheet" href="./css/bulma-tooltip.min.css">
 
     <!-- Font Awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
@@ -38,7 +39,6 @@
                     require "Includes/reserva.inc";
 
                     date_default_timezone_set('America/Sao_Paulo');
-
 
                     if (isset($_POST["item"])) { // Está na parte de Dados da Reserva
 
@@ -66,7 +66,6 @@
                         carrega_reserva(0);
                     }
                 ?>
-
                 <script>
                     var dia = new Date();
                             var dd = dia.getDate();
@@ -83,7 +82,8 @@
                     $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">');
                     $('#reservas-form .radio').on('change', function() {
                         $("#input-dia").remove();
-                        if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Diária"){ // Dia único
+                        console.log($('input[name=tipo-de-reserva]:checked', 'form').val());
+                        if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Diaria"){ // Dia único
                             $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">');
                         }else if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Semanal"){ // Semanal
                             $("#dia").append('<select name="data" id="input-dia" class="input">'
@@ -101,6 +101,10 @@
                 </script>
 
             <?php } ?>
+        </div>
+    </section>
+
+            <?php include "Includes/footer.inc"; ?>
 
             <script src="scripts/main_script.js"></script>
   </body>

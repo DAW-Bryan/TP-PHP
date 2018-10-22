@@ -13,6 +13,7 @@
 
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="./css/bulma.min.css">
+    <link rel="stylesheet" href="./css/bulma-tooltip.min.css">
 
     <!-- Font Awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
@@ -52,6 +53,7 @@
               ";
           }
       ?>
+      <?php include "Includes/footer.inc"; ?>
       <script src="scripts/main_script.js"></script>
   </body>
 </html>

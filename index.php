@@ -31,6 +31,7 @@ if (isset($_GET['logout'])) {
 
         <!-- Bulma CSS -->
         <link rel="stylesheet" href="./css/bulma.min.css">
+        <link rel="stylesheet" href="./css/bulma-tooltip.min.css">
 
         <!-- Font Awesome -->
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
@@ -127,7 +128,23 @@ if (isset($_GET['logout'])) {
         <section class="hero is-light">
             <div class="hero-body">
 
-              <?php if (!isset($logado)) { ?>
+              <?php if (isset($logado)) { ?>
+                  <div class="container">
+                    <section class="section">
+                    <?php echo '<h1 class="title"> Bem vindo, ' . $logado . '</h1>';
+
+                      $reservas = $dao_r->read_by_matricula($matricula);
+                      print_reservas_da_pessoa($reservas);
+
+                    ?>
+                    </section>
+
+                    <section class="section">
+                      <a class="button is-link is-outlined" href="reservar.php"> Fazer outra reserva </a>
+                    </section>
+                  </div>
+              <?php } ?>
+
                 <div class="container">
 
                   <h1 class="title"> Veja as reservas dos próximos dias </h1>
@@ -172,30 +189,10 @@ if (isset($_GET['logout'])) {
 
                       </div>
                 </div>
-              <?php } else { ?>
-
-
-                <div class="container">
-                  <section class="section">
-                  <?php echo '<h1 class="title"> Bem vindo, ' . $logado . '</h1>';
-
-                    $reservas = $dao_r->read_by_matricula($matricula);
-                    print_reservas_da_pessoa($reservas);
-
-                  ?>
-                  </section>
-
-                  <section class="section">
-                    <a class="button is-link is-outlined" href="reservar.php"> Fazer outra reserva </a>
-                  </section>
-                </div>
-
-                <!-- FullCalendar -->
-                <div id="calendar" class="container"></div>
-              <?php } ?>
             </div>
         </section>
 
+        <?php include "Includes/footer.inc"; ?>
 
         <script>
             $(document).ready(function() {
