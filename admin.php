@@ -4,7 +4,7 @@
   <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Reservas Coltec</title>
+        <title>Reservas COLTEC</title>
 
         <link rel="shortcut icon" href="Images/logo.png">
 
@@ -21,6 +21,12 @@
         <!-- JQuery -->
         <script src="scripts/jquery.min.js"></script>
 
+        <style>
+            .button{
+                margin-bottom: 10px !important;
+            }
+        </style>
+
   </head>
 
   <body>
@@ -32,12 +38,13 @@
             include "Includes/menu.inc";
             include "Includes/reserva.inc";
 
-            if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
+            /*if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
                 $cat = new Categoria($_POST["nome"]);
                 $dao_c->insert($cat);
-
-            }else if(isset($_POST["delCat"]) && isset($_POST["delCatPos"])){ // Deletou categoria
+            */
+            if(isset($_POST["delCat"]) && isset($_POST["delCatPos"])){ // Deletou categoria
                 $cats = $dao_c->read_all();
+                unlink($cats[$_POST["delCatPos"]]->imagem);
                 $dao_c->delete($cats[$_POST["delCatPos"]]);
 
             }else if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
@@ -114,7 +121,7 @@
 
 
         <!-- Modal para adicionar categoria -->
-        <form action="admin.php" method="post">
+        <form action="upload.php" method="post" enctype="multipart/form-data">
 
         <div class="modal" id="modalCat">
           <div class="modal-background"></div>
@@ -128,6 +135,13 @@
                     <label class="label">Nome</label>
                     <div class="control">
                         <input class="input" type="text" name="nome" placeholder="Nome da categoria">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Imagem</label>
+                    <div class="control">
+                        <input type="file" name="fileToUpload" id="fileToUpload">
                     </div>
                 </div>
             </section>

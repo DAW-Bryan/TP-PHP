@@ -18,31 +18,34 @@ $(document).ready(function() {
     var senha1 = document.getElementById("senha1");
     var senha2 = document.getElementById("senha2");
 
-    senha2.onkeyup = function(){
-        if (senha1.value != senha2.value){
-            $("#btn_finalizar").attr("disabled");
-            $("#senha2").removeClass("is-success");
-            $("#senha2").addClass("is-danger");
-        }else{
-            $("#btn_finalizar").removeAttr("disabled");
-            $("#senha2").removeClass("is-danger");
-            $("#senha2").addClass("is-success");
+    if (senha2 != null){
+        senha2.onkeyup = function(){
+            if (senha1.value != senha2.value){
+                $("#btn_finalizar").attr("disabled");
+                $("#senha2").removeClass("is-success");
+                $("#senha2").addClass("is-danger");
+            }else{
+                $("#btn_finalizar").removeAttr("disabled");
+                $("#senha2").removeClass("is-danger");
+                $("#senha2").addClass("is-success");
+            }
         }
     }
 
-
-    senha1.onkeyup = function(){
-        if (senha1.value != senha2.value){
-            $("#btn_finalizar").attr("disabled", "");
-            $("#senha2").removeClass("is-success");
-            $("#senha2").addClass("is-danger");
-        }else{
-            $("#btn_finalizar").removeAttr("disabled");
-            $("#senha2").removeClass("is-danger");
-            $("#senha2").addClass("is-success");
+    if (senha1 != null){
+        senha1.onkeyup = function(){
+            if (senha1.value != senha2.value){
+                $("#btn_finalizar").attr("disabled", "");
+                $("#senha2").removeClass("is-success");
+                $("#senha2").addClass("is-danger");
+            }else{
+                $("#btn_finalizar").removeAttr("disabled");
+                $("#senha2").removeClass("is-danger");
+                $("#senha2").addClass("is-success");
+            }
         }
     }
-
+    
     // Modal Muda Senha //
     var modalChangePsw = document.querySelector('#modalChangePsw');
     var triggerPsw = document.querySelector('#modal-trigger-psw');

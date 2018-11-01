@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Reservas Coltec</title>
+    <title>Reservas COLTEC</title>
 
     <link rel="shortcut icon" href="Images/logo.png">
 
@@ -42,7 +42,7 @@
 
                     if (isset($_POST["item"])) { // Está na parte de Dados da Reserva
 
-                        if ($_POST["declaracao"] == ""){
+                        if (!isset($_POST["declaracao"])){
                             carrega_reserva(1); // Não aceitou os termos
 
                         }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == ""){
@@ -67,6 +67,55 @@
                     }
                 ?>
                 <script>
+
+                    /* Passa todas as categorias e seus itens para variáveis do script */
+                    <?php 
+                        $categorias = $dao_c->read_all();
+                        echo "var all_cats = [];\n";
+                        foreach($categorias as $c){
+                            echo "var cat = [];\n";
+                            echo "cat.push(\"".$c->nome."\");\n";
+                            $itens = $dao_i->read_by_categoria($c->nome);
+                            if ($itens != null){
+                                foreach($itens as $i){
+                                    echo "cat.push(\"". $i->nome ."\");\n";
+                                }
+                            }
+
+                            echo 'all_cats.push(cat);';
+                        }
+                    ?>
+
+
+
+                    /* Controle de itens e categorias */
+                    var categorias = $("#categoria");
+                    var itens = $("#itens");
+
+                        
+                    for (let i=0; i<all_cats.length; i++){
+                        if (all_cats[i][0] == $("#categoria option:selected").val()){
+                            for (let j=1; j<all_cats[i].length; j++){
+                                itens.append($("<option></option>").text(all_cats[i][j]));
+                            }
+                        }
+                    }
+                    
+
+                    categorias.change(function() {
+                        itens.find('option').remove();
+                        for (let i=0; i<all_cats.length; i++){
+                            if (all_cats[i][0] == $("#categoria option:selected").val()){
+                                for (let j=1; j<all_cats[i].length; j++){
+                                    itens.append($("<option></option>").text(all_cats[i][j]));
+                                }
+                            }
+                        }
+                    
+                    });
+                    
+                    
+                    /* Controle de dia e dia da semana */
                     var dia = new Date();
                             var dd = dia.getDate();
                             var mm = dia.getMonth()+1; // Janeiro = 0
@@ -96,7 +145,7 @@
                             + '</select>');
                         }
 
-                    });
+                    }); 
 
                 </script>
 

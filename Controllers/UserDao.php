@@ -58,7 +58,7 @@ class UserDao{
        $conexao = connect();
        $resultado = mysqli_query($conexao, "SELECT * FROM " . $this->table . " WHERE nome LIKE '" . $user_nome . "';");
        close($conexao);
-
+        echo $resultado;
        return mysqli_fetch_object($resultado);
    }
 

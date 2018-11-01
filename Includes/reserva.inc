@@ -10,6 +10,7 @@
 
     function carrega_reserva($erro){
         $dao_i = new ItemDao();
+        $dao_c = new CategoriaDao();
         ?>
 
         <form action="reservar.php" class="container" method="POST" id="reservas-form">
@@ -21,15 +22,33 @@
             </div>
 
             <div class="field">
+                <label class="label">Categorias</label>
+                <div class="control">
+                    <div class="select">
+                    <select name="categoria" id="categoria">
+                    <?php
+                        $categorias = $dao_c->read_all();
+                        foreach ($categorias as $c){
+                            if ($dao_i->read_by_categoria($c->nome) != null){
+                                echo '<option>' . $c->nome . '</option>';
+                            }
+                        }
+                    ?>
+                    </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
                 <label class="label">Itens</label>
                 <div class="control">
                     <div class="select">
-                    <select name="item">
+                    <select name="item" id="itens">
                     <?php
-                        $itens = $dao_i->read_all();
-                        foreach ($itens as $i){
-                            echo '<option>' . $i->nome . '</option>';
-                        }
+                        //$itens = $dao_i->read_all();
+                        //foreach ($itens as $i){
+                        //    echo '<option>' . $i->nome . '</option>';
+                        //}
                     ?>
                     </select>
                     </div>

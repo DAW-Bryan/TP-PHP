@@ -9,7 +9,7 @@ class CategoriaDao{
    // Escrita //
    function insert($categoria){
        $conexao = connect();
-       $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome) VALUES (\"". $categoria->nome ."\");");
+       $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome, imagem) VALUES (\"". $categoria->nome ."\", \"". $categoria->imagem ."\");");
        close($conexao);
        return $resultado;
    }

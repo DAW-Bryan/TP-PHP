@@ -22,7 +22,7 @@ if (isset($_GET['logout'])) {
   <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Reservas Coltec</title>
+        <title>Reservas COLTEC</title>
 
         <link rel="shortcut icon" href="Images/logo.png">
 
@@ -83,43 +83,16 @@ if (isset($_GET['logout'])) {
         <section class="section">
             <nav class="columns">
 
-                <a class="column has-text-centered" href="itens.php?tag=Quadras">
-                    <p class="title is-4"> Quadras esportivas </p>
-                    <p class="subtitle is-6"> Jogue seu futebol! </p>
-
-                    <figure class="bd-focus-icon">
-                      <img src="Images/ic_quadra.png" width="200px">
-                    </figure>
-                </a>
-
-                <a class="column has-text-centered" href="itens.php?tag=Veículos">
-                    <p class="title is-4"> Veículos </p>
-                    <p class="subtitle is-6"> Ônibus e van </p>
-
-                    <figure class="bd-focus-icon">
-                      <img src="Images/ic_veiculo.jpg" width="200px">
-                    </figure>
-                </a>
-
-
-                <a class="column has-text-centered" href="itens.php?tag=Laboratórios">
-                    <p class="title is-4"> Laboratórios </p>
-                    <p class="subtitle is-6"> Informática, Química, entre outros </p>
-
-                    <figure class="bd-focus-icon">
-                      <img src="Images/ic_lab.jpg" width="200px">
-                    </figure>
-                </a>
-
-                <a class="column has-text-centered" href="itens.php?tag=Salas de aula">
-                    <p class="title is-4"> Salas de aula </p>
-                    <p class="subtitle is-6"> Auditório, Sala de dança, etc </p>
-
-                    <figure class="bd-focus-icon">
-                      <img src="Images/ic_auditorio.jpg" width="200px">
-                    </figure>
-                </a>
-
+                <?php
+                    $cats = $dao_c->read_all();
+                    if ($cats != null){
+                        foreach($cats as $c){
+                            echo '<a class="column has-text-centered" href="itens.php?tag='. $c->nome .'">';
+                            echo '<p class="title is-4">'. $c->nome .'</p>';
+                            echo '<figure class="bd-focus-icon"><img src="'. $c->imagem .'" width="200px"></figure></a>';
+                        }
+                    }
+                ?>
             </nav>
         </section>
 
@@ -137,40 +110,37 @@ if (isset($_GET['logout'])) {
                       print_reservas_da_pessoa($reservas);
 
                     ?>
-                    </section>
-
-                    <section class="section">
-                      <a class="button is-link is-outlined" href="reservar.php"> Fazer outra reserva </a>
+                      <br><a class="button is-link is-outlined" href="reservar.php"> Fazer uma reserva </a>
                     </section>
                   </div>
               <?php } ?>
 
                 <div class="container">
+                    <?php
 
-                  <h1 class="title"> Veja as reservas dos próximos dias </h1>
-                      <div class="content">
-                        <?php
-
-                            $data = date('Y-m-d');
-                            $reservas = [];
-                            for ($i=0; $i < 7; $i++){
-                                if ($i==0){
-                                    $reservas = $dao_r->read_by_date($data);
-                                }else{
-                                    $reservas = array_merge($reservas, $dao_r->read_by_date($data));
-                                }
-                                $data = date('Y-m-d', strtotime('+1 day', strtotime($data)));
+                        $data = date('Y-m-d');
+                        $reservas = [];
+                        for ($i=0; $i < 7; $i++){
+                            if ($i==0){
+                                $reservas = $dao_r->read_by_date($data);
+                            }else{
+                                $reservas = array_merge($reservas, $dao_r->read_by_date($data));
                             }
+                            $data = date('Y-m-d', strtotime('+1 day', strtotime($data)));
+                        }
+
+                        if (count($reservas) > 0){
+                            echo '<h1 class="title"> Veja as reservas dos próximos dias </h1>';
                             print_todas_as_reservas($reservas);
+                        }    
 
-
-                            if (isset($_GET["data"])){
-                                echo '<h1 class="title"> Dia pesquisado: </h1>';
-                                $reservas = $dao_r->read_by_date($_GET["data"]);
-                                print_todas_as_reservas($reservas);
-                            }
-                        ?>
-
+                        if (isset($_GET["data"])){
+                            echo '<h1 class="title"> Dia pesquisado: </h1>';
+                            $reservas = $dao_r->read_by_date($_GET["data"]);
+                            print_todas_as_reservas($reservas);
+                        }
+                    ?>
+                            
                         <!-- FullCalendar -->
                         <div id="calendar" class="container"></div>
 
@@ -216,22 +186,24 @@ if (isset($_GET['logout'])) {
                 events: [<?php
                     $reservas = $dao_r->read_all();
                     $i = 0;
-                    foreach ($reservas as $r) {
-                        $item = $dao_i->read_by_id($r->item_id);
-                        $i++;
+                    if ($reservas != null){
+                        foreach ($reservas as $r) {
+                            $item = $dao_i->read_by_id($r->item_id);
+                            $i++;
 
-                        if ($r->tipo_de_reserva == "Semanal"){
-                            if ($i == count($reservas)){
-                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]}";
-                            }else{
-                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]},";
-                            }
+                            if ($r->tipo_de_reserva == "Semanal"){
+                                if ($i == count($reservas)){
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]}";
+                                }else{
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]},";
+                                }
 
-                        }else{
-                            if ($i == count($reservas)){
-                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'}";
                             }else{
-                                echo "{title  : '". $r->nome . " - ". $item->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'},";
+                                if ($i == count($reservas)){
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'}";
+                                }else{
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'},";
+                                }
                             }
                         }
                     }
