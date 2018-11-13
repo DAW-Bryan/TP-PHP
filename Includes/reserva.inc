@@ -216,6 +216,25 @@ function convert_num_to_weekday($num){
 }
 
 
+function convert_weekday_to_num($wd){
+    if ($wd == "Segunda"){
+        return 1;
+    }else if ($wd == "Terça"){
+        return 2;
+    }else if ($wd == "Quarta"){
+        return 3;
+    }else if ($wd == "Quinta"){
+        return 4;
+    }else if ($wd == "Sexta"){
+        return 5;
+    }else if ($wd == "Sábado"){
+        return 6;
+    }else {
+        return 0;
+    }
+}
+
+
  function print_reservas_da_pessoa($reservas){
      $dao_i = new ItemDao();
 

@@ -8,12 +8,12 @@
 
         <link rel="shortcut icon" href="Images/logo.png">
 
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="css/custom.css">
-
         <!-- Bulma CSS -->
         <link rel="stylesheet" href="./css/bulma.min.css">
         <link rel="stylesheet" href="./css/bulma-tooltip.min.css">
+        
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/custom.css">
 
         <!-- Font Awesome -->
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>

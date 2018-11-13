@@ -23,6 +23,9 @@
               <a class="navbar-item is-hoverable" href="itens.php">
                 Itens
               </a>
+              <!-- <a class="navbar-item is-hoverable" href="horarios.php">
+                Horários
+              </a> -->
 
             <?php if (isset($_SESSION["root"])){ ?>
               <a class="navbar-item is-hoverable" href="admin.php">
