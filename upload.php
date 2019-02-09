@@ -31,8 +31,8 @@ if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
         }
         $cat = new Categoria($_POST["nome"], basename( $_FILES["fileToUpload"]["name"]));
         $dao_c->insert($cat);
+	header("Location: admin.php");
     }
 }
-header("Location: admin.php");
 
 ?>
