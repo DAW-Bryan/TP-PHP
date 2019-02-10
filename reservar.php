@@ -26,13 +26,9 @@
   <body>
 
     <?php include "Includes/menu.inc"; ?>
-
-    <section class="section">
-
-      <div class="container">
-
         <?php
             if (!isset($_SESSION["login"])){
+                echo '<section class="section"><div class="container">';
                 echo "<h1 class='title'> Você não está logado! </h1>";
                 echo "<p>Entre na plataforma para realizar uma reserva</p>";
             }else{
@@ -43,29 +39,34 @@
                     if (isset($_POST["item"])) { // Está na parte de Dados da Reserva
 
                         if (!isset($_POST["declaracao"])){
+                            
+                            echo '<section class="section"><div class="container">';
                             carrega_reserva(1); // Não aceitou os termos
 
                         }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == "" || $_POST["nome"] == ""){
+                            echo '<section class="section"><div class="container">';
                             carrega_reserva(2); // Não preencheu todos os campos
 
                         }else if (verifica_disponibilidade($_POST["nome"], $_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]) == 0){
+                            echo '<section class="section"><div class="container">';
                             carrega_reserva(3); // Horário indisponível
 
                         }else if (verifica_disponibilidade($_POST["nome"], $_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]) == -1){
+                            echo '<section class="section"><div class="container">';
                             carrega_reserva(4);
                         }else{
                             $item = $dao_i->read_by_nome($_POST["item"]);
                             $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $item->id, $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]);
                     
                             $dao_r->insert($reserva);
-                            echo "<section class='section'>
-                              <div class='container'>
-                                <h1 class='title'> Reserva realizada com sucesso! </h1>
-                              </div>
-                            </section>";
+                            
+                            echo "<div class='notification is-success'>
+                            <h2 class='title'> Reserva criada com sucesso! </h1>
+                            </div>";
                         }
 
                     }else{ // Primeiro acesso ao site
+                        echo '<section class="section"><div class="container">';
                         carrega_reserva(0);
                     }
                 ?>

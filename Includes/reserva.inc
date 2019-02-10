@@ -118,6 +118,7 @@
         return ($horas*60)+$minutos;
     }
 
+
     function verifica_disponibilidade($nome, $item, $tipo, $data, $inicio, $fim, $prazo){
         $dao_r = new ReservaDao();
         $inicio = converte_horario_minutos($inicio);
@@ -127,7 +128,7 @@
             return 0;
         }
 
-        $reservas = $dao_r->read_by_item($item);
+        $reservas = $dao_r->read_all();
 
         if ($reservas != null){
             foreach ( $reservas as $r ) {
@@ -135,32 +136,39 @@
                 // Se reservas possuem o mesmo nome
                 if ($r->nome == $nome){
                     return -1;
-                }
+                }else if ($r->item == $item){
 
-                if ($r->tipo_de_reserva == $tipo){ // Mesmo tipo
-                    if ($r->data == $data){
-                        $r->inicio = converte_horario_minutos($r->inicio);
-                        $r->fim = converte_horario_minutos($r->fim);
-                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
-                            return 0; // Indisponível
+                    if ($r->tipo_de_reserva == $tipo){ // Mesmo tipo
+                        if ($r->data == $data){
+                            $r->inicio = converte_horario_minutos($r->inicio);
+                            $r->fim = converte_horario_minutos($r->fim);
+                            if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                                return 0; // Indisponível
+                            }
                         }
-                    }
-                }else if ($r->tipo_de_reserva == "Diaria"){ // Diária x Semanal
-                    if (date('w', strtotime($r->data)) == $data){
-                        $r->inicio = converte_horario_minutos($r->inicio);
-                        $r->fim = converte_horario_minutos($r->fim);
-                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim) ){
-                            return 0; // Indisponível
+                    }else if ($r->tipo_de_reserva == "Diaria"){ // Diária x Semanal
+                        if (date('w', strtotime($r->data)) == $data){
+                            $r->inicio = converte_horario_minutos($r->inicio);
+                            $r->fim = converte_horario_minutos($r->fim);
+                            if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim) ){
+                                $tempo = (int) $prazo+1;
+                                if (strtotime($r->data) < strtotime($tempo."/01/".date('Y'))){
+                                    return 0; // Indisponível
+                                }
+                            }
                         }
-                    }
-                }else{ // Reserva Semanal x Diária
-                    if (date('w', strtotime($data)) == $r->data){
-                        $r->inicio = converte_horario_minutos($r->inicio);
-                        $r->fim = converte_horario_minutos($r->fim);
-                        if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
-                            return 0; // Indisponível
-                        }
+                    }else{ // Reserva Semanal x Diária
+                        if (date('w', strtotime($data)) == $r->data){
+                            $r->inicio = converte_horario_minutos($r->inicio);
+                            $r->fim = converte_horario_minutos($r->fim);
+                            if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
+                                $tempo = (int) $r->prazo + 1;
+                                if (strtotime($data) < strtotime($tempo."/01/".date('Y'))){
+                                    return 0; // Indisponível
+                                }
+                            }
 
+                        }
                     }
                 }
             }
@@ -255,6 +263,7 @@ function convert_weekday_to_num($wd){
         <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
+                    <th>Nome</td>
                     <th>Item</th>
                     <th>Tipo de Reserva</th>
                     <th>Data/Dia</th>
@@ -269,6 +278,7 @@ function convert_weekday_to_num($wd){
         foreach ( $reservas as $r ) {
             $item = $dao_i->read_by_id($r->item_id);
             echo '<tr>';
+            echo '<td>'. $r->nome .'</td>'; 
             echo '<td>'. $item->nome .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
 
@@ -345,6 +355,7 @@ function print_reservas_semana($reservas){
         <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
+                    <th>Nome</th>
                     <th>Item</th>
                     <th>Usuário</th>
                     <th>Tipo de Reserva</th>
@@ -360,6 +371,7 @@ function print_reservas_semana($reservas){
             $item = $dao_i->read_by_id($r->item_id);
             $usuario = $dao_u->read_by_id($r->matricula);
             echo '<tr>';
+            echo '<td>'. $r->nome .'</td>';
             echo '<td>'. $item->nome .'</div>';
             echo '<td>'. $usuario->nome .'</div>';
             echo '<td>'. $r->tipo_de_reserva .'</div>';
