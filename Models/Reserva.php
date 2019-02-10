@@ -7,8 +7,9 @@
         var $data;
         var $inicio;
         var $fim;
+        var $prazo;
 
-        function __construct($nome, $matricula, $item_id, $tipo_de_reserva, $data, $inicio, $fim) {
+        function __construct($nome, $matricula, $item_id, $tipo_de_reserva, $data, $inicio, $fim, $prazo) {
             $this->nome = $nome;
             $this->matricula = $matricula;
             $this->item_id = $item_id;
@@ -16,6 +17,7 @@
             $this->data = $data;
             $this->inicio = $inicio;
             $this->fim = $fim;
+            $this->prazo = $prazo;
         }
 
     }

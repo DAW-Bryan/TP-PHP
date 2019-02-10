@@ -45,15 +45,18 @@
                         if (!isset($_POST["declaracao"])){
                             carrega_reserva(1); // Não aceitou os termos
 
-                        }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == ""){
+                        }else if($_POST["data"] == "" || $_POST["inicio"] == "" || $_POST["termino"] == "" || $_POST["nome"] == ""){
                             carrega_reserva(2); // Não preencheu todos os campos
 
-                        }else if (verifica_disponibilidade($_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]) == 0){
+                        }else if (verifica_disponibilidade($_POST["nome"], $_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]) == 0){
                             carrega_reserva(3); // Horário indisponível
 
+                        }else if (verifica_disponibilidade($_POST["nome"], $_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]) == -1){
+                            carrega_reserva(4);
                         }else{
                             $item = $dao_i->read_by_nome($_POST["item"]);
-                            $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $item->id, $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"]);
+                            $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $item->id, $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]);
+                    
                             $dao_r->insert($reserva);
                             echo "<section class='section'>
                               <div class='container'>
@@ -131,9 +134,10 @@
                     $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">');
                     $('#reservas-form .radio').on('change', function() {
                         $("#input-dia").remove();
-                        console.log($('input[name=tipo-de-reserva]:checked', 'form').val());
                         if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Diaria"){ // Dia único
                             $("#dia").append('<input class="input" type="date" name="data" id="input-dia" value="' + dia + '">');
+                            $("#prazo").empty();
+                            $("#prazo").append('<input type="hidden" name="prazo" value="0">');
                         }else if ($('input[name=tipo-de-reserva]:checked', 'form').val() == "Semanal"){ // Semanal
                             $("#dia").append('<select name="data" id="input-dia" class="input">'
                                 + '<option value="1">Segunda</option>'
@@ -143,6 +147,32 @@
                                 + '<option value="5">Sexta</option>'
                                 + '<option value="6">Sábado</option>'
                             + '</select>');
+
+                            $("#prazo").empty();
+                            $("#prazo").append('<label for="">Válido até</label>' 
+                            + '<select name="prazo" id="input-prazo" class="input">'
+                                + '<option value="1">Janeiro</option>'
+                                + '<option value="2">Fevereiro</option>'
+                                + '<option value="3">Março</option>'
+                                + '<option value="4">Abril</option>'
+                                + '<option value="5">Maio</option>'
+                                + '<option value="6">Junho</option>'
+                                + '<option value="7">Julho</option>'
+                                + '<option value="8">Agosto</option>'
+                                + '<option value="9">Setembro</option>'
+                                + '<option value="10">Outrubro</option>'
+                                + '<option value="11">Novembro</option>'
+                                + '<option value="12">Dezembro</option>'
+                            + '</select>'
+                            );
+
+                            var children = $("#input-prazo").children();
+
+                            for (i=1; i<mm; i++){
+                                children[i-1].remove();
+                            }
+
+                            $(children[i-1]).text("Final desse mês");
                         }
 
                     }); 

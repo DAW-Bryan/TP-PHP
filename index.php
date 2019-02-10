@@ -27,12 +27,12 @@ if (isset($_GET['logout'])) {
 
         <link rel="shortcut icon" href="Images/logo.png">
 
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="css/custom.css">
-
         <!-- Bulma CSS -->
         <link rel="stylesheet" href="./css/bulma.min.css">
         <link rel="stylesheet" href="./css/bulma-tooltip.min.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/custom.css">
 
         <!-- Font Awesome -->
         <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
@@ -193,25 +193,36 @@ if (isset($_GET['logout'])) {
                             $i++;
 
                             if ($r->tipo_de_reserva == "Semanal"){
+                                $prazo = (int) $r->prazo;
+                                $prazo = $prazo+1;
                                 if ($i == count($reservas)){
-                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]}";
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."], ranges: [{start:'". date('Y/m/d') ."', end:'".date('Y') ."/".$prazo."/01'}]}";
                                 }else{
-                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."]},";
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."], ranges: [{start:'". date('Y/m/d') ."', end:'".date('Y') ."/".$prazo."/01'}]},";
                                 }
 
                             }else{
                                 if ($i == count($reservas)){
-                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'}";
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "', ranges: []}";
                                 }else{
-                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "'},";
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" . $r->data . "T" . $r->inicio. "', end  : '". $r->data . "T" . $r->fim. "', ranges: []},";
                                 }
                             }
                         }
                     }
-                    ?>]
-            })
+                ?>],
+                    
+                eventRender: function(event){
+                    if (event.ranges != ""){
+                        return (event.ranges.filter(function(range){ // test event against all the ranges
+                            return (event.start.isBefore(range.end) && event.end.isAfter(range.start));
+                        }).length)>0; //if it isn't in one of the ranges, don't render it (by returning false)
+                    }
+                }
+            });
+
         });
-        </script>
+    </script>
 
         <!-- Importando os scripts -->
         <script src="scripts/main_script.js"></script>

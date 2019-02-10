@@ -8,8 +8,8 @@
         function insert($reserva){
             $conexao = connect();
 
-            $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome, item_id, tipo_de_reserva, data, inicio, fim, matricula)
-            VALUES ('". $reserva->nome ."', ". $reserva->item_id .", '". $reserva->tipo_de_reserva ."', '". $reserva->data ."',
+            $resultado = mysqli_query($conexao, "INSERT INTO " . $this->table . "(nome, item_id, tipo_de_reserva, data, prazo, inicio, fim, matricula)
+            VALUES ('". $reserva->nome ."', ". $reserva->item_id .", '". $reserva->tipo_de_reserva ."', '". $reserva->data ."', '". $reserva->prazo ."',
             '". $reserva->inicio ."', '". $reserva->fim ."', '". $reserva->matricula ."');");
             close($conexao);
             return $resultado;
@@ -20,6 +20,8 @@
             if ($todas_reservas != null){
                 foreach ( $todas_reservas as $r ) {
                     if (strtotime($r->data) < strtotime(date('Y-m-d')) && $r->tipo_de_reserva != "Semanal"){
+                        $this->delete($r);
+                    }else if ($r->prazo < date('n') && $r->tipo_de_reserva == "Semanal"){
                         $this->delete($r);
                     }
                 }
@@ -57,6 +59,7 @@
             for ($i=0; $i< mysqli_num_rows($resultado); $i++){
                 $reservas[$i] = mysqli_fetch_object($resultado);
             }
+
             return $reservas;
         }
 

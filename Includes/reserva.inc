@@ -78,6 +78,10 @@
                     <label for="">Término</label>
                     <input class="input" type="time" name="termino">
                 </div>
+
+                <div class="control" id="prazo">
+                    <input type="hidden" name="prazo" value="0">
+                </div>
             </div>
 
             <div class="field">
@@ -99,6 +103,8 @@
                     echo '<span class="msg-erro">Preencha todos os campos</span>';
                 }else if ($erro == 3){
                     echo '<span class="msg-erro">Horário indisponível</span>';
+                }else if ($erro == 4){
+                    echo '<span class="msg-erro">Nome da reserva já está em uso</span>';
                 }
             ?>
             </div>
@@ -112,10 +118,8 @@
         return ($horas*60)+$minutos;
     }
 
-    function verifica_disponibilidade($item, $tipo, $data, $inicio, $fim){
+    function verifica_disponibilidade($nome, $item, $tipo, $data, $inicio, $fim, $prazo){
         $dao_r = new ReservaDao();
-
-
         $inicio = converte_horario_minutos($inicio);
         $fim = converte_horario_minutos($fim);
 
@@ -127,6 +131,12 @@
 
         if ($reservas != null){
             foreach ( $reservas as $r ) {
+
+                // Se reservas possuem o mesmo nome
+                if ($r->nome == $nome){
+                    return -1;
+                }
+
                 if ($r->tipo_de_reserva == $tipo){ // Mesmo tipo
                     if ($r->data == $data){
                         $r->inicio = converte_horario_minutos($r->inicio);
@@ -419,6 +429,4 @@ function print_todas_as_reservas($reservas) {
             <a class="button is-info is-outlined" href="reservar.php"> Fazer uma reserva</a> <br>';
   }
 }
-
-
 ?>
