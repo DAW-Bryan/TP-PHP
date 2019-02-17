@@ -33,6 +33,8 @@ if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
         $dao_c->insert($cat);
 	header("Location: admin.php");
     }
+}else{
+    header("Location: admin.php");
 }
 
 ?>

@@ -1,4 +1,11 @@
-<?php session_start(); ?>
+<?php 
+session_start(); 
+if (!isset($_SESSION["root"])){
+    header("location:index.php");
+}else{
+
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -32,16 +39,9 @@
   <body>
         <!-- Menu navbar -->
         <?php
-        if (!isset($_SESSION["root"])){
-            header("location:index.php");
-        }else{
             include "Includes/menu.inc";
             include "Includes/reserva.inc";
 
-            /*if (isset($_POST["addCat"]) && $_POST["nome"] != ""){ // Adicionou categoria
-                $cat = new Categoria($_POST["nome"]);
-                $dao_c->insert($cat);
-            */
             if(isset($_POST["delCat"]) && isset($_POST["delCatPos"])){ // Deletou categoria
                 $cats = $dao_c->read_all();
                 unlink($cats[$_POST["delCatPos"]]->imagem);
@@ -49,13 +49,17 @@
 
             }else if (isset($_POST["addItem"]) && $_POST["nome"] != ""){ // Adicionou Item
                 $categoria = $dao_c->read_by_name($_POST["tipo_item"]);
-                $item = new Item($_POST["nome"], $categoria->id);
+                $item = new Item($_POST["nome"], $_POST["descricao"], $categoria->id);
                 $dao_i->insert($item);
 
             }else if (isset($_POST["delItem"]) && isset($_POST["delItemPos"])){ // Deletou Item
                 $itens = $dao_i->read_all();
                 $dao_i->delete($itens[$_POST["delItemPos"]]);
 
+            }else if(isset($_POST["editItem"])){
+                $item = new Item($_POST["item_change"], $_POST["descricao"], null);
+                $dao_i->editDesc($item);
+                
             }else if (isset($_POST["delReserva"]) && isset($_POST["reserva"])){ // Deletou Reserva
                 $reservas = $dao_r->read_all();
                 $dao_r->delete($reservas[$_POST["reserva"]]);
@@ -72,50 +76,88 @@
             <h1 class="title"> Funções de administrador </h1>
             <span class="control" style="margin-left: 5px">
 
-            <button class="button is-link" id="modal-trigger-cat" data-target="modalCat">
-                <span>
-                    Adicionar Categoria
-                </span>
-            </button>
-            <button class="button is-link" id="modal-trigger-delcat" data-target="modalDelCat">
-                <span>
-                    Deletar Categoria
-                </span>
-            </button>
+            <div class="row">
+                <h2 class="subtitle">Categorias</h2>
+                
+                <!-- Add Category -->
+                <button class="button is-link" id="modal-trigger-cat" data-target="modalCat">
+                    <span>
+                        Adicionar Categoria
+                    </span>
+                </button>
+                
+                <!-- Delete Category -->
+                <button class="button is-link" id="modal-trigger-delcat" data-target="modalDelCat">
+                    <span>
+                        Deletar Categoria
+                    </span>
+                </button>
 
-              <button class="button is-link" id="modal-trigger-e" data-target="modalItem">
-                  <span>
-                      Adicionar Item
-                  </span>
-              </button>
-              <button class="button is-link" id="modal-trigger-del" data-target="modalDelItem">
-                  <span>
-                      Deletar Item
-                  </span>
-              </button>
-              <a href="reservar.php" class="button is-link">
-                  <span>
-                      Adicionar Reserva
-                  </span>
-              </a>
-              <button class="button is-link" id="modal-trigger-del-reserva" data-target="modalDelReserva">
-                  <span>
-                      Deletar Reserva
-                  </span>
-              </button>
+            </div>
 
-              <button class="button is-link" id="modal-trigger-adm" data-target="modalGiveAdm">
-                  <span>
-                      Adicionar Administrador
-                  </span>
-              </button>
+            <div class="row">
+                <h2 class="subtitle">Itens</h2>
 
-              <button class="button is-link" id="modal-trigger-caduser" data-target="modalGiveAdm">
-                  <span>
-                      Cadastrar Usuário
-                  </span>
-              </button>
-          </span>
+                <!-- Add Item -->
+                <button class="button is-link" id="modal-trigger-e" data-target="modalItem">
+                    <span>
+                        Adicionar Item
+                    </span>
+                </button>
+                
+                <!-- Delete Item -->
+                <button class="button is-link" id="modal-trigger-del" data-target="modalDelItem">
+                    <span>
+                        Deletar Item
+                    </span>
+                </button>        
+
+                <!-- Edit Item Description -->
+                <button class="button is-link" id="modal-trigger-edit" data-target="modalItemDescription">
+                    <span>
+                        Editar Descrição
+                    </span>
+                </button>        
+    
+            </div>
+
+            <div class="row">
+                <h2 class="subtitle">Reservas</h2>
+            
+                <!-- Add Reservation -->
+                <a href="reservar.php" class="button is-link">
+                    <span>
+                        Adicionar Reserva
+                    </span>
+                </a>
+
+                <!-- Delete Reservation -->
+                <button class="button is-link" id="modal-trigger-del-reserva" data-target="modalDelReserva">
+                    <span>
+                        Deletar Reserva
+                    </span>
+                </button>  
+            </div>
+              
+            <div class="row">
+                <h2 class="subtitle">Usuários</h2>
+
+                <!-- Add Admin -->
+                <button class="button is-link" id="modal-trigger-adm" data-target="modalGiveAdm">
+                    <span>
+                        Adicionar Administrador
+                    </span>
+                </button>
+
+                <!-- Add User -->
+                <button class="button is-link" id="modal-trigger-caduser" data-target="modalCadUser">
+                    <span>
+                        Cadastrar Usuário
+                    </span>
+                </button>
+
+            </div>
+            </span>
           </div>
         </section>
 
@@ -213,6 +255,13 @@
                 </div>
 
                 <div class="field">
+                    <label class="label">Descrição</label>
+                    <div class="control">
+                        <textarea name="descricao" placeholder="Descrição do item" class="textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="field">
                     <label class="label">Tipo</label>
                     <div class="control">
                         <div class="select">
@@ -239,7 +288,6 @@
         </form>
 
         <!-- Modal deletar item -->
-
         <form action="admin.php" method="post">
         <div class="modal" id="modalDelItem">
           <div class="modal-background"></div>
@@ -274,6 +322,73 @@
                 ?>
                 <input type="hidden" id="delItem" name="delItem" value="true">
             </section>
+            </div>
+        </div>
+
+        </form>
+
+    <!-- Modal editar descrição -->
+    <form action="admin.php" method="post">
+        <div class="modal" id="modalItemDescription">
+          <div class="modal-background"></div>
+            <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Editar descrição do item</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                
+            <div class="field">
+                    <label class="label">Item</label>
+                    <div class="control">
+                        <div class="select">
+                            <select name="item_change" id="item_change">
+                            <?php
+                                $itens = $dao_i->read_all();
+                                foreach ($itens as $i){
+                                    echo "<option>". $i->nome ."</option>";
+                                }
+                            ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="field">
+                    <label class="label">Descrição</label>
+                    <div class="control">
+                        <textarea name="descricao" id="descricao" placeholder="Descrição do item" class="textarea"></textarea>
+                    </div>
+                </div>
+
+                <script>
+                    /** Script para controlar o texto da descrição a partir do item selecionado */
+                    <?php
+                        echo "var nomes = [];\nvar descricoes = [];\n";
+                        foreach($itens as $i){
+                        echo "nomes.push(\"$i->nome\");\ndescricoes.push(\"$i->descricao\");\n";
+                        }
+                    ?>
+                    var item = $("#item_change");
+                    var descricao = $("#descricao");
+                    descricao.val(descricoes[0]);
+
+                    item.change(function() {
+                        for (let i=0; i<nomes.length; i++){
+                            if (nomes[i] == $("#item_change option:selected").val()){
+                                descricao.val(descricoes[i]);
+                                break;
+                            }
+                        }
+                    });
+                </script>
+            </section>
+
+            <footer class="modal-card-foot">
+                <input type="hidden" id="editItem" name="editItem" value="true">
+                <input class="button is-success" type="submit" value="Adicionar">
+            </footer>
             </div>
         </div>
 
@@ -420,7 +535,9 @@
     <?php } ?>
 
     <?php include "Includes/footer.inc"; ?>
-    <!-- Importando os scripts -->
+    <!-- Importando os scripts  -->
     <script src="scripts/main_script.js"></script>
+    <script src="scripts/admin_script.js"></script>
+
   </body>
 </html>
