@@ -103,8 +103,6 @@
                     echo '<span class="msg-erro">Preencha todos os campos</span>';
                 }else if ($erro == 3){
                     echo '<span class="msg-erro">Horário indisponível</span>';
-                }else if ($erro == 4){
-                    echo '<span class="msg-erro">Nome da reserva já está em uso</span>';
                 }
             ?>
             </div>
@@ -133,10 +131,7 @@
         if ($reservas != null){
             foreach ( $reservas as $r ) {
 
-                // Se reservas possuem o mesmo nome
-                if ($r->nome == $nome){
-                    return -1;
-                }else if ($r->item == $item){
+                if ($r->item_id == $item){
 
                     if ($r->tipo_de_reserva == $tipo){ // Mesmo tipo
                         if ($r->data == $data){

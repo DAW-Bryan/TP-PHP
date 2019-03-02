@@ -30,7 +30,7 @@
 
         function delete($reserva){
             $conexao = connect();
-            $resultado = mysqli_query($conexao, "DELETE FROM " . $this->table . " WHERE nome LIKE '" . $reserva->nome . "';");
+            $resultado = mysqli_query($conexao, "DELETE FROM " . $this->table . " WHERE item_id LIKE '" . $reserva->item_id . "' AND data LIKE '" . $reserva->data . "' AND inicio LIKE '" . $reserva->inicio . "';");
             close($conexao);
             return $resultado;
         }

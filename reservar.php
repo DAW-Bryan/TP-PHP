@@ -37,6 +37,7 @@
                     date_default_timezone_set('America/Sao_Paulo');
 
                     if (isset($_POST["item"])) { // Está na parte de Dados da Reserva
+                        $item = $dao_i->read_by_nome($_POST["item"]);
 
                         if (!isset($_POST["declaracao"])){
                             
@@ -47,15 +48,11 @@
                             echo '<section class="section"><div class="container">';
                             carrega_reserva(2); // Não preencheu todos os campos
 
-                        }else if (verifica_disponibilidade($_POST["nome"], $_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]) == 0){
+                        }else if (verifica_disponibilidade($_POST["nome"], $item->id, $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]) == 0){
                             echo '<section class="section"><div class="container">';
                             carrega_reserva(3); // Horário indisponível
-
-                        }else if (verifica_disponibilidade($_POST["nome"], $_POST["item"], $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]) == -1){
-                            echo '<section class="section"><div class="container">';
-                            carrega_reserva(4);
                         }else{
-                            $item = $dao_i->read_by_nome($_POST["item"]);
+                            //$item = $dao_i->read_by_nome($item->id);
                             $reserva = new Reserva($_POST["nome"], $_SESSION["matricula"], $item->id, $_POST["tipo-de-reserva"], $_POST["data"], $_POST["inicio"], $_POST["termino"], $_POST["prazo"]);
                     
                             $dao_r->insert($reserva);

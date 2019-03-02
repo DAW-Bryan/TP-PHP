@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require "Includes/reserva.inc";
 
@@ -60,11 +59,11 @@ if (isset($_GET['logout'])) {
             $dao_r->deleta_antigas();
 
             if (isset($_GET["reserva"])){ // Usuário deletou reserva
-              echo " <div class='notification is-success'>
-                        <h2 class='title'> Reserva deletada com sucesso! </h1>
-                     </div>";;
                 $reservas_da_pessoa = $dao_r->read_by_matricula($_SESSION["matricula"]);
-                $dao_r->delete($reservas_da_pessoa[$_GET["reserva"]]);
+                $res = $dao_r->delete($reservas_da_pessoa[$_GET["reserva"]]);
+                echo " <div class='notification is-success'>
+                            <h2 class='title'> Reserva deletada com sucesso! </h1>
+                    </div>";
             }
 
             if (isset($changePsw)){ // Usuário mudou de senha
