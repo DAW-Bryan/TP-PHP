@@ -279,6 +279,9 @@ function convert_weekday_to_num($wd){
 
             if ($r->tipo_de_reserva == "Semanal"){
                 $r->data = convert_num_to_weekday($r->data);
+            }else{
+                $date = date_create($r->data);
+                $r->data = $date->format('d/m/Y');
             }
 
             echo '<td>'. $r->data .'</div>';
@@ -321,6 +324,9 @@ function print_reservas_por_item($reservas) {
 
             if ($r->tipo_de_reserva == "Semanal"){
                 $r->data = convert_num_to_weekday($r->data);
+            }else{
+                $date = date_create($r->data);
+                $r->data = $date->format('d/m/Y');
             }
 
             echo '<td>'. $r->data .'</div>';
