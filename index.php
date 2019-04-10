@@ -193,11 +193,15 @@ if (isset($_GET['logout'])) {
 
                             if ($r->tipo_de_reserva == "Semanal"){
                                 $prazo = (int) $r->prazo;
-                                $prazo = $prazo+1;
+                                if ($prazo != 12){
+                                //    $prazo = $prazo+1;
+                                }
+
+
                                 if ($i == count($reservas)){
-                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."], ranges: [{start:'". date('Y/m/d') ."', end:'".date('Y') ."/".$prazo."/01'}]}";
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."], ranges: [{start:'". date('Y/m/d') ."', end:'".date('Y') ."/".$prazo."/31'}]}";
                                 }else{
-                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."], ranges: [{start:'". date('Y/m/d') ."', end:'".date('Y') ."/".$prazo."/01'}]},";
+                                    echo "{title  : '". $item->nome . " - ". $r->nome ."', start  : '" .$r->inicio. "', end  : '". $r->fim ."', dow: [ ". $r->data ."], ranges: [{start:'". date('Y/m/d') ."', end:'".date('Y') ."/".$prazo."/31'}]},";
                                 }
 
                             }else{

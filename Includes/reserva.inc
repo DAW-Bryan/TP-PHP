@@ -146,8 +146,8 @@
                             $r->inicio = converte_horario_minutos($r->inicio);
                             $r->fim = converte_horario_minutos($r->fim);
                             if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim) ){
-                                $tempo = (int) $prazo+1;
-                                if (strtotime($r->data) < strtotime($tempo."/01/".date('Y'))){
+                                $tempo = (int) $prazo;
+                                if (strtotime($r->data) < strtotime($tempo. "/31/" .date('Y'))){
                                     return 0; // Indisponível
                                 }
                             }
@@ -157,8 +157,8 @@
                             $r->inicio = converte_horario_minutos($r->inicio);
                             $r->fim = converte_horario_minutos($r->fim);
                             if (($inicio >= $r->inicio && $inicio < $r->fim) || ($fim > $r->inicio && $fim <= $r->fim) || ($r->inicio >= $inicio && $r->inicio < $fim) || ($r->fim > $inicio && $r->fim <= $fim)){
-                                $tempo = (int) $r->prazo + 1;
-                                if (strtotime($data) < strtotime($tempo."/01/".date('Y'))){
+                                $tempo = (int) $r->prazo;
+                                if (strtotime($data) < strtotime($tempo."/31/".date('Y'))){
                                     return 0; // Indisponível
                                 }
                             }
